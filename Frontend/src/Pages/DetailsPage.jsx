@@ -52,7 +52,7 @@ function PropertyDetails() {
       _id: '1',
       title: 'Cozy Studio Apartment',
       price: 15000,
-      furnishing: 'Yes',
+      type: '1 BHK',
       location: 'Kathmandu, Nepal',
       description: 'A small but cozy studio apartment perfect for singles.'
     },
@@ -60,7 +60,7 @@ function PropertyDetails() {
       _id: '2',
       title: 'Luxury Villa',
       price: 85000,
-      furnishing: 'No',
+      type: '1 BHK',
       location: 'Patan, Nepal',
       description: 'A luxurious villa with modern amenities.'
     },
@@ -68,7 +68,7 @@ function PropertyDetails() {
       _id: '3',
       title: 'Budget-Friendly Room',
       price: 7000,
-      furnishing: 'No',
+      type: '1 BHK',
       location: 'Bhaktapur, Nepal',
       description: 'Affordable room for students or workers.'
     },
@@ -76,7 +76,7 @@ function PropertyDetails() {
       _id: '4',
       title: 'Spacious Family Apartment',
       price: 30000,
-      furnishing: 'Yes',
+      type: '1 BHK',
       location: 'Pokhara, Nepal',
       description: 'Ideal for families, with spacious living area.'
     }
@@ -178,6 +178,29 @@ function PropertyDetails() {
                 </span>
               </div>
             </div>
+            {/* Feedback form */}
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-4">
+                Leave Your Feedback
+              </h2>
+              <form className="space-y-4">
+                <div>
+                  <textarea
+                    id="comment"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Write your comment here"
+                    rows="4"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Submit Feedback
+                </button>
+              </form>
+            </div>
           </div>
 
           <div className="flex flex-col w-full sm:w-1/2 mt-6">
@@ -230,7 +253,7 @@ function PropertyDetails() {
                   <div className="flex justify-between mt-2">
                     <p className="text-gray-400 text-xl">Rs {property.price}</p>
                     <p className="text-gray-600">
-                      Furnished: {property.furnishing}
+                      Room Type: {property.type}
                     </p>
                   </div>
                   <p className="text-gray-600 flex items-center mt-2">

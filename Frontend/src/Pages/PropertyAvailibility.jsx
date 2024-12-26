@@ -8,7 +8,7 @@ function PropertyAvailability() {
       _id: '1',
       title: 'Cozy Studio Apartment',
       price: 15000,
-      furnishing: 'Yes',
+      type: '1 BHK',
       location: 'Kathmandu, Nepal',
       description: 'A small but cozy studio apartment perfect for singles.'
     },
@@ -16,7 +16,7 @@ function PropertyAvailability() {
       _id: '2',
       title: 'Luxury Villa',
       price: 85000,
-      furnishing: 'No',
+      type: '1 BHK',
       location: 'Patan, Nepal',
       description: 'A luxurious villa with modern amenities.'
     },
@@ -24,7 +24,7 @@ function PropertyAvailability() {
       _id: '3',
       title: 'Budget-Friendly Room',
       price: 7000,
-      furnishing: 'No',
+      type: '1 BHK',
       location: 'Bhaktapur, Nepal',
       description: 'Affordable room for students or workers.'
     },
@@ -32,7 +32,7 @@ function PropertyAvailability() {
       _id: '4',
       title: 'Spacious Family Apartment',
       price: 30000,
-      furnishing: 'Yes',
+      type: '1 BHK',
       location: 'Pokhara, Nepal',
       description: 'Ideal for families, with spacious living area.'
     },
@@ -40,7 +40,7 @@ function PropertyAvailability() {
       _id: '5',
       title: 'Modern Shared Room',
       price: 10000,
-      furnishing: 'Yes',
+      type: '1 BHK',
       location: 'Lalitpur, Nepal',
       description: 'Shared room in a modern apartment.'
     },
@@ -48,7 +48,7 @@ function PropertyAvailability() {
       _id: '6',
       title: 'Elegant Penthouse',
       price: 120000,
-      furnishing: 'No',
+      type: '1 BHK',
       location: 'Kathmandu, Nepal',
       description: 'Experience luxury living in this elegant penthouse.'
     }
@@ -120,9 +120,7 @@ function PropertyAvailability() {
               </h3>
               <div className="flex justify-between mt-2">
                 <p className="text-gray-400 text-xl">Rs {property.price}</p>
-                <p className="text-gray-600">
-                  Furnished: {property.furnishing}
-                </p>
+                <p className="text-gray-600">Room Type: {property.type}</p>
               </div>
               <p className="text-gray-600 flex items-center mt-2">
                 <MapPin size={13} color="blue" className="mr-0.5" />
