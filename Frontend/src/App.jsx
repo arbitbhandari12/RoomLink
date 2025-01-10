@@ -9,6 +9,11 @@ import Signup from './Pages/Register';
 import Header from './components/header';
 import Footer from './components/footer';
 import AboutUs from './Pages/AboutUs';
+import AdminHome from './Pages/AdminHome';
+import AdminUser from './Pages/AdminUser';
+import AdminlistProperty from './Pages/AdminListProperty';
+import AdminShifting from './Pages/AdminShift';
+import TenantDetails from './Pages/AdminShftingdetails';
 
 function App() {
   return (
@@ -23,6 +28,11 @@ function App() {
         <Route path="/addProperty" element={<AddProperty />} />
         <Route path="/roomShifting" element={<RoomShifting />} />
         <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/adminUser" element={<AdminUser />} />
+        <Route path="/adminListProperty" element={<AdminlistProperty />} />
+        <Route path="/adminShift" element={<AdminShifting />} />
+        <Route path="/adminShiftDetails" element={<TenantDetails />} />
       </Routes>
       <Footer />
     </Router>

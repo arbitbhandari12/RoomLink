@@ -69,15 +69,19 @@ const RoomShifting = () => {
             className="border border-slate-600 p-2 h-28 mt-3"
           />
         </div>
-        <div className='flex flex-col mt-6'>
-          <label className='text-xl '>Need Helpers For Packing?</label>
-          <select className='border border-slate-600 p-2 rounded mt-2 w-1/5'>
-            <option value="" className='flex'>Need Helpers For Packing?</option>
+        <div className="flex flex-col mt-6">
+          <label className="text-xl ">Need Helpers For Packing?</label>
+          <select className="border border-slate-600 p-2 rounded mt-2 w-1/5">
+            <option value="" className="flex">
+              Need Helpers For Packing?
+            </option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
         </div>
-        <button type='submit' className='border bg-blue-500 w-full mt-8 p-3'>Submit Request</button>
+        <button type="submit" className="border bg-blue-500 w-full mt-8 p-3">
+          Submit Request
+        </button>
       </div>
     </>
   );
