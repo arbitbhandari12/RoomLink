@@ -1,11 +1,19 @@
 const mongoose = require('mongoose');
 
 const bookinglist = new mongoose.Schema({
-  startDate: {
-    type: Date,
+  name: {
+    type: String,
     required: true
   },
-  endDate: {
+  email: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  Date: {
     type: Date,
     required: true
   },
@@ -16,4 +24,4 @@ const bookinglist = new mongoose.Schema({
 });
 
 const Booking = mongoose.model('BookingList', bookinglist);
-module.exports = Booking
+module.exports = Booking;
