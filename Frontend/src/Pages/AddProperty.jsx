@@ -5,38 +5,38 @@ import * as yup from 'yup';
 function AddProperty() {
   const fileInputRef = useRef();
 
-  // const validationSchema = yup.object({
-  //   title: yup
-  //   .string()
-  //   .matches(
-  //     /^[a-zA-Z][a-zA-Z0-9]*$/,
-  //     'Title must start with a letter and contain only letters and numbers'
-  //   )
-  //   .trim()
-  //   .required('Title is required')
-  //   .min(5, 'Title must be at least 5 characters')
-  //   .max(30, 'Title must be 30 characters or less'),
+  const validationSchema = yup.object({
+    title: yup
+      .string()
+      .matches(
+        /^[a-zA-Z][a-zA-Z0-9]*$/,
+        'Title must start with a letter and contain only letters and numbers'
+      )
+      .trim()
+      .required('Title is required')
+      .min(5, 'Title must be at least 5 characters')
+      .max(30, 'Title must be 30 characters or less'),
 
-  // type: yup
-  //   .string()
-  //   .required('Property type is required')
-  //   .oneOf(
-  //     ['apartment', 'house', 'townhouse'],
-  //     'Please select a valid property type'
-  //   ),
-  // price: yup
-  //   .string()
-  //   .required('Price is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bedroom: yup
-  //   .string()
-  //   .required('Bedroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bathroom: yup
-  //   .string()
-  //   .required('Bathroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input')
-  // });
+    type: yup
+      .string()
+      .required('Property type is required')
+      .oneOf(
+        ['apartment', 'house', 'townhouse'],
+        'Please select a valid property type'
+      ),
+    price: yup
+      .string()
+      .required('Price is required')
+      .matches(/^[0-9]+$/, 'Invalid Input'),
+    bedroom: yup
+      .string()
+      .required('Bedroom is required')
+      .matches(/^[0-9]+$/, 'Invalid Input'),
+    bathroom: yup
+      .string()
+      .required('Bathroom is required')
+      .matches(/^[0-9]+$/, 'Invalid Input')
+  });
 
   const initialValues = {
     title: '',
@@ -54,7 +54,7 @@ function AddProperty() {
     photos: '',
     school: '',
     healthcare: '',
-    bank:'',
+    bank: '',
     park: '',
     transport: '',
     temple: '',
@@ -66,7 +66,6 @@ function AddProperty() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
-
 
   const formik = useFormik({
     initialValues: initialValues,
