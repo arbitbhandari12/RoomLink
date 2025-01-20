@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./utils/db.js');
+const connectDB = require('./Utils/db.js');
 const router = require('./router/auth-router.js');
 const propertyRouter = require('./router/Property-router.js');
 const adminRouter = require('./router/admin-router.js');
