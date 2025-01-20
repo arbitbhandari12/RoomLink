@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const shiftingRequest = require('../Controllers/shiftingRequest-controller');
+const shiftRoom = require('../Controllers/shiftingRequest-controller');
 
-router.route('/shiftRequest').post(shiftingRequest);
+router.route('/shiftRequest').post(shiftRoom);
 
 module.exports = router;
