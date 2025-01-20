@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const shiftingRequest = new mongoose({
+const shiftingRequest = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -22,7 +22,7 @@ const shiftingRequest = new mongoose({
     required: true
   },
   shiftingdate: {
-    type: date,
+    type: Date,
     required: true
   },
   listofitems: {

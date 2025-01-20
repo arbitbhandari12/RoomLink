@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const shiftingRequest = new mongoose({
+const shiftingRequestSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -22,10 +22,10 @@ const shiftingRequest = new mongoose({
     required: true
   },
   shiftingdate: {
-    type: date,
+    type: Date,
     required: true
   },
-  listofitems: {
+  listOfitems: { 
     type: [String],
     required: true
   },
@@ -35,5 +35,5 @@ const shiftingRequest = new mongoose({
   }
 });
 
-const shiftRoom = mongoose.model('shiftingRequest', shiftingRequest);
-module.exports = shiftRoom;
+const ShiftRoomApprove = mongoose.model('approveShiftingRequest', shiftingRequestSchema);
+module.exports = ShiftRoomApprove;

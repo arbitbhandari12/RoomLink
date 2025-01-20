@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./utils/db.js');
 const router = require('./router/auth-router.js');
 const PropertyRouter = require('./router/Property-router.js');
+const shifting = require("./router/shiftRequest-router.js")
 const adminRouter = require('./router/admin-router.js');
 const cors = require('cors');
 const app = express();
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use('/api/auth', router);
 app.use('/api/properties', PropertyRouter);
+app.use('/api/shifting', shifting);
 app.use('/api/admin', adminRouter);
 
 connectDB()

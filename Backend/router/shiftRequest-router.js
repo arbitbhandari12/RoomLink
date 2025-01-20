@@ -1,5 +1,7 @@
-const express = required("express")
-const router = express.Router()
-const shiftRequest = require("../controllers/shiftingRequest-controller")
+const express = require('express');
+const router = express.Router();
+const shiftingRequest = require('../Controllers/shiftingRoom-controller');
 
-router.route('/shiftRequest').post(shiftRequest);
+router.route('/shiftRequest').post(shiftingRequest);
+
+module.exports = router;
