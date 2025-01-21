@@ -1,46 +1,30 @@
 import { useEffect, useState } from 'react';
+import { Bed, Bath, MapPin } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 
 function Home() {
   const [properties, setProperties] = useState([]);
-
-  const sampleProperties = [
-    {
-      _id: '1',
-      title: 'Cozy Apartment in City Center',
-      photos: ['intro.jpg'],
-      price: 5000
-    },
-    {
-      _id: '2',
-      title: 'Spacious Room with Balcony',
-      photos: ['intro.jpg'],
-      price: 7500
-    },
-    {
-      _id: '3',
-      title: 'Modern Studio Apartment',
-      photos: ['intro.jpg'],
-      price: 6000
-    },
-    {
-      _id: '4',
-      title: 'Cozy Apartment in City Center',
-      photos: ['intro.jpg'],
-      price: 6000
-    },
-    {
-      _id: '5',
-      title: 'Spacious Room with Balcony',
-      photos: ['intro.jpg'],
-      price: 6000
+  const latestProperty = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/properties/homelatest',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const latestproperty = await response.json();
+      setProperties(latestproperty);
+      console.log(latestproperty);
+    } catch {
+      console.log(error);
     }
-  ];
-
+  };
   useEffect(() => {
-    setProperties(sampleProperties);
+    latestProperty();
   }, []);
-
   return (
     <>
       <div className="relative">
@@ -55,10 +39,7 @@ function Home() {
           <p className="text-2xl mt-4">
             Discover comfortable and affordable rooms in your desired location.
           </p>
-          <NavLink
-            to="/PropertyAvailability"
-            className="bg-white text-black px-6 py-2 mt-6 rounded hover:bg-gray-200"
-          >
+          <NavLink to='/PropertyAvailability' className="bg-white text-black px-6 py-2 mt-6 rounded hover:bg-gray-200">
             Start Exploring
           </NavLink>
         </div>
@@ -68,10 +49,7 @@ function Home() {
         <h1 className="font-extralight">Our Rooms</h1>
       </div>
       <div className="flex justify-end mr-8 mt-8 md:mt-0">
-        <NavLink
-          to="/PropertyAvailability"
-          className="border bg-slate-500 text-white rounded-md p-1.5 hover:bg-black w-24 text-center"
-        >
+        <NavLink to='/PropertyAvailability' className="border bg-slate-500 text-white rounded-md p-1.5 hover:bg-black w-24 text-center">
           View All <span>&#8594;</span>
         </NavLink>
       </div>
@@ -82,7 +60,7 @@ function Home() {
               <div className="border rounded-lg">
                 <div className="">
                   <img
-                    src={property.photos[0]}
+                    src={`http://localhost:4001/${property.photos[0]}`}
                     alt={property.title}
                     className="w-full h-48 rounded-t-lg"
                   />
