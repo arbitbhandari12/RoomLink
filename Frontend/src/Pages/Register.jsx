@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Store/auth';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
@@ -54,11 +57,34 @@ const Signup = () => {
     password: ''
   };
 
+  const navigate = useNavigate();
+  const { storeToken } = useAuth();
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      try {
+        const response = await fetch(
+          `http://localhost:4001/api/auth/register`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values)
+          }
+        );
+        if (response.ok) {
+          formik.resetForm();
+          navigate('/');
+        }
+
+        const data = await response.json();
+        toast.success(data.msg || 'Register Sucess');
+        storeToken(data.token);
+      } catch (error) {
+        console.error('register error:', error.message);
+      }
     }
   });
 
