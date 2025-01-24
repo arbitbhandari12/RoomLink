@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Store/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const initialValues = {
@@ -8,11 +12,39 @@ const Login = () => {
     password: ''
   };
 
+  const navigate = useNavigate();
+
+  const { storeToken } = useAuth();
+
   const formik = useFormik({
     initialValues: initialValues,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
-      // The backend call and token storage have been removed
+      try {
+        const response = await fetch(`http://localhost:4001/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values)
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          toast.error(errorData.msg || 'Login failed');
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.token) {
+          storeToken(data.token);
+          formik.resetForm();
+          navigate('/');
+          toast.success(data.msg || 'Login Sucessful');
+        } else {
+          console.log('No token received');
+        }
+      } catch (error) {
+        console.log('register error:', error.message);
+      }
     }
   });
 
