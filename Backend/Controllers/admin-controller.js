@@ -43,7 +43,6 @@ const detailsPage = async (req, res) => {
 };
 
 // Rejecting Property
-
 const deleteProperty = async (req, res) => {
   try {
     const id = req.params.id;
