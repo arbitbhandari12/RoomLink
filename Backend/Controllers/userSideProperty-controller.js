@@ -60,11 +60,22 @@ const deleteProperty = async (req, res) => {
   }
 };
 
+//edit by property owner
+const editRoom = async (req, res) => {
+    try {
+      const edit = await approve.findById(req.params.id);
+      res.json(edit);
+    } catch (error) {
+      res.status(500).json({ error: 'Property not found' });
+    }
+};
+
 module.exports = {
   homeproperty,
   userSideProperty,
   propertyPage,
   personalProperty,
   yourProperties,
-  deleteProperty
+  deleteProperty,
+  editRoom
 };
