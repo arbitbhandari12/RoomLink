@@ -69,3 +69,34 @@ const login = async (req, res) => {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
+
+//Completed Login User
+
+//To check currently login user
+
+const user = async (req, res) => {
+  try {
+    const userData = req.user;
+    return res.status(200).json({ userData });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const forgot = async (req, res) => {
+  const email = req.body;
+  try {
+    const oldUser = await User.findOne({ email });
+    if (!oldUser) {
+      return res.status(404).json({ error: "User doesn't exists" });
+    }
+  } catch (error) {}
+};
+
+module.exports = {
+  home,
+  register,
+  login,
+  user,
+  forgot
+};
