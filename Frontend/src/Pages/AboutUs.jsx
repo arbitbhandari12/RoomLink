@@ -126,7 +126,7 @@ export default function AboutUs() {
               List Your Room
             </NavLink>
             <NavLink
-              to="/availableRooms"
+              to="/PropertyAvailability"
               className="bg-green-500 px-6 py-3 rounded-full font-semibold hover:bg-green-700"
             >
               Find a Room
