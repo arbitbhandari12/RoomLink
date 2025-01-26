@@ -8,10 +8,11 @@ const {
   personalProperty,
   yourProperties,
   deleteProperty,
+  editRoom,
   homeproperty
 } = require('../controllers/userSideProperty-controller');
-const booking = require('../Controllers/BookingProperty-controller');
-const authMiddleware = require('../middlewares/auth-middleware');
+const booking = require('../controllers/BookingProperty-controller');
+const authMiddleware = require('../middlewares/auth-middleware'); //editRoom
 
 router.post('/addproperty', upload.array('photos', 10), addProperty);
 router.route('/homelatest').get(homeproperty);
@@ -20,6 +21,7 @@ router.route('/property/:id').get(propertyPage);
 router.route('/myProperty').get(authMiddleware, personalProperty);
 router.route('/yourProperties/:id').get(yourProperties);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
+router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booking').post(authMiddleware, booking);
 
 module.exports = router;
