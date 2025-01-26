@@ -1,6 +1,17 @@
 import React from 'react';
+import { useFormik } from 'formik';
 
 const RoomShifting = () => {
+  const Formik = useFormik({
+    name: '',
+    phone: '',
+    email: '',
+    pickup: '',
+    dropoff: '',
+    shiftingdate: '',
+    listofitems: '',
+    helper: ''
+  });
   return (
     <>
       <div className="border p-4 border-gray-300 hover:border-blue-500 transition w-full max-w-6xl mx-auto m-6">
@@ -17,6 +28,9 @@ const RoomShifting = () => {
             <input
               type="text"
               className="border border-slate-600 p-2 rounded"
+              name="name"
+              onChange={Formik.handleChange}
+              onBlur={Formik.handleBlur}
             />
           </div>
           <div className="flex flex-col w-1/3">
@@ -24,6 +38,9 @@ const RoomShifting = () => {
             <input
               type="text"
               className="border border-slate-600 p-2 rounded"
+              name="phone"
+              onChange={Formik.handleChange}
+              onBlur={Formik.handleBlur}
             />
           </div>
           <div className="flex flex-col w-1/3">
