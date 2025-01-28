@@ -41,7 +41,6 @@ function App() {
         <Route path="/property/:id" element={<PropertyDetails />} />
         <Route path="/properties/:id" element={<DetailsPropertyAdmin />} />
         <Route path="/yourproperty/:id" element={<PersonalPropertyDetails />} />
-        <Route path="editProperty/:id" element={<EditProperty />}></Route>
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/logout" element={<Logout />} />
@@ -49,6 +48,7 @@ function App() {
         <Route path="/addproperty" element={<PropertyLayout />}>
           <Route index element={<AddProperty />} />{' '}
           <Route path="UserProperty" element={<UserProperty />}></Route>
+          <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/Roomshifting" element={<RoomShifting />} />
@@ -59,10 +59,7 @@ function App() {
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
           {/* <Route path="complaint-property" element={<AdminComplaint />} /> */}
           <Route path="shifting" element={<AdminShift />} />
-          <Route
-            path="adminShifting"
-            element={<AdminShifting />}
-          />
+          <Route path="adminShifting" element={<AdminShifting />} />
         </Route>
       </Routes>
       {!isAdminRoute && <Footer />}
