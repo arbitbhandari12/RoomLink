@@ -91,7 +91,7 @@ function UserProperty() {
                   <Link>
                     <Link
                       key={properties._id}
-                      to={`/editProperty/${properties._id}`}
+                      to={`/addproperty/editProperty/${properties._id}`}
                     >
                       <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
                         Edit
