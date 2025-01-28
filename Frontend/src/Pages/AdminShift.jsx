@@ -11,7 +11,6 @@ const AdminShifting = () => {
         <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg mb-20">
           <thead className="bg-gradient-to-r from-indigo-600 to-red-700 text-white">
             <tr>
-
               <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold text-sm lg:text-base">
                 Pick-Up
               </th>
@@ -38,7 +37,7 @@ const AdminShifting = () => {
                 2024-12-10, 8:00 AM
               </td>
               <td className="py-3 px-4 border-b border-gray-300 text-center flex flex-wrap justify-center gap-2">
-                <NavLink to="/admin/RoomShiftingDetailsPage">
+                <NavLink to="/admin/adminShifting">
                   <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded">
                     View Details
                   </button>
