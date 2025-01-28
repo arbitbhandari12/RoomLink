@@ -2,7 +2,7 @@ import React from 'react';
 import { Building, Search, Users, Clock, ThumbsUp, Truck } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-export default function AboutUs() {
+export default function Aboutus() {
   return (
     <div className="bg-gray-100 text-gray-800">
       {/* Hero Section */}
@@ -137,3 +137,4 @@ export default function AboutUs() {
     </div>
   );
 }
+
