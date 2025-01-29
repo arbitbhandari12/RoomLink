@@ -61,18 +61,17 @@ function PropertyDetails() {
           }
         );
         const data = await response.json();
-        console.log('Fetched similar rooms:', data); 
+        console.log('Fetched similar rooms:', data);
         setSimilarRooms(data);
       } catch (error) {
-        console.error('Error fetching similar rooms:', error); 
+        console.error('Error fetching similar rooms:', error);
       }
     };
-  
+
     if (id) {
-      fetchSimilarRooms(); 
+      fetchSimilarRooms();
     }
-  }, [id]); 
-  
+  }, [id]);
 
   if (!property) {
     return <p>Loading property details...</p>;
