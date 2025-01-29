@@ -12,6 +12,7 @@ const {
   homeproperty
 } = require('../controllers/userSideProperty-controller');
 const updateProperty = require('../Controllers/editProperty-controller');
+const similarProperty = require("../Controllers/SimilarProperty-controller")
 const booking = require('../controllers/BookingProperty-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 
@@ -22,6 +23,7 @@ router.route('/property/:id').get(propertyPage);
 router.route('/myProperty').get(authMiddleware, personalProperty);
 router.route('/yourProperties/:id').get(yourProperties);
 router.route('/update/:id').patch(authMiddleware, upload.array('photos', 10), updateProperty);
+router.route('/similar/:id').get(authMiddleware, similarProperty);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booking').post(authMiddleware, booking);
