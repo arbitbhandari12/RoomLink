@@ -59,7 +59,7 @@ function App() {
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
           {/* <Route path="complaint-property" element={<AdminComplaint />} /> */}
           <Route path="shifting" element={<AdminShift />} />
-          <Route path="RoomShiftingDetailsPage" element={<AdminShifting />} />
+          <Route path="adminShifting" element={<AdminShifting />} />
         </Route>
       </Routes>
       {!isAdminRoute && <Footer />}
