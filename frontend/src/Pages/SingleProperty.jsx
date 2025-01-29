@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import ImageSlider from '../Components/Image-Slider';
+import { useAuth } from '../Store/auth';
+
 import {
   MapPin,
   Bed,
@@ -22,6 +24,8 @@ import BookingButton from '../Components/Booking';
 function PropertyDetails() {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const [similar, setSimilarRooms] = useState([]);
+  const { authorization } = useAuth();
 
   const fetchProperty = async () => {
     try {
@@ -43,6 +47,32 @@ function PropertyDetails() {
       fetchProperty();
     }
   }, [id]);
+
+  useEffect(() => {
+    const fetchSimilarRooms = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:4001/api/properties/similar/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: authorization
+            }
+          }
+        );
+        const data = await response.json();
+        console.log('Fetched similar rooms:', data); 
+        setSimilarRooms(data);
+      } catch (error) {
+        console.error('Error fetching similar rooms:', error); 
+      }
+    };
+  
+    if (id) {
+      fetchSimilarRooms(); 
+    }
+  }, [id]); 
+  
 
   if (!property) {
     return <p>Loading property details...</p>;
