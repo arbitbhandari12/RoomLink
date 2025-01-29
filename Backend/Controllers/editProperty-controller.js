@@ -1,0 +1,62 @@
+const List = require('../models/propertyapprove-model');
+
+const updateProperty = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Create the base updated data object
+    const updatedData = {
+      title: req.body.title,
+      description: req.body.description,
+      type: req.body.type,
+      location: req.body.location,
+      price: req.body.price,
+      bedroom: req.body.bedroom,
+      bathroom: req.body.bathroom,
+      kitchen: req.body.kitchen,
+      parking: req.body.parking,
+      balcony: req.body.balcony,
+      furnishing: req.body.furnishing,
+      water: req.body.water,
+      school: req.body.school,
+      temple: req.body.temple,
+      healthcare: req.body.healthcare,
+      park: req.body.park,
+      bank: req.body.bank,
+      transport: req.body.transport,
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email
+    };
+
+    // Only update photos if new files were uploaded
+    if (req.files && req.files.length > 0) {
+      const photoPaths = req.files.map((file) => file.path);
+      updatedData.photos = photoPaths;
+    }
+
+    // Use findByIdAndUpdate to get the updated document
+    const updatedProperty = await List.findByIdAndUpdate(
+      id,
+      updatedData,
+      { new: true } // This option returns the updated document
+    );
+
+    if (!updatedProperty) {
+      return res
+        .status(404)
+        .json({ message: 'Property not found.' });
+    }
+
+    res.status(200).json({
+      message: 'Property updated successfully!',
+      property: updatedProperty
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update property.' });
+  }
+};
+
+module.exports = updateProperty;
