@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ function EditProperty() {
   const { authorization, user } = useAuth();
   const fileInputRef = useRef();
   const [Property, setPropertyData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Validation schema
   const validationSchema = yup.object({
@@ -37,10 +38,84 @@ function EditProperty() {
       .min(0, 'Invalid number of bathrooms')
   });
 
-  // Fetch property data on component mount if editing
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      description: '',
+      type: '',
+      location: '',
+      price: '',
+      bedroom: '',
+      bathroom: '',
+      kitchen: '',
+      parking: '',
+      balcony: '',
+      furnishing: '',
+      water: '',
+      photos: [], 
+      school: '',
+      healthcare: '',
+      bank: '',
+      park: '',
+      transport: '',
+      temple: '',
+      name: user?.username || '',
+      phone: user?.phone || '',
+      email: user?.email || ''
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        setLoading(true);
+        const formData = new FormData();
+  
+        // Add all text fields to FormData
+        Object.keys(values).forEach(key => {
+          if (key !== 'photos') {
+            formData.append(key, values[key]);
+          }
+        });
+  
+        // Add photos if new ones were selected
+        if (fileInputRef.current && fileInputRef.current.files.length > 0) {
+          Array.from(fileInputRef.current.files).forEach(file => {
+            formData.append('photos', file);
+          });
+        }
+  
+        const response = await fetch(
+          `http://localhost:4001/api/properties/update/${id}`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: authorization
+            },
+            body: formData
+          }
+        );
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update property');
+        }
+  
+        const data = await response.json();
+        console.log('Success:', data);
+        alert('Property updated successfully!');
+      } catch (error) {
+        console.error('Error:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  });
+  
+  // Fetch property data
   useEffect(() => {
     const fetchProperty = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `http://localhost:4001/api/properties/editProperty/${id}`,
           {
@@ -49,103 +124,36 @@ function EditProperty() {
             }
           }
         );
-
+  
         if (!response.ok) {
-          throw new Error('Failed to fetch property');
+          throw new Error('Failed to fetch property data');
         }
-
+  
         const data = await response.json();
         setPropertyData(data);
+  
+        // Update formik values with fetched data
+        Object.keys(data).forEach(key => {
+          if (key !== 'photos') {  // Handle photos separately
+            formik.setFieldValue(key, data[key]);
+          } else {
+            // Handle photos separately if necessary
+            formik.setFieldValue('photos', data[key] || []);
+          }
+        });
       } catch (error) {
         console.error('Error:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     if (id) {
       fetchProperty();
     }
   }, [id, authorization]);
-
-  const formik = useFormik({
-    initialValues: {
-      title: Property?.title || '',
-      description: Property?.description || '',
-      type: Property?.type || '',
-      location: Property?.location || '',
-      price: Property?.price || '',
-      bedroom: Property?.bedroom || '',
-      bathroom: Property?.bathroom || '',
-      kitchen: Property?.kitchen || '',
-      parking: Property?.parking || '',
-      balcony: Property?.balcony || '',
-      furnishing: Property?.furnishing || '',
-      water: Property?.water || '',
-      photos: Property?.photos || [],
-      school: Property?.school || '',
-      healthcare: Property?.healthcare || '',
-      bank: Property?.bank || '',
-      park: Property?.park || '',
-      transport: Property?.transport || '',
-      temple: Property?.temple || '',
-      name: user?.username || '',
-      phone: user?.phone || '',
-      email: user?.email || ''
-    },
-    enableReinitialize: true, // This is crucial for updating form values when propertyData changes
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const formData = new FormData();
-
-        Object.keys(values).forEach((key) => {
-          if (key === 'photos' && values[key]) {
-            Array.from(values[key]).forEach((photo) => {
-              formData.append('photos', photo);
-            });
-          } else {
-            formData.append(key, values[key]);
-          }
-        });
-
-        const response = await fetch(
-          `http://localhost:4001/api/properties/${id ? 'updateproperty/' + id : 'addproperty'}`,
-          {
-            method: id ? 'PUT' : 'POST',
-            headers: {
-              Authorization: authorization
-            },
-            body: formData
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to save property');
-        }
-
-        const data = await response.json();
-        console.log('Success:', data);
-
-        if (!id) {
-          formik.resetForm();
-          if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-          }
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-  });
-
-  // Update contact info when user data changes
-  useEffect(() => {
-    if (user) {
-      formik.setFieldValue('email', user.email || '');
-      formik.setFieldValue('phone', user.phone || '');
-      formik.setFieldValue('name', user.username || '');
-    }
-  }, [user]);
-
+  
   return (
     <div className="container border border-gray-300 hover:border-blue-600 rounded-md shadow-lg mt-5 mx-auto p-8 bg-white w-full">
       <div>
@@ -524,8 +532,11 @@ function EditProperty() {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-3 rounded-md mt-4 hover:bg-blue-600 transition"
+          onClick={() => {
+            console.log('Current form values:', formik.values); // Debug log
+          }}
         >
-          List Property
+          Update Property
         </button>
       </form>
     </div>
