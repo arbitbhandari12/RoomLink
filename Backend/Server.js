@@ -7,9 +7,7 @@ const adminRouter = require('./router/admin-router.js');
 const cors = require('cors');
 const app = express();
 
-
 dotenv.config();
-
 
 const coreOptions = {
   origin: 'http://localhost:5173',
@@ -37,8 +35,4 @@ connectDB()
     console.error('Database connection failed:', err);
   });
 
-
-
-
-  
 // GZGpctYGDvnhWy9I
