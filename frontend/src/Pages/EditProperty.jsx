@@ -1,182 +1,157 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 function EditProperty() {
   const { id } = useParams();
-  const { authorization } = useAuth();
-  const [Property, setProperty] = useState([]);
-
-  const editRoom = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:4001/api/properties/editProperty/${id}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: authorization
-          }
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      setProperty(data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (id) {
-      editRoom();
-    }
-  }, [id]);
-
+  const { authorization, user } = useAuth();
   const fileInputRef = useRef();
+  const [Property, setPropertyData] = useState(null);
 
-  // const validationSchema = yup.object({
-  //   title: yup
-  //   .string()
-  //   .matches(
-  //     /^[a-zA-Z][a-zA-Z0-9]*$/,
-  //     'Title must start with a letter and contain only letters and numbers'
-  //   )
-  //   .trim()
-  //   .required('Title is required')
-  //   .min(5, 'Title must be at least 5 characters')
-  //   .max(30, 'Title must be 30 characters or less'),
+  // Validation schema
+  const validationSchema = yup.object({
+    title: yup
+      .string()
+      .matches(
+        /^[a-zA-Z][a-zA-Z0-9\s]*$/,
+        'Title must start with a letter and contain only letters, numbers and spaces'
+      )
+      .trim()
+      .required('Title is required')
+      .min(5, 'Title must be at least 5 characters')
+      .max(30, 'Title must be 30 characters or less'),
+    type: yup.string().required('Property type is required'),
+    price: yup
+      .number()
+      .required('Price is required')
+      .positive('Price must be positive'),
+    bedroom: yup
+      .number()
+      .required('Bedroom is required')
+      .min(0, 'Invalid number of bedrooms'),
+    bathroom: yup
+      .number()
+      .required('Bathroom is required')
+      .min(0, 'Invalid number of bathrooms')
+  });
 
-  // type: yup
-  //   .string()
-  //   .required('Property type is required')
-  //   .oneOf(
-  //     ['apartment', 'house', 'townhouse'],
-  //     'Please select a valid property type'
-  //   ),
-  // price: yup
-  //   .string()
-  //   .required('Price is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bedroom: yup
-  //   .string()
-  //   .required('Bedroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bathroom: yup
-  //   .string()
-  //   .required('Bathroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input')
-  // });
-
-  const initialValues = {
-    title: '',
-    description: '',
-    type: '',
-    location: '',
-    price: '',
-    bedroom: '',
-    bathroom: '',
-    kitchen: '',
-    parking: '',
-    balcony: '',
-    furnishing: '',
-    water: '',
-    photos: '',
-    school: '',
-    healthcare: '',
-    bank: '',
-    park: '',
-    transport: '',
-    temple: '',
-    name: '',
-    phone: '',
-    email: ''
-  };
-
-  const { user } = useAuth();
-  if (!user) {
-  }
-
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState('');
-
+  // Fetch property data on component mount if editing
   useEffect(() => {
-    if (user) {
-      const { email, phone, username } = user; // Destructure user data
-
-      if (email) {
-        setEmail(email); // Set email when available
-        formik.setFieldValue('email', email); // Update formik's email field
-      }
-
-      if (phone) {
-        setPhone(phone);
-        formik.setFieldValue('phone', phone); // Update formik's phone field
-      }
-
-      if (username) {
-        setName(username);
-        formik.setFieldValue('name', username); // Update formik's name field
-      }
-    }
-  }, [user]);
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    // validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      const formData = new FormData();
-      for (const key in values) {
-        if (key === 'photos') {
-          Array.from(values.photos).forEach((photo) => {
-            formData.append('photos', photo);
-          });
-        } else {
-          formData.append(key, values[key]);
-        }
-      }
-      console.log(values);
+    const fetchProperty = async () => {
       try {
         const response = await fetch(
-          'http://localhost:4001/api/properties/addproperty',
+          `http://localhost:4001/api/properties/editProperty/${id}`,
           {
-            method: 'POST',
+            headers: {
+              Authorization: authorization
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch property');
+        }
+
+        const data = await response.json();
+        setPropertyData(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    if (id) {
+      fetchProperty();
+    }
+  }, [id, authorization]);
+
+  const formik = useFormik({
+    initialValues: {
+      title: Property?.title || '',
+      description: Property?.description || '',
+      type: Property?.type || '',
+      location: Property?.location || '',
+      price: Property?.price || '',
+      bedroom: Property?.bedroom || '',
+      bathroom: Property?.bathroom || '',
+      kitchen: Property?.kitchen || '',
+      parking: Property?.parking || '',
+      balcony: Property?.balcony || '',
+      furnishing: Property?.furnishing || '',
+      water: Property?.water || '',
+      photos: Property?.photos || [],
+      school: Property?.school || '',
+      healthcare: Property?.healthcare || '',
+      bank: Property?.bank || '',
+      park: Property?.park || '',
+      transport: Property?.transport || '',
+      temple: Property?.temple || '',
+      name: user?.username || '',
+      phone: user?.phone || '',
+      email: user?.email || ''
+    },
+    enableReinitialize: true, // This is crucial for updating form values when propertyData changes
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const formData = new FormData();
+
+        Object.keys(values).forEach((key) => {
+          if (key === 'photos' && values[key]) {
+            Array.from(values[key]).forEach((photo) => {
+              formData.append('photos', photo);
+            });
+          } else {
+            formData.append(key, values[key]);
+          }
+        });
+
+        const response = await fetch(
+          `http://localhost:4001/api/properties/${id ? 'updateproperty/' + id : 'addproperty'}`,
+          {
+            method: id ? 'PUT' : 'POST',
+            headers: {
+              Authorization: authorization
+            },
             body: formData
           }
         );
 
-        // if (response.ok) {
-        //   formik.resetForm({
-        //     values: {
-        //       ...initialValues,
-        //       name: name,
-        //       phone: phone,
-        //       email: email
-        //     }
-        //   });
-        //   if (fileInputRef.current) {
-        //     fileInputRef.current.value = '';
-        //   }
-        // }
+        if (!response.ok) {
+          throw new Error('Failed to save property');
+        }
 
         const data = await response.json();
-        console.log(data);
+        console.log('Success:', data);
+
+        if (!id) {
+          formik.resetForm();
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        }
       } catch (error) {
         console.error('Error:', error);
       }
     }
   });
 
+  // Update contact info when user data changes
+  useEffect(() => {
+    if (user) {
+      formik.setFieldValue('email', user.email || '');
+      formik.setFieldValue('phone', user.phone || '');
+      formik.setFieldValue('name', user.username || '');
+    }
+  }, [user]);
+
   return (
     <div className="container border border-gray-300 hover:border-blue-600 rounded-md shadow-lg mt-5 mx-auto p-8 bg-white w-full">
       <div>
-        <h1 className="flex justify-start text-4xl font-bold text-gray-800">
-          List Your Property
+        <h1 className="flex justify-start text-4xl font-bold text-gray-800 mb-6">
+          Edit Your Room
         </h1>
-        <h2 className="flex justify-start text-lg text-gray-500 mt-2 mb-6">
-          Fill out the form below to list your property for rent.
-        </h2>
       </div>
 
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
@@ -192,7 +167,7 @@ function EditProperty() {
             name="title"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={Property.title}
+            value={formik.values.title}
           />
           {formik.errors.title && formik.touched.title && (
             <div className="text-red-500 text-sm mt-1">
@@ -211,7 +186,7 @@ function EditProperty() {
             autoComplete="off"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={Property.description}
+            value={formik.values.description}
           />
         </div>
 
@@ -224,7 +199,7 @@ function EditProperty() {
             name="type"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={Property.type}
+            value={formik.values.type}
           >
             <option className="flex">Select Property Type</option>
             <option value="Apartment">Apartment</option>
@@ -253,7 +228,7 @@ function EditProperty() {
             autoComplete="off"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={Property.location}
+            value={formik.values.location}
           />
         </div>
 
@@ -271,15 +246,17 @@ function EditProperty() {
             }}
             className="border w-full p-3 rounded-md mt-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {Property.photos && Property.photos.length > 0 && (
-            <ul className="mt-2 list-disc pl-5">
-              {Property.photos.map((photo, index) => (
-                <li key={index} className="text-gray-700 text-sm">
-                  {photo.replace(/^.*[\\/]/, '').replace(/^\d+-/, '')}{' '}
-                </li>
-              ))}
-            </ul>
-          )}
+          {formik.values.photos &&
+            Array.isArray(formik.values.photos) &&
+            formik.values.photos.length > 0 && (
+              <ul className="mt-2 list-disc pl-5">
+                {formik.values.photos.map((photo, index) => (
+                  <li key={index} className="text-gray-700 text-sm">
+                    {photo.replace(/^.*[\\/]/, '').replace(/^\d+-/, '')}{' '}
+                  </li>
+                ))}
+              </ul>
+            )}
         </div>
 
         <div className="flex flex-col mb-6 lg:flex-row lg:gap-4">
@@ -293,7 +270,7 @@ function EditProperty() {
               name="price"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.price}
+              value={formik.values.price}
             />
             {formik.errors.price && formik.touched.price && (
               <div className="text-red-500 text-sm mt-1">
@@ -311,7 +288,7 @@ function EditProperty() {
               name="bedroom"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.bedroom}
+              value={formik.values.bedroom}
             />
             {formik.errors.bedroom && formik.touched.bedroom && (
               <div className="text-red-500 text-sm mt-1">
@@ -329,7 +306,7 @@ function EditProperty() {
               name="bathroom"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.bathroom}
+              value={formik.values.bathroom}
             />
             {formik.errors.bathroom && formik.touched.bathroom && (
               <div className="text-red-500 text-sm mt-1">
@@ -347,7 +324,7 @@ function EditProperty() {
               name="kitchen"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.kitchen}
+              value={formik.values.kitchen}
             >
               <option value="">Kitchen</option>
               <option className="" value="Yes">
@@ -363,7 +340,7 @@ function EditProperty() {
               name="parking"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.parking}
+              value={formik.values.parking}
             >
               <option value="">Parking</option>
               <option value="yes">Yes</option>
@@ -377,7 +354,7 @@ function EditProperty() {
               name="balcony"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.balcony}
+              value={formik.values.balcony}
             >
               <option value="">Balcony</option>
               <option value="yes">Yes</option>
@@ -393,7 +370,7 @@ function EditProperty() {
               name="furnishing"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.furnishing}
+              value={formik.values.furnishing}
             >
               <option value="">Furnishing</option>
               <option value="yes">Yes</option>
@@ -407,7 +384,7 @@ function EditProperty() {
               name="water"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={Property.water}
+              value={formik.values.water}
             >
               <option value="">Water Facility</option>
               <option value="24hrs">24 Hrs</option>
@@ -427,7 +404,7 @@ function EditProperty() {
             <select
               name="school"
               onChange={formik.handleChange}
-              value={Property.school}
+              value={formik.values.school}
               className="border flex rounded-md p-3 mt-2"
             >
               <option value="">School</option>
@@ -440,7 +417,7 @@ function EditProperty() {
             <select
               name="healthcare"
               onChange={formik.handleChange}
-              value={Property.healthcare}
+              value={formik.values.healthcare}
               className="border flex rounded-md p-3 mt-2"
             >
               <option value="">Healthcare</option>
@@ -453,7 +430,7 @@ function EditProperty() {
             <select
               name="park"
               onChange={formik.handleChange}
-              value={Property.park}
+              value={formik.values.park}
               className="border flex rounded-md p-3 mt-2"
             >
               <option value="">Parks</option>
@@ -468,7 +445,7 @@ function EditProperty() {
             <select
               name="bank"
               onChange={formik.handleChange}
-              value={Property.bank}
+              value={formik.values.bank}
               className="border flex rounded-md p-3 mt-2 "
             >
               <option value="">Banks</option>
@@ -481,7 +458,7 @@ function EditProperty() {
             <select
               name="transport"
               onChange={formik.handleChange}
-              value={Property.transport}
+              value={formik.values.transport}
               className="border flex rounded-md p-3 mt-2"
             >
               <option value="">Transport</option>
@@ -495,7 +472,7 @@ function EditProperty() {
               id="temple"
               name="temple"
               onChange={formik.handleChange}
-              value={Property.temple}
+              value={formik.values.temple}
               className="border flex rounded-md p-3 mt-2"
             >
               <option value="">Temple</option>
@@ -517,7 +494,6 @@ function EditProperty() {
             autoComplete="off"
             name="name"
             value={formik.values.name}
-            readOnly
           />
         </div>
 
@@ -531,7 +507,6 @@ function EditProperty() {
             autoComplete="off"
             name="phone"
             value={formik.values.phone}
-            readOnly
           />
         </div>
 
@@ -543,7 +518,6 @@ function EditProperty() {
             autoComplete="off"
             name="email"
             value={formik.values.email}
-            readOnly
           />
         </div>
 
