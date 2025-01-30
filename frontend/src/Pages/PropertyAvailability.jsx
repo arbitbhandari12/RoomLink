@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
-import Fuse from 'fuse.js'; // Import Fuse.js
+import Fuse from 'fuse.js';
 
 function PropertyAvailability() {
   const [approve, setApprove] = useState([]);
   const [locationInput, setLocationInput] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
+  const [loading, setLoading] = useState(true); 
 
   const approvedProperty = async () => {
     try {
@@ -24,6 +25,8 @@ function PropertyAvailability() {
       setApprove(data.approved);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -100,38 +103,50 @@ function PropertyAvailability() {
           </form>
         </div>
       </div>
-      <div className="grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5">
-        {filteredProperties.map((property) => (
-          <Link key={property._id} to={`/property/${property._id}`}>
-            <div className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-96">
-              <div className="relative">
-                <img
-                  src={`http://localhost:4001/${property.photos[0]}`}
-                  alt={property.title}
-                  className="w-full h-48 rounded-t-lg"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
-                  {property.title}
-                </h3>
-                <div className="flex justify-between mt-2">
-                  <p className="text-gray-400 text-xl">Rs {property.price}</p>
-                  <p className="text-gray-600">Room Type: {property.type}</p>
+
+      <div
+        className={`grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5 ${
+          loading ? 'min-h-[400px]' : ''
+        }`}
+      >
+        {loading ? (
+          <p className="text-center col-span-full text-gray-500">Loading properties...</p>
+        ) : filteredProperties.length > 0 ? (
+          filteredProperties.map((property) => (
+            <Link key={property._id} to={`/property/${property._id}`}>
+              <div className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-96">
+                <div className="relative">
+                  <img
+                    src={`http://localhost:4001/${property.photos[0]}`}
+                    alt={property.title}
+                    className="w-full h-48 rounded-t-lg"
+                    loading="lazy"
+                  />
                 </div>
-                <p className="text-gray-600 flex items-center mt-2">
-                  <MapPin size={13} color="blue" className="mr-0.5" />
-                  {property.location}
-                </p>
-                <p className="text-gray-600 text-sm mt-4">
-                  {property.description.length > 50
-                    ? `${property.description.split(' ').slice(0, 10).join(' ')}...`
-                    : property.description}
-                </p>
+                <div className="p-4">
+                  <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
+                    {property.title}
+                  </h3>
+                  <div className="flex justify-between mt-2">
+                    <p className="text-gray-400 text-xl">Rs {property.price}</p>
+                    <p className="text-gray-600">Room Type: {property.type}</p>
+                  </div>
+                  <p className="text-gray-600 flex items-center mt-2">
+                    <MapPin size={13} color="blue" className="mr-0.5" />
+                    {property.location}
+                  </p>
+                  <p className="text-gray-600 text-sm mt-4">
+                    {property.description.length > 50
+                      ? `${property.description.split(' ').slice(0, 10).join(' ')}...`
+                      : property.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        ) : (
+          <p className="text-center col-span-full text-gray-500">No properties available.</p>
+        )}
       </div>
     </>
   );
