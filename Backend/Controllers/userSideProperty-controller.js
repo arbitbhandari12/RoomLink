@@ -70,6 +70,57 @@ const editRoom = async (req, res) => {
   }
 };
 
+//Booking
+const createBooking = async (req) => {
+  try {
+    const { name, email, contact, bookingDate } = req.body;
+
+    if (!name || !email || !contact || !bookingDate) {
+      return { success: false, message: 'All fields are required' };
+    }
+
+    const formattedDate = new Date(bookingDate);
+    if (isNaN(formattedDate.getTime())) {
+      return { success: false, message: 'Invalid date format' };
+    }
+
+    const newBooking = new Booking({
+      name,
+      email,
+      contact,
+      bookingDate: formattedDate
+    });
+    await newBooking.save();
+
+    return { success: true, message: 'Booking successful', data: newBooking };
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Error saving booking',
+      error: error.message
+    };
+  }
+};
+
+//feedback
+const submitFeedback = async (req) => {
+  try {
+      const userId = req.user.id;
+      const { comment } = req.body;
+
+      if (!userId || !comment) {
+          return { success: false, message: 'All fields are required' };
+      }
+
+      const newFeedback = new Feedback({ userId, comment });
+      await newFeedback.save();
+
+      return { success: true, message: 'Feedback submitted successfully', data: newFeedback };
+  } catch (error) {
+      return { success: false, message: 'Error submitting feedback', error: error.message };
+  }
+};
+
 module.exports = {
   homeproperty,
   userSideProperty,
@@ -77,5 +128,7 @@ module.exports = {
   personalProperty,
   yourProperties,
   deleteProperty,
-  editRoom
+  editRoom,
+  createBooking,
+  submitFeedback
 };
