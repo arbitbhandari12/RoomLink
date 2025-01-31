@@ -94,6 +94,7 @@ const approveProperty = async (req, res) => {
   }
 };
 
+//Approve shifting request
 const approveshifting = async (req, res) => {
   try {
     const id = req.params.id;
@@ -124,5 +125,6 @@ module.exports = {
   detailsPage,
   allproperty,
   deleteProperty,
-  approveProperty
+  approveProperty,
+  approveshifting
 };
