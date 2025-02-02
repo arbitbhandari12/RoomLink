@@ -5,7 +5,7 @@ const {
   register,
   login,
   user,
-} = require('../controllers/auth-controller');
+} = require('../Controllers/auth-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 
 router.route('/').get(home);

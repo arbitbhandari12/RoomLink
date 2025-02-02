@@ -7,7 +7,7 @@ const {
   detailsPage,
   deleteProperty,
   approveProperty,
-} = require('../controllers/admin-controller');
+} = require('../Controllers/admin-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const adminMiddleware = require('../middlewares/admin-middleware');
 

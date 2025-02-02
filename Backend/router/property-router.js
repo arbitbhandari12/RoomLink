@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const addProperty = require('../controllers/addproperty-controller');
+const addProperty = require('../Controllers/addproperty-controller');
 const upload = require('../middlewares/multer-config');
 const {
   userSideProperty,
@@ -13,8 +13,8 @@ const {
 } = require('../controllers/userSideProperty-controller');
 const updateProperty = require('../Controllers/editProperty-controller');
 const similarProperty = require('../Controllers/SimilarProperty-controller');
-const booking = require('../controllers/BookingProperty-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
+const { booking, roomStatus } = require('../Controllers/BookingProperty-controller');
 
 router.post('/addproperty', upload.array('photos', 10), addProperty);
 router.route('/homelatest').get(homeproperty);
@@ -28,6 +28,10 @@ router
 router.route('/similar/:id').get(authMiddleware, similarProperty);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
-router.route('/booking').post(authMiddleware, booking);
+router.post('/booking/:id', booking);
+router.patch('/roomStatus/:id', roomStatus);
+
+
+
 
 module.exports = router;
