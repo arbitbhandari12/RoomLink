@@ -66,23 +66,24 @@ const approveList = new mongoose.Schema({
     required: true
   },
   school: {
-    type: String,
+    type: String
   },
   healthcare: {
-    type: String,
+    type: String
   },
   park: {
-    type: String,
+    type: String
   },
   transport: {
-    type: String,
+    type: String
   },
   temple: {
-    type: String,
+    type: String
   },
   bank: {
-    type: String,
-  }
+    type: String
+  },
+  status: { type: String, enum: ["Available", "Rented"], default: "Available" },
 });
 
 const approve = mongoose.model('ApproveList', approveList);
