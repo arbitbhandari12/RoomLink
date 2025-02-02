@@ -3,7 +3,10 @@ Backend/uploads/1738152242463-loft-home-office-interior-design.jpg
 Backend/uploads/1738150853049-loft-home-office-interior-design.jpg
 Backend/uploads/1738163886768-loft-home-office-interior-design.jpg
 Backend/uploads/1738166420370-loft-home-office-interior-design.jpg
+<<<<<<< HEAD
 Backend/models/Booking-model.js
 Backend/models/propertyapprove-model.js
 Backend/uploads/1738333192497-loft-home-office-interior-design.jpg
 Backend/uploads/1738333378532-loft-home-office-interior-design.jpg
+=======
+>>>>>>> parent of 3c737c2 (Some Changes on booking and property models)
