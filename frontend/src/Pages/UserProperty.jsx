@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Store/auth';
-import ImageSlider from '../Components/Image-Slider';
 import { Link } from 'react-router-dom';
 
 function UserProperty() {
