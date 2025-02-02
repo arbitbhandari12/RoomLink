@@ -14,7 +14,10 @@ const {
 const updateProperty = require('../Controllers/editProperty-controller');
 const similarProperty = require('../Controllers/SimilarProperty-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
-const { booking, roomStatus } = require('../Controllers/BookingProperty-controller');
+const {
+  booking,
+  roomStatus
+} = require('../Controllers/BookingProperty-controller');
 
 router.post('/addproperty', upload.array('photos', 10), addProperty);
 router.route('/homelatest').get(homeproperty);
