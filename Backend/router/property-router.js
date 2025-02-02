@@ -30,11 +30,5 @@ router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.post('/booking/:id', booking);
 router.patch('/roomStatus/:id', roomStatus);
-<<<<<<< Updated upstream
-
-
-
-=======
->>>>>>> Stashed changes
 
 module.exports = router;
