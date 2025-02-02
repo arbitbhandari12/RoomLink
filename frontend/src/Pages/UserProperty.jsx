@@ -26,6 +26,10 @@ function UserProperty() {
     } catch (error) {}
   };
 
+  useEffect(() => {
+    myProperty();
+  }, []);
+
   const deleteProperty = async (id) => {
     try {
       const response = await fetch(
@@ -45,9 +49,24 @@ function UserProperty() {
     }
   };
 
-  useEffect(() => {
-    myProperty();
-  }, []);
+  const rentProperty = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4001/api/properties/roomStatus/${id}`,
+
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -99,10 +118,16 @@ function UserProperty() {
                     </Link>
                   </Link>
                   <button
-                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
+                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2"
                     onClick={() => deleteProperty(properties._id)}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
+                    onClick={() => rentProperty(properties._id)}
+                  >
+                    Rented
                   </button>
                 </td>
               </tr>
