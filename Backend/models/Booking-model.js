@@ -13,14 +13,11 @@ const bookinglist = new mongoose.Schema({
     type: String,
     required: true
   },
-  Date: {
+  date: {
     type: Date,
     required: true
   },
-  isBooked: {
-    type: Boolean,
-    default: true
-  }
+  room: { type: mongoose.Schema.Types.ObjectId, ref: 'ApproveList' },
 });
 
 const Booking = mongoose.model('BookingList', bookinglist);
