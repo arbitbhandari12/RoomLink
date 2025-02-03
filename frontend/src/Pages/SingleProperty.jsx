@@ -240,10 +240,11 @@ function PropertyDetails() {
             </div>
 
             <div className="flex gap-6 mt-6 mb-40">
-              <div className="">
-                <BookingButton />
-              </div>
-            </div>
+  <div>
+    <BookingButton id={id} />
+  </div>
+</div>
+
           </div>
         </div>
       </div>
