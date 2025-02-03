@@ -1,38 +1,52 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Formik, useFormik } from 'formik';
+import { useParams } from 'react-router-dom';
 
-const BookingForm = () => {
-  const [formData, setFormData] = useState({
+
+const BookingForm = ({ id }) => {
+  const initialValues = {
     name: '',
     email: '',
-    contact: '',
-    date: null,
+    phone: '',
+    date: null
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: async (values) => {
+      console.log(values);
+      try {
+        const response = await fetch(
+          `http://localhost:4001/api/properties/booking/${id}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+          }
+        );
+        if (response.ok) {
+          console.log('working');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleDateChange = (date) => {
-    setFormData({ ...formData, date });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Booking Details:', formData);
-  };
 
   return (
     <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Book a Visit</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
         <input
           type="text"
           name="name"
           placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.name}
           className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
@@ -40,24 +54,24 @@ const BookingForm = () => {
           type="email"
           name="email"
           placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.email}
           className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
         <input
           type="tel"
-          name="contact"
+          name="phone"
           placeholder="Contact Number"
-          value={formData.contact}
-          onChange={handleChange}
+          onChange={formik.handleChange}
+          value={formik.values.phone}
           className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
         <div>
           <DatePicker
-            selected={formData.date}
-            onChange={handleDateChange}
+            selected={formik.values.date}
+            onChange={(date) => formik.setFieldValue('date', date)}
             minDate={new Date()}
             placeholderText="Select a Date"
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
