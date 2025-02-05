@@ -167,54 +167,60 @@ function PropertyDetails() {
                 </span>
               </div>
             </div>
+
             <div className="p-4">
-              <h1 className="text-3xl font-semibold mb-4">Posts Feed</h1>
-
-              <div className="space-y-6">
-                {/* Existing feedback comments */}
-                <div className="bg-gray-100 p-2 rounded-lg shadow-md">
-                  <div className="text-xl font-bold">Arbit</div>
-                  <div className="mt-2 text-gray-700">
-                    This is an amazing Room!
-                  </div>
-                </div>
-
-                <div className="bg-gray-100 p-2 rounded-lg shadow-md">
-                  <div className="text-xl font-bold">Miraj</div>
-                  <div className="mt-2 text-gray-700">
-                    This is an amazing Room!
-                  </div>
-                </div>
-              </div>
-
-              {/* Feedback form */}
               <div className="mt-8">
                 <h2 className="text-2xl font-semibold mb-4">
                   Leave Your Feedback
                 </h2>
-                <form className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="comment"
-                      className="block text-lg font-medium mb-2"
-                    >
-                      Your Comment
-                    </label>
-                    <textarea
-                      id="comment"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Write your comment here"
-                      rows="4"
-                    />
+                <div className="space-y-4">
+                  {/* Existing Comments */}
+                  <div className="bg-gray-100 p-4 rounded-md">
+                    <h3 className="text-lg font-medium mb-2">User Feedback</h3>
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      <p className="p-3 bg-white rounded-md shadow">
+                        "Great property! The location is perfect."
+                      </p>
+                      <p className="p-3 bg-white rounded-md shadow">
+                        "Had an amazing experience. Highly recommended!"
+                      </p>
+                      <p className="p-3 bg-white rounded-md shadow">
+                        "Needs some maintenance, but overall a good stay."
+                      </p>
+                      <p className="p-3 bg-white rounded-md shadow">
+                        "Loved the design and amenities!"
+                      </p>
+                      <p className="p-3 bg-white rounded-md shadow">
+                        "Would definitely book again!"
+                      </p>
+                    </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    Submit Feedback
-                  </button>
-                </form>
+                  {/* Feedback Form */}
+                  <form className="space-y-4">
+                    <div>
+                      <label
+                        htmlFor="comment"
+                        className="block text-lg font-medium mb-2"
+                      >
+                        Your Comment
+                      </label>
+                      <textarea
+                        id="comment"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Write your comment here"
+                        rows="4"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      Submit Feedback
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -240,11 +246,10 @@ function PropertyDetails() {
             </div>
 
             <div className="flex gap-6 mt-6 mb-40">
-  <div>
-    <BookingButton id={id} />
-  </div>
-</div>
-
+              <div>
+                <BookingButton id={id} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
