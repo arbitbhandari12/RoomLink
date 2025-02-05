@@ -85,13 +85,23 @@ const roomStatus = async (req, res) => {
 // Book a room
 const booking = async (req, res) => {
   const room = req.params.id;
+  const { name, email, phone, date } = req.body;
+
   try {
+    // Check if a booking already exists for this room and date
+    const existingBooking = await Booking.findOne({ room: room, date: date });
+
+    if (existingBooking) {
+      return res.status(400).json({ msg: 'This date is already booked. Please select another date.' });
+    }
+
+    // If no existing booking, create a new booking
     const newBooking = await Booking.create({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      date: req.body.date,
-      room: room, 
+      name,
+      email,
+      phone,
+      date,
+      room,
     });
 
     res.status(201).json({ msg: 'Booked Successfully', booking: newBooking });
@@ -100,5 +110,5 @@ const booking = async (req, res) => {
   }
 };
 
-// Export both functions
+
 module.exports = { booking, roomStatus };
