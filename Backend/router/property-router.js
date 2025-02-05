@@ -13,6 +13,7 @@ const {
 } = require('../controllers/userSideProperty-controller');
 const updateProperty = require('../Controllers/editProperty-controller');
 const similarProperty = require('../Controllers/SimilarProperty-controller');
+const { Comment, getComment } = require('../Controllers/comments-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const {
   booking,
@@ -34,6 +35,7 @@ router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
 router.post('/booking/:id', booking);
 router.patch('/roomStatus/:id', roomStatus);
-
+router.post('/comment/:id', authMiddleware, Comment);
+router.route('/getComment/:id').get(authMiddleware, getComment);
 
 module.exports = router;
