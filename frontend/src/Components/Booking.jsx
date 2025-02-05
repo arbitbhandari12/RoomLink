@@ -1,40 +1,48 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Formik, useFormik } from 'formik';
-import { useParams } from 'react-router-dom';
-
+import { useFormik } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BookingForm = ({ id }) => {
   const initialValues = {
     name: '',
     email: '',
     phone: '',
-    date: null
+    date: null,
   };
 
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: async (values) => {
-      console.log(values);
       try {
         const response = await fetch(
           `http://localhost:4001/api/properties/booking/${id}`,
           {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
             },
-            body: JSON.stringify(values)
+            body: JSON.stringify(values),
           }
         );
+
+        const data = await response.json();
+
         if (response.ok) {
-          console.log('working');
+          toast.success('Booking Successful!', {
+          });
+        } else {
+          toast.error(data.msg || 'Booking failed', {
+          });
         }
       } catch (error) {
         console.log(error);
+        toast.error('Server error. Please try again later.', {
+        });
       }
-    }
+    },
   });
 
   return (
@@ -84,6 +92,7 @@ const BookingForm = ({ id }) => {
           Submit Booking
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
