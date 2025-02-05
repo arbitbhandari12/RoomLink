@@ -18,11 +18,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  searchHistory: [{
-    location: String,
-    priceRange: [Number],
-    type: String
-     }],
   isAdmin: {
     type: Boolean,
     default: false
