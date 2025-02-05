@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import ImageSlider from '../Components/Image-Slider';
@@ -24,8 +24,77 @@ import BookingButton from '../Components/Booking';
 function PropertyDetails() {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
+  const [comment, setComment] = useState();
   const [similar, setSimilarRooms] = useState([]);
   const { authorization } = useAuth();
+
+  const initialValues = {
+    comment: ''
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch(
+          `http://localhost:4001/api/properties/comment/${id}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: authorization,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(values)
+          }
+        );
+
+        if (response.ok) {
+          const updatedCommentsResponse = await fetch(
+            `http://localhost:4001/api/properties/getComment/${id}`,
+            {
+              method: 'GET',
+              headers: {
+                Authorization: authorization
+              }
+            }
+          );
+
+          const updatedComments = await updatedCommentsResponse.json();
+          setComment(updatedComments);
+
+          formik.resetForm();
+        } else {
+          console.error('Error submitting comment');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+  });
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:4001/api/properties/getComment/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: authorization
+            }
+          }
+        );
+        const data = await response.json();
+        setComment(data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
+    if (id) {
+      fetchComments();
+    }
+  }, [id]);
 
   const fetchProperty = async () => {
     try {
@@ -168,59 +237,48 @@ function PropertyDetails() {
               </div>
             </div>
 
-            <div className="p-4">
-              <div className="mt-8">
-                <h2 className="text-2xl font-semibold mb-4">
-                  Leave Your Feedback
-                </h2>
-                <div className="space-y-4">
-                  {/* Existing Comments */}
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h3 className="text-lg font-medium mb-2">User Feedback</h3>
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      <p className="p-3 bg-white rounded-md shadow">
-                        "Great property! The location is perfect."
-                      </p>
-                      <p className="p-3 bg-white rounded-md shadow">
-                        "Had an amazing experience. Highly recommended!"
-                      </p>
-                      <p className="p-3 bg-white rounded-md shadow">
-                        "Needs some maintenance, but overall a good stay."
-                      </p>
-                      <p className="p-3 bg-white rounded-md shadow">
-                        "Loved the design and amenities!"
-                      </p>
-                      <p className="p-3 bg-white rounded-md shadow">
-                        "Would definitely book again!"
-                      </p>
-                    </div>
+            <div className="p-4 border mt-5 mb-5 border-gray-500 shadow-md">
+              <h2 className="text-2xl font-semibold mb-4">
+                Leave Your Feedback
+              </h2>
+              <div className="space-y-4">
+                <div className="bg-gray-100 p-4 rounded-md">
+                  <h3 className="text-lg font-medium mb-2">User Feedback</h3>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {comment &&
+                      comment.map((comments) => (
+                        <p
+                          key={comments._id}
+                          className="p-3 bg-white rounded-md shadow"
+                        >
+                          {comments.comment}
+                        </p>
+                      ))}
+                  </div>
+                </div>
+
+                {/* Feedback Form */}
+                <form onSubmit={formik.handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-lg font-medium mb-2">
+                      Your Comment
+                    </label>
+                    <textarea
+                      name="comment"
+                      onChange={formik.handleChange}
+                      value={formik.values.comment}
+                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Write your comment here"
+                    />
                   </div>
 
-                  {/* Feedback Form */}
-                  <form className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="comment"
-                        className="block text-lg font-medium mb-2"
-                      >
-                        Your Comment
-                      </label>
-                      <textarea
-                        id="comment"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Write your comment here"
-                        rows="4"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Submit Feedback
-                    </button>
-                  </form>
-                </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    Submit Feedback
+                  </button>
+                </form>
               </div>
             </div>
           </div>
