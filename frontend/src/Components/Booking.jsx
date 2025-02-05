@@ -46,7 +46,7 @@ const BookingForm = ({ id }) => {
   });
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md border border-gray-500">
       <h2 className="text-2xl font-bold mb-4 text-center">Book a Visit</h2>
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <input
