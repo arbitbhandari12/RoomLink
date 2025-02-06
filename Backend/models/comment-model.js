@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  room: { type: mongoose.Schema.Types.ObjectId, ref: 'ApproveList' }
+  room: { type: String, required: true }
 });
 
 const Comment = mongoose.model('Comment', commentSchema);
