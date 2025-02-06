@@ -247,12 +247,15 @@ function PropertyDetails() {
                   <div className="space-y-2 max-h-40 overflow-y-auto">
                     {comment &&
                       comment.map((comments) => (
-                        <p
+                        <div
                           key={comments._id}
                           className="p-3 bg-white rounded-md shadow"
                         >
-                          {comments.comment}
-                        </p>
+                          <p className="text-sm font-semibold text-gray-700">
+                            {comments.name}
+                          </p>
+                          <p className="text-gray-800">{comments.comment}</p>
+                        </div>
                       ))}
                   </div>
                 </div>

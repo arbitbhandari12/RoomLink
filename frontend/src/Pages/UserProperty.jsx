@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Store/auth';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function UserProperty() {
   const [property, setProperty] = useState([]);
@@ -31,6 +32,18 @@ function UserProperty() {
 
   const deleteProperty = async (id) => {
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You want to delete this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (!result.isConfirmed) return;
+
       const response = await fetch(
         `http://localhost:4001/api/properties/delete/${id}`,
 

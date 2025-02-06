@@ -1,4 +1,5 @@
 const comment = require('../models/comment-model');
+const authMiddleware = require('../middlewares/auth-middleware')
 
 const Comment = async (req, res) => {
   const room = req.params.id;
