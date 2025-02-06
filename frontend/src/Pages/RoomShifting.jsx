@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 
 const RoomShifting = () => {
-  const Formik = useFormik({
+  const initialValues = {
     name: '',
     phone: '',
     email: '',
@@ -11,6 +11,26 @@ const RoomShifting = () => {
     shiftingdate: '',
     listofitems: '',
     helper: ''
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: async (values) => {
+      const response = await fetch(
+        'http://localhost:4001/api/shifting/shiftRequest',
+        {
+          method:"POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      if(response.ok){
+        const data = await response.json()
+        console.log(data)
+      }
+    }
   });
   return (
     <>
@@ -21,84 +41,114 @@ const RoomShifting = () => {
             Please fill out the form below to request room shifting assistance.
           </h2>
         </div>
-        <h1 className="mt-10 font-bold text-xl">Personal Information</h1>
-        <div className="flex mt-4 space-x-4">
-          <div className="flex flex-col w-1/3">
-            <label className="mb-2">Name</label>
-            <input
-              type="text"
-              className="border border-slate-600 p-2 rounded"
-              name="name"
-              onChange={Formik.handleChange}
-              onBlur={Formik.handleBlur}
-            />
-          </div>
-          <div className="flex flex-col w-1/3">
-            <label className="mb-2">Phone Number</label>
-            <input
-              type="text"
-              className="border border-slate-600 p-2 rounded"
-              name="phone"
-              onChange={Formik.handleChange}
-              onBlur={Formik.handleBlur}
-            />
-          </div>
-          <div className="flex flex-col w-1/3">
-            <label className="mb-2">Email</label>
-            <input
-              type="email"
-              className="border border-slate-600 p-2 rounded"
-            />
-          </div>
-        </div>
-        <h1 className="mt-4 font-bold text-xl mb-4">Shifting Details</h1>
-        <div className="flex gap-2">
-          <div className="flex flex-col w-1/3">
-            <label>Pick-Up Location</label>
-            <input
-              type="text"
-              className="border border-slate-600 p-2 rounded mt-3"
-            />
-          </div>
-          <div className="flex flex-col w-1/3">
-            <label>Drop-off Location</label>
-            <input
-              type="text"
-              className="border border-slate-600 p-2 rounded mt-3"
-            />
-          </div>
-          <div>
-            <div className="flex flex-col w-96">
-              <label>Shifting Date</label>
+        <form onSubmit={formik.handleSubmit}>
+          <h1 className="mt-10 font-bold text-xl">Personal Information</h1>
+          <div className="flex mt-4 space-x-4">
+            <div className="flex flex-col w-1/3">
+              <label className="mb-2">Name</label>
               <input
-                type="datetime-local"
-                className="border border-slate-600 rounded p-2 mt-2.5"
+                type="text"
+                className="border border-slate-600 p-2 rounded"
+                name="name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+              />
+            </div>
+            <div className="flex flex-col w-1/3">
+              <label className="mb-2">Phone Number</label>
+              <input
+                type="text"
+                className="border border-slate-600 p-2 rounded"
+                name="phone"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.phone}
+              />
+            </div>
+            <div className="flex flex-col w-1/3">
+              <label className="mb-2">Email</label>
+              <input
+                type="email"
+                name='email'
+                className="border border-slate-600 p-2 rounded"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
             </div>
           </div>
-        </div>
-        <div className="flex flex-col">
-          <h1 className="font-bold text-xl mt-4">
-            List of items to be shifted
-          </h1>
-          <input
-            type="text"
-            className="border border-slate-600 p-2 h-28 mt-3"
-          />
-        </div>
-        <div className="flex flex-col mt-6">
-          <label className="text-xl ">Need Helpers For Packing?</label>
-          <select className="border border-slate-600 p-2 rounded mt-2 w-1/5">
-            <option value="" className="flex">
-              Need Helpers For Packing?
-            </option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-        <button type="submit" className="border bg-blue-500 w-full mt-8 p-3">
-          Submit Request
-        </button>
+          <h1 className="mt-4 font-bold text-xl mb-4">Shifting Details</h1>
+          <div className="flex gap-2">
+            <div className="flex flex-col w-1/3">
+              <label>Pick-Up Location</label>
+              <input
+                type="text"
+                name="pickup"
+                className="border border-slate-600 p-2 rounded mt-3"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.pickup}
+              />
+            </div>
+            <div className="flex flex-col w-1/3">
+              <label>Drop-off Location</label>
+              <input
+                type="text"
+                name="dropoff"
+                className="border border-slate-600 p-2 rounded mt-3"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.dropoff}
+              />
+            </div>
+            <div>
+              <div className="flex flex-col w-96">
+                <label>Shifting Date</label>
+                <input
+                  type="datetime-local"
+                  name="shiftingdate"
+                  className="border border-slate-600 rounded p-2 mt-2.5"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.shiftingdate}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h1 className="font-bold text-xl mt-4">
+              List of items to be shifted
+            </h1>
+            <input
+              type="text"
+              name="listofitems"
+              className="border border-slate-600 p-2 h-28 mt-3"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.listofitems}
+            />
+          </div>
+          <div className="flex flex-col mt-6">
+            <label className="text-xl ">Need Helpers For Packing?</label>
+            <select
+              className="border border-slate-600 p-2 rounded mt-2 w-1/5"
+              name="helper"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.helper}
+            >
+              <option value="" className="flex">
+                Need Helpers For Packing?
+              </option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <button type="submit" className="border bg-blue-500 w-full mt-8 p-3">
+            Submit Request
+          </button>
+        </form>
       </div>
     </>
   );
