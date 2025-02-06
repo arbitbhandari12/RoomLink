@@ -36,6 +36,6 @@ router.route('/booked-dates/:id').get(authMiddleware, booking);
 router.post('/booking/:id', booking);
 router.patch('/roomStatus/:id', roomStatus);
 router.post('/comment/:id', authMiddleware, Comment);
-router.route('/getComment/:id').get(authMiddleware, getComment);
+router.route('/getComment/:id').get(getComment);
 
 module.exports = router;
