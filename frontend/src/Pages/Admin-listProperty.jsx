@@ -15,6 +15,7 @@ function AdminlistProperty() {
         }
       });
       const data = await response.json();
+      console.log(data)
       setProperties(data.listProperty); // Set properties data
     } catch (error) {
       console.log('Error', error);
