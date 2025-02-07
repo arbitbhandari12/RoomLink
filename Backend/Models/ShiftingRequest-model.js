@@ -26,7 +26,7 @@ const shiftingRequest = new mongoose.Schema({
     required: true
   },
   listofitems: {
-    type: [String],
+    type: String,
     required: true
   },
   helper: {
