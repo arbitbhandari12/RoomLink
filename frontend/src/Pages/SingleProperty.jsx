@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import BookingButton from '../Components/Booking';
 
+
 function PropertyDetails() {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
