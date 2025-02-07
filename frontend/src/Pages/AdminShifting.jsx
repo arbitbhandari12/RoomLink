@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const AdminShifting = () => {
+  const [request, setRequest] = useState();
+
+  const requestShifting = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/shifting/adminShift',
+        {
+          method: 'GET'
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setRequest(data);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    requestShifting();
+  }, []);
+
   return (
     <>
       <h1 className="font-bold text-center text-2xl sm:text-xl lg:text-3xl mb-6">
