@@ -39,7 +39,7 @@ function AdminLayout() {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/shifting" className="">
+            <NavLink to="/admin/requests" className="">
               Shifting Request
             </NavLink>
           </li>

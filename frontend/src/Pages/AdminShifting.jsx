@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const AdminShifting = () => {
   const [request, setRequest] = useState([]);
+  
 
   const requestShifting = async () => {
     try {
@@ -64,11 +65,14 @@ const AdminShifting = () => {
                 </td>
 
                 <td className="py-3 px-4 border-b border-gray-300 text-center flex flex-wrap justify-center gap-2">
-                  <NavLink to="/admin/adminShifting">
+                  <Link
+                    key={shift._id}
+                    to={`/admin/Shifting/${shift._id}`}
+                  >
                     <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded">
                       View Details
                     </button>
-                  </NavLink>
+                  </Link>
                   <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded">
                     Approve
                   </button>
