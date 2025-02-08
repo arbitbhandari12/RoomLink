@@ -58,8 +58,8 @@ function App() {
           <Route path="listofproperty" element={<AdminListProperty />} />
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
           {/* <Route path="complaint-property" element={<AdminComplaint />} /> */}
-          <Route path="shifting" element={<AdminShift />} />
-          <Route path="adminShifting" element={<AdminShifting />} />
+          <Route path="requests" element={<AdminShift />} />
+          <Route path="Shifting/:id" element={<AdminShifting />} />
         </Route>
       </Routes>
       {!isAdminRoute && <Footer />}
