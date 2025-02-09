@@ -7,6 +7,7 @@ const {
   detailsPage,
   deleteProperty,
   approveProperty,
+  rejectedProperty,
 } = require('../Controllers/admin-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const adminMiddleware = require('../middlewares/admin-middleware');
@@ -21,11 +22,12 @@ router
   .delete(authMiddleware, adminMiddleware, deleteUsers);
 
 router
-  .route('/property/delete/:id')
-  .delete(authMiddleware, adminMiddleware, deleteProperty);
-
-router
   .route('/property/approve/:id')
-  .get(authMiddleware, adminMiddleware, approveProperty);
+  .post(authMiddleware, adminMiddleware, approveProperty);
+
+
+  router
+  .route('/property/rejected/:id')
+  .post(authMiddleware, adminMiddleware, rejectedProperty);
 
 module.exports = router;

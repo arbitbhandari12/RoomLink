@@ -6,8 +6,10 @@ const {
   userSideProperty,
   propertyPage,
   personalProperty,
+  rejectedProperty,
   yourProperties,
   deleteProperty,
+  deleterejectedProperty,
   editRoom,
   homeproperty
 } = require('../controllers/userSideProperty-controller');
@@ -25,12 +27,14 @@ router.route('/homelatest').get(homeproperty);
 router.route('/available').get(userSideProperty);
 router.route('/property/:id').get(propertyPage);
 router.route('/myProperty').get(authMiddleware, personalProperty);
+router.route('/rejectedProperty').get(authMiddleware, rejectedProperty);
 router.route('/yourProperties/:id').get(yourProperties);
 router
   .route('/update/:id')
   .patch(authMiddleware, upload.array('photos', 10), updateProperty);
 router.route('/similar/:id').get(authMiddleware, similarProperty);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
+router.route('/deletereject/:id').delete(authMiddleware, deleterejectedProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
 router.post('/booking/:id', booking);
