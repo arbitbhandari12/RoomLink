@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 
 function UserProperty() {
   const [property, setProperty] = useState([]);
+  const [rejected, setRejected] = useState([]);
   const { authorization } = useAuth();
 
   const myProperty = async () => {
@@ -21,14 +22,34 @@ function UserProperty() {
       const data = await response.json();
       if (response.ok) {
         setProperty(data);
-        myProperty();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useEffect(() => {
-    myProperty();
-  }, []);
+  const myrejectedProperty = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/properties/rejectedProperty',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setRejected(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  myProperty();
+  myrejectedProperty();
 
   const deleteProperty = async (id) => {
     try {
@@ -46,7 +67,36 @@ function UserProperty() {
 
       const response = await fetch(
         `http://localhost:4001/api/properties/delete/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const deleterejectedProperty = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You want to delete this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (!result.isConfirmed) return;
+
+      const response = await fetch(
+        `http://localhost:4001/api/properties/deletereject/${id}`,
         {
           method: 'DELETE',
           headers: {
@@ -65,7 +115,6 @@ function UserProperty() {
     try {
       const response = await fetch(
         `http://localhost:4001/api/properties/roomStatus/${id}`,
-
         {
           method: 'PATCH',
           headers: {
@@ -93,6 +142,9 @@ function UserProperty() {
                 Room Title
               </th>
               <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
+                Status
+              </th>
+              <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
                 Actions
               </th>
             </tr>
@@ -103,12 +155,18 @@ function UserProperty() {
                 key={index}
                 className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
               >
-                <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                <td className="py-3 px-4 border-b border-gray-300 text-center">
                   (#{properties._id.substring(18, 24)})
                 </td>
                 <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {properties.title.split(' ').slice(0, 4).join(' ')}
-                  {properties.title.split(' ').length > 4 && '...'}
+                  {properties.title && properties.title.length > 20
+                    ? properties.title.substring(0, 20) + '...'
+                    : properties.title}
+                </td>
+                <td className="text-center py-3 px-4 border-b">
+                  <span className="py-3 px-4 border-b border-gray-300 bg-green-200 rounded-full">
+                    {properties.statusApprove}
+                  </span>
                 </td>
                 <td className="text-center py-3 px-4 border-b border-gray-300">
                   <Link
@@ -119,15 +177,13 @@ function UserProperty() {
                       View Details
                     </button>
                   </Link>
-                  <Link>
-                    <Link
-                      key={properties._id}
-                      to={`/addproperty/editProperty/${properties._id}`}
-                    >
-                      <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
-                        Edit
-                      </button>
-                    </Link>
+                  <Link
+                    key={properties._id}
+                    to={`/addproperty/editProperty/${properties._id}`}
+                  >
+                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
+                      Edit
+                    </button>
                   </Link>
                   <button
                     className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2"
@@ -140,6 +196,43 @@ function UserProperty() {
                     onClick={() => rentProperty(properties._id)}
                   >
                     Rented
+                  </button>
+                </td>
+              </tr>
+            ))}
+
+            {rejected.map((properties, index) => (
+              <tr
+                key={index}
+                className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+              >
+                <td className="py-3 px-4 border-b border-gray-300 text-center">
+                  (#{properties._id.substring(18, 24)})
+                </td>
+                <td className="py-3 px-4 border-b border-gray-300 text-center">
+                  {properties.title && properties.title.length > 20
+                    ? properties.title.substring(0, 20) + '...'
+                    : properties.title}
+                </td>
+                <td className="text-center py-3 px-4 border-b border-gray-300">
+                  <span className="py-3 px-4 border-b border-gray-300 bg-red-200 rounded-full">
+                    {properties.status}
+                  </span>
+                </td>
+                <td className="text-center py-3 px-4 border-b border-gray-300">
+                  <Link
+                    key={properties._id}
+                    to={`/yourproperty/${properties._id}`}
+                  >
+                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
+                      View Details
+                    </button>
+                  </Link>
+                  <button
+                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2"
+                    onClick={() => deleterejectedProperty(properties._id)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
