@@ -14,6 +14,7 @@ import UserProperty from './Pages/UserProperty';
 import EditProperty from './Pages/EditProperty';
 import PropertyLayout from './Components/Layouts/Property-Layout';
 import Footer from './Components/Footer';
+import ShiftingLayout from './Components/Layouts/Shift-Layout'
 import RoomShifting from './Pages/RoomShifting';
 import DetailsPropertyAdmin from './Pages/DetailsPropertyAdmin';
 import ForgotPassword from './Pages/ForgotPassword';
@@ -46,12 +47,14 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addproperty" element={<PropertyLayout />}>
-          <Route index element={<AddProperty />} />{' '}
+          <Route index element={<AddProperty />} />
           <Route path="UserProperty" element={<UserProperty />}></Route>
           <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
         <Route path="/aboutus" element={<AboutUs />} />
-        <Route path="/Roomshifting" element={<RoomShifting />} />
+        <Route path='/Roomshifting' element={<ShiftingLayout/>}>
+          <Route index element={<RoomShifting />} />
+        </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
           <Route path="users" element={<AdminUser />} />
