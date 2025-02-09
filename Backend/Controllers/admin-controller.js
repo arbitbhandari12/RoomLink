@@ -1,8 +1,9 @@
 const User = require('../models/user-model');
 const approve = require('../models/propertyapprove-model');
 const List = require('../models/propertyList-model');
-const shift = require('../models/ShiftingRequest-model');
+const shiftRequest = require('../models/ShiftingRequest-model');
 const approveShifting = require('../models/ShiftingApprove-model');
+const rejectedList = require('../models/PropertyReject-models');
 
 const allUsers = async (req, res) => {
   try {
@@ -44,22 +45,12 @@ const detailsPage = async (req, res) => {
   }
 };
 
-// Rejecting Property
-const deleteProperty = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await List.deleteOne({ _id: id });
-    res.status(200).json({ msg: 'Delete Property successfully.' });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
-  }
-};
 
 // Approved Property list
 const approveProperty = async (req, res) => {
   try {
     const id = req.params.id;
-    const property = await List.findOne({ _id: id });
+    const property = await List.findById(id);
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
@@ -94,11 +85,50 @@ const approveProperty = async (req, res) => {
   }
 };
 
+//Rejected room
+const rejectedProperty = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const rejected = await List.findById(id);
+    if (!rejected) {
+      return res.status(404).json({ message: 'Property not found' });
+    }
+    await rejectedList.create({
+      title: rejected.title,
+      description: rejected.description,
+      type: rejected.type,
+      location: rejected.location,
+      price: rejected.price,
+      bedroom: rejected.bedroom,
+      bathroom: rejected.bathroom,
+      photos: rejected.photos,
+      kitchen: rejected.kitchen,
+      parking: rejected.parking,
+      balcony: rejected.balcony,
+      furnishing: rejected.furnishing,
+      water: rejected.water,
+      school: rejected.school,
+      temple: rejected.temple,
+      healthcare: rejected.healthcare,
+      park: rejected.park,
+      transport: rejected.transport,
+      bank: rejected.bank,
+      name: rejected.name,
+      phone: rejected.phone,
+      email: rejected.email
+    });
+    res.status(200).json({ msg: 'Reject Property successfully.' });
+    await List.deleteOne({ _id: id });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
 //Approve shifting request
 const approveshifting = async (req, res) => {
   try {
     const id = req.params.id;
-    const shifting = await shiftRequest.findOne({ _id: id });
+    const shifting = await shiftRequest.findById(id);
     if (!shifting) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
@@ -124,7 +154,7 @@ module.exports = {
   deleteUsers,
   detailsPage,
   allproperty,
-  deleteProperty,
   approveProperty,
+  rejectedProperty,
   approveshifting
 };
