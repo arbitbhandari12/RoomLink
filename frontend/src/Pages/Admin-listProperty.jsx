@@ -15,41 +15,21 @@ function AdminlistProperty() {
         }
       });
       const data = await response.json();
-      console.log(data)
-      setProperties(data.listProperty); // Set properties data
+      console.log(data);
+      setProperties(data.listProperty);
     } catch (error) {
       console.log('Error', error);
     }
   };
 
-  const deleteProperty = async (id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4001/api/admin/property/delete/${id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: authorization
-          }
-        }
-      );
-      const data = await response.json();
-      console.log(` after delete ${data}`);
-
-      if (response.ok) {
-        allProperty();
-      }
-    } catch (error) {
-      console.log('Error', error);
-    }
-  };
+  allProperty();
 
   const approveProperty = async (id) => {
     try {
       const response = await fetch(
         `http://localhost:4001/api/admin/property/approve/${id}`,
         {
-          method: 'GET',
+          method: 'POST',
           headers: {
             Authorization: authorization
           }
@@ -66,9 +46,24 @@ function AdminlistProperty() {
     }
   };
 
-  useEffect(() => {
-    allProperty();
-  }, []);
+  const rejectedProperty = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4001/api/admin/property/rejected/${id}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      if (response.ok) {
+        allProperty();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -121,7 +116,7 @@ function AdminlistProperty() {
                     Approve
                   </button>
                   <button
-                    onClick={() => deleteProperty(property._id)}
+                    onClick={() => rejectedProperty(property._id)}
                     className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700"
                   >
                     Reject

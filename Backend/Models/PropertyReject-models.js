@@ -82,6 +82,10 @@ const rejectList = new mongoose.Schema({
   },
   bank: {
     type: String
+  },
+  status: {
+    type: String,
+    default: 'Rejected'
   }
 });
 

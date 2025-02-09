@@ -82,6 +82,10 @@ const propertyList = new mongoose.Schema({
   },
   bank: {
     type: String
+  },
+  status: {
+    type: String,
+    default: 'Pending'
   }
 });
 

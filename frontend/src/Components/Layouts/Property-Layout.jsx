@@ -17,12 +17,23 @@ function PropertyLayout() {
         <nav className="flex justify-center">
           <ul className="space-y-6 mt-8">
             <li>
-              <NavLink to="/addproperty" className="text-center">
+              <NavLink
+                to="/addproperty"
+                end
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
                 Add Property
               </NavLink>
             </li>
             <li>
-              <NavLink to="/addproperty/UserProperty" className="text-center">
+              <NavLink
+                to="/addproperty/UserProperty"
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
                 My Property
               </NavLink>
             </li>

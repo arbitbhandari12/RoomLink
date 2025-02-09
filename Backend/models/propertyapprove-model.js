@@ -83,7 +83,11 @@ const approveList = new mongoose.Schema({
   bank: {
     type: String
   },
-  status: { type: String, enum: ["Available", "Rented"], default: "Available" },
+  status: { type: String, enum: ['Available', 'Rented'], default: 'Available' },
+  statusApprove: {
+    type: String,
+    default: 'Approved'
+  }
 });
 
 const approve = mongoose.model('ApproveList', approveList);
