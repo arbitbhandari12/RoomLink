@@ -25,13 +25,17 @@ const shiftingRequest = new mongoose.Schema({
     type: Date,
     required: true
   },
-  listofitems: {
+  categories: {
     type: String,
     required: true
   },
   helper: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    default: 'Pending'
   }
 });
 

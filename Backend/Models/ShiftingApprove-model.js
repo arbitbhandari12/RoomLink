@@ -25,13 +25,17 @@ const shiftingRequestSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  listOfitems: { 
-    type: [String],
+  categories: { 
+    type: String,
     required: true
   },
   helper: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    default: 'Approved'
   }
 });
 

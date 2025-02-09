@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const shiftingRequestRejected = new mongoose({
+const shiftingRequestRejected = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -22,18 +22,25 @@ const shiftingRequestRejected = new mongoose({
     required: true
   },
   shiftingdate: {
-    type: date,
+    type: Date,
     required: true
   },
-  listofitems: {
-    type: [String],
+  categories: {
+    type: String,
     required: true
   },
   helper: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    default: 'Rejected'
   }
 });
 
-const rejectshiftRoom = mongoose.model('shiftingRequest', shiftingRequestRejected);
-module.exports = rejectshiftRoom;
+const RejectshiftRoom = mongoose.model(
+  'shiftingRequestRejected',
+  shiftingRequestRejected
+);
+module.exports = RejectshiftRoom;
