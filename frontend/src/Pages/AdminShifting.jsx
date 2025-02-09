@@ -25,6 +25,14 @@ const AdminShifting = () => {
     requestShifting();
   }, []);
 
+  const approveShifting = async () =>{
+    try {
+      // const response = 
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <>
       <h1 className="font-bold text-center text-2xl sm:text-xl lg:text-3xl mb-6">
