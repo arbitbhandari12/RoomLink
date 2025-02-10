@@ -104,7 +104,6 @@ function EditProperty() {
         alert('Property updated successfully!');
       } catch (error) {
         console.error('Error:', error);
-        setError(error.message);
       } finally {
         setLoading(false);
       }
