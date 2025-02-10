@@ -1,9 +1,7 @@
 const User = require('../models/user-model');
-const approve = require('../models/propertyapprove-model');
 const List = require('../models/propertyList-model');
 const shiftRequest = require('../models/ShiftingRequest-model');
 const approveShifting = require('../models/ShiftingApprove-model');
-const rejectedList = require('../models/PropertyReject-models');
 
 const allUsers = async (req, res) => {
   try {
@@ -28,7 +26,7 @@ const deleteUsers = async (req, res) => {
 //Getting all property
 const allproperty = async (req, res) => {
   try {
-    const listProperty = await List.find({});
+    const listProperty = await List.find({ status: 'Pending' });
     res.status(201).json({ listProperty });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -45,41 +43,21 @@ const detailsPage = async (req, res) => {
   }
 };
 
-
 // Approved Property list
 const approveProperty = async (req, res) => {
   try {
     const id = req.params.id;
-    const property = await List.findById(id);
+    const property = await List.findByIdAndUpdate(
+      id,
+      {
+        status: 'Approved'
+      },
+      { new: true }
+    );
     if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
-    await approve.create({
-      title: property.title,
-      description: property.description,
-      type: property.type,
-      location: property.location,
-      price: property.price,
-      bedroom: property.bedroom,
-      bathroom: property.bathroom,
-      photos: property.photos,
-      kitchen: property.kitchen,
-      parking: property.parking,
-      balcony: property.balcony,
-      furnishing: property.furnishing,
-      water: property.water,
-      school: property.school,
-      temple: property.temple,
-      healthcare: property.healthcare,
-      park: property.park,
-      transport: property.transport,
-      bank: property.bank,
-      name: property.name,
-      phone: property.phone,
-      email: property.email
-    });
-    res.status(200).json({ msg: 'Approved Property successfully.' });
-    await List.deleteOne({ _id: id });
+    res.json({ message: 'Property Approved successfully', property });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -89,36 +67,17 @@ const approveProperty = async (req, res) => {
 const rejectedProperty = async (req, res) => {
   try {
     const id = req.params.id;
-    const rejected = await List.findById(id);
-    if (!rejected) {
+    const property = await List.findByIdAndUpdate(
+      id,
+      {
+        status: 'Rejected'
+      },
+      { new: true }
+    );
+    if (!property) {
       return res.status(404).json({ message: 'Property not found' });
     }
-    await rejectedList.create({
-      title: rejected.title,
-      description: rejected.description,
-      type: rejected.type,
-      location: rejected.location,
-      price: rejected.price,
-      bedroom: rejected.bedroom,
-      bathroom: rejected.bathroom,
-      photos: rejected.photos,
-      kitchen: rejected.kitchen,
-      parking: rejected.parking,
-      balcony: rejected.balcony,
-      furnishing: rejected.furnishing,
-      water: rejected.water,
-      school: rejected.school,
-      temple: rejected.temple,
-      healthcare: rejected.healthcare,
-      park: rejected.park,
-      transport: rejected.transport,
-      bank: rejected.bank,
-      name: rejected.name,
-      phone: rejected.phone,
-      email: rejected.email
-    });
-    res.status(200).json({ msg: 'Reject Property successfully.' });
-    await List.deleteOne({ _id: id });
+    res.json({ message: 'Property rejected successfully', property });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
