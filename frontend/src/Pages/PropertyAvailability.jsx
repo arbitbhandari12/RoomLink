@@ -127,7 +127,7 @@ function PropertyAvailability() {
                   <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
                     {property.title}
                   </h3>
-                  <h1>{property.status}</h1>
+                  <h1>{property.roomStatus}</h1>
                   <div className="flex justify-between mt-2">
                     <p className="text-gray-400 text-xl">Rs {property.price}</p>
                     <p className="text-gray-600">Room Type: {property.type}</p>
