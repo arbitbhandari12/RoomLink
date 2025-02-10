@@ -55,7 +55,7 @@ function AddProperty() {
     photos: '',
     school: '',
     healthcare: '',
-    bank:'',
+    bank: '',
     park: '',
     transport: '',
     temple: '',
@@ -229,25 +229,18 @@ function AddProperty() {
         </div>
 
         <div className="mb-6">
-          <label className="flex mt-2 text-lg font-semibold">Photos</label>
+          <label className="text-lg font-semibold">Photos</label>
           <input
             type="file"
             accept="image/*"
             multiple
-            name="photos"
-            ref={fileInputRef}
-            onChange={(event) => {
-              const files = event.target.files;
-              formik.setFieldValue('photos', files);
-            }}
-            className="border w-full p-3 rounded-md mt-1 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => formik.setFieldValue('photos', e.target.files)}
+            className="border w-full p-3 rounded-md mt-1 border-gray-300 focus:ring-2 focus:ring-blue-500"
           />
           {formik.values.photos && formik.values.photos.length > 0 && (
-            <ul className="mt-2 list-disc pl-5">
+            <ul className="mt-2">
               {Array.from(formik.values.photos).map((file, index) => (
-                <li key={index} className="text-gray-700 text-sm">
-                  {file.name}
-                </li>
+                <li key={index}>{file.name}</li>
               ))}
             </ul>
           )}
