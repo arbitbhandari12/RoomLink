@@ -1,12 +1,11 @@
-const List = require('../models/propertyList-model'); // Import the List model
+const List = require('../models/propertyList-model');
 
 const addProperty = async (req, res) => {
   try {
     // Create an array of file paths for the uploaded photos
     const photoPaths = req.files.map((file) => file.path);
 
-    // Create a new property listing using the data from the request body
-    const newProperty = await List.create({
+    await List.create({
       title: req.body.title,
       description: req.body.description,
       type: req.body.type,
@@ -14,7 +13,7 @@ const addProperty = async (req, res) => {
       price: req.body.price,
       bedroom: req.body.bedroom,
       bathroom: req.body.bathroom,
-      photos: photoPaths, // Save the array of file paths
+      photos: photoPaths,
       kitchen: req.body.kitchen,
       parking: req.body.parking,
       balcony: req.body.balcony,
@@ -24,14 +23,12 @@ const addProperty = async (req, res) => {
       temple: req.body.temple,
       healthcare: req.body.healthcare,
       park: req.body.park,
-      bank:req.body.bank,
+      bank: req.body.bank,
       transport: req.body.transport,
       name: req.body.name,
       phone: req.body.phone,
       email: req.body.email
     });
-
-    // Save the property to the database
 
     // Send success response
     res.status(201).json({ message: 'Property added successfully!' });
