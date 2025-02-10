@@ -83,8 +83,14 @@ const propertyList = new mongoose.Schema({
   bank: {
     type: String
   },
+  roomStatus: {
+    type: String,
+    enum: ['Available', 'Rented'],
+    default: 'Available'
+  },
   status: {
     type: String,
+    enum: ['Approved', 'Pending', 'Rejected'],
     default: 'Pending'
   }
 });
