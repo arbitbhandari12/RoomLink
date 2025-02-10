@@ -1,10 +1,9 @@
-const List = require('../models/propertyapprove-model');
+const propertyList = require('../models/propertyList-model');
 
 const updateProperty = async (req, res) => {
   try {
     const id = req.params.id;
 
-    // Create the base updated data object
     const updatedData = {
       title: req.body.title,
       description: req.body.description,
@@ -26,20 +25,19 @@ const updateProperty = async (req, res) => {
       transport: req.body.transport,
       name: req.body.name,
       phone: req.body.phone,
-      email: req.body.email
+      email: req.body.email,
+      status:"Pending"
     };
 
-    // Only update photos if new files were uploaded
     if (req.files && req.files.length > 0) {
       const photoPaths = req.files.map((file) => file.path);
       updatedData.photos = photoPaths;
     }
 
-    // Use findByIdAndUpdate to get the updated document
-    const updatedProperty = await List.findByIdAndUpdate(
+    const updatedProperty = await propertyList.findByIdAndUpdate(
       id,
       updatedData,
-      { new: true } // This option returns the updated document
+      { new: true }
     );
 
     if (!updatedProperty) {
