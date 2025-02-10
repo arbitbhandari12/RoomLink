@@ -17,7 +17,7 @@ const bookinglist = new mongoose.Schema({
     type: Date,
     required: true
   },
-  room: { type: mongoose.Schema.Types.ObjectId, ref: 'ApproveList' }
+  room: { type: mongoose.Schema.Types.ObjectId, ref: 'PropertyList' }
 });
 
 const Booking = mongoose.model('BookingList', bookinglist);
