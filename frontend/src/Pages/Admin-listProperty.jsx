@@ -22,7 +22,9 @@ function AdminlistProperty() {
     }
   };
 
-  allProperty();
+  useEffect(() => {
+    allProperty();
+  }, []);
 
   const approveProperty = async (id) => {
     try {
