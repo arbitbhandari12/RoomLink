@@ -1,10 +1,8 @@
-const approve = require('../models/propertyapprove-model');
-const rejected = require('../models/PropertyReject-models');
+const PropertyList = require('../models/propertyList-model');
 
 const homeproperty = async (req, res) => {
   try {
-    const latestItems = await approve
-      .find()
+    const latestItems = await PropertyList.find()
       .sort({ createdAt: -1 }) // Sort by createdAt in descending order
       .limit(5); // Limit to 5 results
     res.status(200).json(latestItems);
@@ -16,7 +14,7 @@ const homeproperty = async (req, res) => {
 //all property available page that are approved
 const userSideProperty = async (req, res) => {
   try {
-    const approved = await approve.find({});
+    const approved = await PropertyList.find({ status: 'Approved' });
     res.status(201).json({ approved });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -26,30 +24,21 @@ const userSideProperty = async (req, res) => {
 // property detail page
 const propertyPage = async (req, res) => {
   try {
-    const property = await approve.findById(req.params.id);
+    const property = await PropertyList.findById(req.params.id);
     res.json(property);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
 
-//User Personal property to edit or delete or to check how many property user have listed and this is from approve property list
+//User Personal property to edit or delete or to check how many property user have listed
 const personalProperty = async (req, res) => {
   try {
     const userData = req.user;
-    const myProperty = await approve.find({ email: userData.email });
+    const myProperty = await PropertyList.find({ email: userData.email }).sort({
+      _id: -1
+    });
     res.json(myProperty);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
-  }
-};
-
-//User Personal property to edit or delete or to check how many property user have listed and this is from rejected property list
-const rejectedProperty = async (req, res) => {
-  try {
-    const user = req.user;
-    const reject = await rejected.find({ email: user.email });
-    res.json(reject);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -58,7 +47,7 @@ const rejectedProperty = async (req, res) => {
 //personal property of user details page
 const yourProperties = async (req, res) => {
   try {
-    const details = await approve.findById(req.params.id);
+    const details = await PropertyList.findById(req.params.id);
     res.json(details);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -69,18 +58,7 @@ const yourProperties = async (req, res) => {
 const deleteProperty = async (req, res) => {
   try {
     const id = req.params.id;
-    await approve.deleteOne({ _id: id });
-    res.status(200).json({ msg: 'Delete Property successfully.' });
-  } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
-  }
-};
-
-//delete property by owner of rejected property by owner
-const deleterejectedProperty = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await rejected.deleteOne({ _id: id });
+    await PropertyList.deleteOne({ _id: id });
     res.status(200).json({ msg: 'Delete Property successfully.' });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -90,7 +68,7 @@ const deleterejectedProperty = async (req, res) => {
 //edit by property owner
 const editRoom = async (req, res) => {
   try {
-    const edit = await approve.findById(req.params.id);
+    const edit = await PropertyList.findById(req.params.id);
     res.json(edit);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -161,10 +139,8 @@ module.exports = {
   userSideProperty,
   propertyPage,
   personalProperty,
-  rejectedProperty,
   yourProperties,
   deleteProperty,
-  deleterejectedProperty,
   editRoom,
   createBooking,
   submitFeedback
