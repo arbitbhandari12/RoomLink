@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 
 function UserProperty() {
   const [property, setProperty] = useState([]);
-  const [rejected, setRejected] = useState([]);
   const { authorization } = useAuth();
 
   const myProperty = async () => {
@@ -28,28 +27,9 @@ function UserProperty() {
     }
   };
 
-  const myrejectedProperty = async () => {
-    try {
-      const response = await fetch(
-        'http://localhost:4001/api/properties/rejectedProperty',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: authorization
-          }
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setRejected(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  myProperty();
-  myrejectedProperty();
+  useEffect(() => {
+    myProperty();
+  }, []);
 
   const deleteProperty = async (id) => {
     try {
@@ -164,8 +144,13 @@ function UserProperty() {
                     : properties.title}
                 </td>
                 <td className="text-center py-3 px-4 border-b">
-                  <span className="py-3 px-4 border-b border-gray-300 bg-green-200 rounded-full">
-                    {properties.statusApprove}
+                <span
+                    className={`py-3 px-4 border-b border-gray-300 rounded-full 
+                    ${properties.status === 'Pending' ? 'bg-yellow-300 text-black' :
+                      properties.status === 'Rejected' ? 'bg-red-400 text-white' :
+                      'bg-green-200 text-black'}`}
+                  >
+                    {properties.status}
                   </span>
                 </td>
                 <td className="text-center py-3 px-4 border-b border-gray-300">
@@ -191,49 +176,14 @@ function UserProperty() {
                   >
                     Delete
                   </button>
-                  <button
-                    className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
-                    onClick={() => rentProperty(properties._id)}
-                  >
-                    Rented
-                  </button>
-                </td>
-              </tr>
-            ))}
-
-            {rejected.map((properties, index) => (
-              <tr
-                key={index}
-                className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
-              >
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  (#{properties._id.substring(18, 24)})
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {properties.title && properties.title.length > 20
-                    ? properties.title.substring(0, 20) + '...'
-                    : properties.title}
-                </td>
-                <td className="text-center py-3 px-4 border-b border-gray-300">
-                  <span className="py-3 px-4 border-b border-gray-300 bg-red-200 rounded-full">
-                    {properties.status}
-                  </span>
-                </td>
-                <td className="text-center py-3 px-4 border-b border-gray-300">
-                  <Link
-                    key={properties._id}
-                    to={`/yourproperty/${properties._id}`}
-                  >
-                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
-                      View Details
+                  {properties.status !== 'Pending' && properties.status !== 'Rejected' && (
+                    <button
+                      className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
+                      onClick={() => rentProperty(properties._id)}
+                    >
+                      Rented
                     </button>
-                  </Link>
-                  <button
-                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2"
-                    onClick={() => deleterejectedProperty(properties._id)}
-                  >
-                    Delete
-                  </button>
+                  )}
                 </td>
               </tr>
             ))}
