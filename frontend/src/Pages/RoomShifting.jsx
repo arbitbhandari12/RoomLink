@@ -1,40 +1,71 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import { useAuth } from '../Store/auth';
+import Swal from 'sweetalert2';
 
 const RoomShifting = () => {
-  const initialValues = {
-    name: '',
-    phone: '',
-    email: '',
-    pickup: '',
-    dropoff: '',
-    shiftingdate: '',
-    categories: '',
-    helper: ''
-  };
+  const { authorization, user } = useAuth();
 
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      name: '',
+      phone: '',
+      email: '',
+      pickup: '',
+      dropoff: '',
+      shiftingdate: '',
+      categories: '',
+      helper: ''
+    },
     onSubmit: async (values) => {
-      const response = await fetch(
-        'http://localhost:4001/api/shifting/shiftRequest',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(values)
+      try {
+        const response = await fetch(
+          'http://localhost:4001/api/shifting/shiftRequest',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: authorization
+            },
+            body: JSON.stringify(values)
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Login Required!',
+            text: 'Please login first before submitting the request.'
+          });
+        } else if (response.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Request submitted successfully!'
+          });
+          formik.resetForm();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: data.error || 'Failed to submit request!'
+          });
         }
-      );
-      if (response.ok) {
-        formik.resetForm();
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong! Please try again later.'
+        });
       }
     }
   });
   return (
     <>
-      <div className="bg-blue-100 min-h-screen flex items-center justify-center p-6">
-        <div className="border p-4 border-gray-300 bg-white transition w-full max-w-6xl mx-auto m-6 rounded-lg">
+      <div className=" flex justify-center md:mt-6">
+        <div className="border p-4 border-gray-300 bg-white transition w-full mx-auto rounded-lg">
           <div className="text-center font-bold text-2xl">
             <h1>Room Shifting Request</h1>
             <h2>
@@ -44,8 +75,8 @@ const RoomShifting = () => {
           </div>
           <form onSubmit={formik.handleSubmit}>
             <h1 className="mt-10 font-bold text-xl">Personal Information</h1>
-            <div className="flex mt-4 space-x-4">
-              <div className="flex flex-col w-1/3">
+            <div className="grid md:flex mt-4 md:space-x-4">
+              <div className="flex flex-col md:w-1/3">
                 <label className="mb-2">Name</label>
                 <input
                   type="text"
@@ -56,7 +87,7 @@ const RoomShifting = () => {
                   value={formik.values.name}
                 />
               </div>
-              <div className="flex flex-col w-1/3">
+              <div className="flex flex-col md:w-1/3">
                 <label className="mb-2">Phone Number</label>
                 <input
                   type="text"
@@ -67,7 +98,7 @@ const RoomShifting = () => {
                   value={formik.values.phone}
                 />
               </div>
-              <div className="flex flex-col w-1/3">
+              <div className="flex flex-col md:w-1/3">
                 <label className="mb-2">Email</label>
                 <input
                   type="email"
@@ -80,8 +111,8 @@ const RoomShifting = () => {
               </div>
             </div>
             <h1 className="mt-4 font-bold text-xl mb-4">Shifting Details</h1>
-            <div className="flex gap-2">
-              <div className="flex flex-col w-1/3">
+            <div className="grid md:flex gap-2">
+              <div className="flex flex-col md:w-1/3">
                 <label>Pick-Up Location</label>
                 <input
                   type="text"
@@ -92,7 +123,7 @@ const RoomShifting = () => {
                   value={formik.values.pickup}
                 />
               </div>
-              <div className="flex flex-col w-1/3">
+              <div className="flex flex-col md:w-1/3">
                 <label>Drop-off Location</label>
                 <input
                   type="text"
@@ -103,27 +134,27 @@ const RoomShifting = () => {
                   value={formik.values.dropoff}
                 />
               </div>
-              <div>
-                <div className="flex flex-col w-96">
-                  <label>Shifting Date</label>
-                  <input
-                    type="datetime-local"
-                    name="shiftingdate"
-                    className="border border-slate-600 rounded p-2 mt-2.5"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.shiftingdate}
-                  />
-                </div>
+              <div className="flex flex-col md:w-1/3">
+                <label>Shifting Date</label>
+                <input
+                  type="datetime-local"
+                  name="shiftingdate"
+                  className="bg-transparent border border-slate-600 rounded md:p-2 mt-2.5 p-3"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.shiftingdate}
+                />
               </div>
             </div>
 
-            <div className="flex flex-row gap-6 items-center">
-              <div className="flex flex-col w-1/2">
-                <label className="text-xl mt-10">House Moving Categories</label>
+            <div className="md:flex flex-row gap-6 items-center">
+              <div className="flex flex-col md:w-1/2">
+                <label className="text-xl md:mt-10 mt-6">
+                  House Moving Categories
+                </label>
                 <select
                   name="categories"
-                  className="border border-slate-600 p-2 mt-2 rounded"
+                  className="border border-slate-600 p-3 md:p-2 mt-2 rounded"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.categories}
@@ -136,12 +167,12 @@ const RoomShifting = () => {
                 </select>
               </div>
 
-              <div className="flex flex-col w-1/2">
-                <label className="text-xl mt-10 ">
+              <div className="flex flex-col md:w-1/2">
+                <label className="text-xl md:mt-10 mt-5">
                   Need Helpers For Packing?
                 </label>
                 <select
-                  className="border border-slate-600 p-2 rounded mt-2"
+                  className="border border-slate-600 p-3 md:p-2 rounded mt-2"
                   name="helper"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
