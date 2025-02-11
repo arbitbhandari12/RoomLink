@@ -7,9 +7,10 @@ const {
 const {
   shiftingRequest,
   details
-} = require('../Controllers/adminShift-controller');
+} = require('../Controllers/shiftingRooms-controller');
+const authMiddleware = require('../middlewares/auth-middleware');
 
-router.route('/shiftRequest').post(shiftRoom);
+router.route('/shiftRequest').post(authMiddleware, shiftRoom);
 router.route('/shiftApprove/:id').post(shiftApprove);
 router.route('/adminShift').get(shiftingRequest);
 router.route('/shiftDetails/:id').get(details);

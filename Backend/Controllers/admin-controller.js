@@ -1,7 +1,6 @@
 const User = require('../models/user-model');
 const List = require('../models/propertyList-model');
 const shiftRequest = require('../models/ShiftingRequest-model');
-const approveShifting = require('../models/ShiftingApprove-model');
 
 const allUsers = async (req, res) => {
   try {
@@ -87,24 +86,35 @@ const rejectedProperty = async (req, res) => {
 const approveshifting = async (req, res) => {
   try {
     const id = req.params.id;
-    const shifting = await shiftRequest.findById(id);
-    if (!shifting) {
+    const shift = await shiftList.findByIdAndUpdate(
+      id,
+      { status: 'Approved' },
+      { new: true }
+    );
+    if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
-    await approveShifting.create({
-      name: shifting.name,
-      phone: shifting.phone,
-      email: shifting.email,
-      pickup: shifting.pickup,
-      dropoff: shifting.dropoff,
-      shiftingdate: shifting.shiftingdate,
-      listofitems: shifting.listofitems,
-      helper: shifting.helper
-    });
-    res.status(200).json({ msg: 'Approved shifting request successfully.' });
-    await shiftRequest.deleteOne({ _id: id });
   } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
+    console.log(error);
+  }
+};
+
+//Rejecting shifting request
+const rejectingShifting = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const shift = await shiftRequest.findByIdAndUpdate(
+      id,
+      { status: 'Rejected' },
+      {
+        new: true
+      }
+    );
+    if (!shift) {
+      return res.status(404).json({ message: 'Shifting request not found' });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -115,5 +125,6 @@ module.exports = {
   allproperty,
   approveProperty,
   rejectedProperty,
-  approveshifting
+  approveshifting,
+  rejectingShifting
 };

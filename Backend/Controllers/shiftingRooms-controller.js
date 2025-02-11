@@ -1,10 +1,14 @@
-const shiftRequest = require('../models/ShiftingRequest-model');
-const approve = require('../models/ShiftingApprove-model');
-const Reject = require('../models/ShiftingRejected-Model');
+const shiftList = require('../models/ShiftingRequest-model');
 
 const shiftRoom = async (req, res) => {
   try {
-    await shiftRequest.create({
+    const user = req.user;
+    console.log(user);
+    if (!user) {
+      return res.status(401).json({ error: 'Please login first' });
+    }
+
+    await shiftList.create({
       name: req.body.name,
       phone: req.body.phone,
       email: req.body.email,
@@ -24,49 +28,61 @@ const shiftRoom = async (req, res) => {
 const shiftApprove = async (req, res) => {
   try {
     const id = req.params.id;
-    const shift = await shiftRequest.findById(id);
+    const shift = await shiftList.findByIdAndUpdate(
+      id,
+      { status: 'Approved' },
+      { new: true }
+    );
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
-    await approve.create({
-      name: shift.name,
-      phone: shift.phone,
-      email: shift.email,
-      pickup: shift.pickup,
-      dropoff: shift.dropoff,
-      shiftingdate: shift.shiftingdate,
-      categories: shift.categories,
-      helper: shift.helper
-    });
-    console.log(shift);
   } catch (error) {
     console.log(error);
   }
 };
-
 
 const shiftReject = async (req, res) => {
   try {
     const id = req.params.id;
-    const shift = await shiftRequest.findById(id);
+    const shift = await shiftList.findByIdAndUpdate(
+      id,
+      { status: 'Rejected' },
+      {
+        new: true
+      }
+    );
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
-    await approve.create({
-      name: shift.name,
-      phone: shift.phone,
-      email: shift.email,
-      pickup: shift.pickup,
-      dropoff: shift.dropoff,
-      shiftingdate: shift.shiftingdate,
-      categories: shift.categories,
-      helper: shift.helper
-    });
-    console.log(shift);
   } catch (error) {
     console.log(error);
   }
 };
 
+const shiftingRequest = async (req, res) => {
+  try {
+    const approve = await shiftList.find({});
+    res.status(201).json({ approve });
+    console.log(approve);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-module.exports = { shiftRoom, shiftApprove };
+const details = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const shiftingDetails = await shiftList.findById(id);
+    res.status(200).json(shiftingDetails);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  shiftRoom,
+  shiftApprove,
+  shiftReject,
+  shiftingRequest,
+  details
+};
