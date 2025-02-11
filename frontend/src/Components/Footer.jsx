@@ -4,72 +4,84 @@ import { FiTwitter } from 'react-icons/fi';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12 text-center">
+    <footer className="bg-gray-100 text-gray-600 py-12">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row justify-between items-start space-y-8 lg:space-y-0 lg:space-x-8">
-          <div className="lg:w-1/3 mb-8 lg:mb-0">
-            <h2 className="text-2xl font-bold mb-4">RoomLink</h2>
-
-            <p className="text-gray-400 hover:text-white mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold text-primary">RoomLink</h2>
+            <p className="text-sm text-gray-400 hover:text-gray-600 mb-4">
               Discover your perfect living space with ease.
             </p>
             <div className="flex items-center justify-center gap-7 mt-4">
-              <Facebook size={20} className="text-white hover:text-blue-500" />
-              <Instagram size={20} className="text-white hover:text-blue-500" />
-              <FiTwitter size={20} className="text-white hover:text-blue-500" />
+              <a
+                href="#"
+                className="text-primary hover:text-primary-dark transition-colors"
+              >
+                <Facebook size={24} />
+              </a>
+              <a
+                href="#"
+                className="text-primary hover:text-primary-dark transition-colors"
+              >
+                <Instagram size={24} />
+              </a>
+              <a
+                href="#"
+                className="text-primary hover:text-primary-dark transition-colors"
+              >
+                <FiTwitter size={24} />
+              </a>
             </div>
           </div>
 
-          <div className="lg:w-1/3 ">
-            <h2 className="text-2xl font-bold mb-4">Quick Links</h2>
-            <div className="space-y-2 ">
-              <a href="/" className="text-gray-400 hover:text-white block">
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-primary">Quick Links</h3>
+            <nav className="flex flex-col space-y-2">
+              <a href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
                 Home
               </a>
-              <a href="/PropertyAvailability" className="text-gray-400 hover:text-white block">
+              <a
+                href="/PropertyAvailability"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
                 Find Rooms
               </a>
               <a
                 href="/addproperty"
-                className="text-gray-400 hover:text-white block"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 List Your Rooms
               </a>
-              <a href="/about" className="text-gray-400 hover:text-white block">
+              <a href="/about" className="text-gray-400 hover:text-gray-600 transition-colors">
                 About Us
               </a>
-            </div>
+            </nav>
           </div>
-          <div className="mb-8 lg:mb-0 lg:w-1/3">
-            <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
-            <div className="flex items-center mb-4">
-              <Mail className="mr-3" size={20} color="white" />
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-primary">Contact Us</h3>
+            <div className="space-y-2">
               <a
-                href="mailto:support@company.com"
-                className="text-lg font-semibold text-blue-400 hover:text-blue-300"
+                href="mailto:sastoproperty7@gmail.com"
+                className="flex items-center hover:text-gray-600 transition-colors"
               >
+                <Mail size={18} className="mr-2 text-primary" />
                 sastoproperty7@gmail.com
               </a>
-            </div>
-            <div className="flex items-center mb-4">
-              <Phone className="mr-3" size={20} color="white" />
-              <p className="text-lg text-gray-400 hover:text-white font-semibold">
+              <p className="flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                <Phone size={18} className="mr-2 text-primary" />
                 +977 9863935190
               </p>
-            </div>
-            <div className="flex items-center mb-4">
-              <MapPin className="mr-3" size={20} color="white" />
-              <div>
-                <p className="text-lg text-gray-400 hover:text-white font-semibold">
-                  Santinagar, Kathmandu
-                </p>
-              </div>
+              <p className="flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                <MapPin size={18} className="mr-2 text-primary" />
+                Santinagar, Kathmandu
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 lg:mt-8 border-t border-gray-700 pt-8 text-center">
-          <p className="text-sm mt-4">© 2024 RoomLink. All rights reserved.</p>
+        <div className="mt-8 pt-8 border-t border-gray-200 text-center">
+          <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} RoomLink. All rights reserved.</p>
         </div>
       </div>
     </footer>
