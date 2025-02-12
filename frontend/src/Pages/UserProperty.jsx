@@ -61,36 +61,6 @@ function UserProperty() {
     }
   };
 
-  const deleterejectedProperty = async (id) => {
-    try {
-      const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'You want to delete this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
-      });
-
-      if (!result.isConfirmed) return;
-
-      const response = await fetch(
-        `http://localhost:4001/api/properties/deletereject/${id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: authorization
-          }
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const rentProperty = async (id) => {
     try {
       const response = await fetch(
