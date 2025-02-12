@@ -14,7 +14,7 @@ import UserProperty from './Pages/UserProperty';
 import EditProperty from './Pages/EditProperty';
 import PropertyLayout from './Components/Layouts/Property-Layout';
 import Footer from './Components/Footer';
-import ShiftingLayout from './Components/Layouts/Shift-Layout'
+import ShiftingLayout from './Components/Layouts/Shift-Layout';
 import RoomShifting from './Pages/RoomShifting';
 import DetailsPropertyAdmin from './Pages/DetailsPropertyAdmin';
 import ForgotPassword from './Pages/ForgotPassword';
@@ -23,6 +23,7 @@ import AdminShift from './Pages/AdminShifting';
 import AdminShifting from './Pages/RoomShiftingDetailsPage';
 import AdminHome from './Pages/AdminHome';
 import AboutUs from './Pages/AboutUs';
+import UserShifting from './Pages/UserShifting';
 
 function App() {
   const location = useLocation();
@@ -52,15 +53,16 @@ function App() {
           <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
         <Route path="/aboutus" element={<AboutUs />} />
-        <Route path='/Roomshifting' element={<ShiftingLayout/>}>
+        <Route path="/Roomshifting" element={<ShiftingLayout />}>
           <Route index element={<RoomShifting />} />
+          <Route path="yourRequest" element={<UserShifting />}></Route>
+          <Route path="Shifting/:id" element={<AdminShifting />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
           <Route path="users" element={<AdminUser />} />
           <Route path="listofproperty" element={<AdminListProperty />} />
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
-          {/* <Route path="complaint-property" element={<AdminComplaint />} /> */}
           <Route path="requests" element={<AdminShift />} />
           <Route path="Shifting/:id" element={<AdminShifting />} />
         </Route>
