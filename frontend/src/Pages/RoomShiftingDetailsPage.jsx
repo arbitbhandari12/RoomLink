@@ -108,9 +108,9 @@ const TenantDetails = () => {
         <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
           <FaBox className="text-indigo-500" size={24} />
           <div>
-            <p className="text-sm text-gray-500 font-semibold">Items</p>
+            <p className="text-sm text-gray-500 font-semibold">Categories</p>
             <p className="text-lg text-gray-700">
-              {shift.listofitems}
+              {shift.categories}
             </p>
           </div>
         </div>
