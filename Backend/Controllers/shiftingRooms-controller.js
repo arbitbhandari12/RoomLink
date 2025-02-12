@@ -3,11 +3,11 @@ const shiftList = require('../models/ShiftingRequest-model');
 const shiftRoom = async (req, res) => {
   try {
     const user = req.user;
+    const id = req.user._id;
     console.log(user);
     if (!user) {
       return res.status(401).json({ error: 'Please login first' });
     }
-
     await shiftList.create({
       name: req.body.name,
       phone: req.body.phone,
@@ -16,7 +16,8 @@ const shiftRoom = async (req, res) => {
       dropoff: req.body.dropoff,
       shiftingdate: req.body.shiftingdate,
       categories: req.body.categories,
-      helper: req.body.helper
+      helper: req.body.helper,
+      userId: id
     });
     res.status(201).json({ message: 'Request submitted successfully!' });
   } catch (error) {
@@ -61,9 +62,8 @@ const shiftReject = async (req, res) => {
 
 const shiftingRequest = async (req, res) => {
   try {
-    const approve = await shiftList.find({});
-    res.status(201).json({ approve });
-    console.log(approve);
+    const pending = await shiftList.find({ status: 'Pending' });
+    res.status(201).json({ pending });
   } catch (error) {
     console.log(error);
   }
@@ -79,10 +79,25 @@ const details = async (req, res) => {
   }
 };
 
+const requestHistory = async (req, res) => {
+  try {
+    const user = req.user;
+    const id = user._id;
+    const request = await shiftList.find({ userId: id });
+    res.status(200).json({ request });
+    console.log(request)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Failed to fetch request history.' });
+  }
+};
+
+
 module.exports = {
   shiftRoom,
   shiftApprove,
   shiftReject,
   shiftingRequest,
-  details
+  details,
+  requestHistory
 };
