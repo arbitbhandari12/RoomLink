@@ -39,7 +39,7 @@ function ShiftLayout() {
             </li>
             <li>
               <NavLink
-                to="/"
+                to="/RoomShifting/yourRequest"
                 className="text-center"
                 onClick={() => setIsOpen(false)}
               >
