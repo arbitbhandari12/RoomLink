@@ -37,6 +37,10 @@ const shiftingRequest = new mongoose.Schema({
     type: String,
     enum: ['Approved', 'Pending', 'Rejected'],
     default: 'Pending'
+  },
+  userId: {
+    type: String,
+    required: true
   }
 });
 
