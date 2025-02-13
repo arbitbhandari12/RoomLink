@@ -6,7 +6,9 @@ const {
   shiftReject,
   shiftingRequest,
   details,
-  requestHistory
+  requestHistory,
+  shiftingEdit,
+  editShifting
 } = require('../Controllers/shiftingRooms-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 
@@ -16,5 +18,9 @@ router.route('/shiftApprove/:id').post(shiftApprove);
 router.route('/shiftReject/:id').post(shiftReject);
 router.route('/shiftDetails/:id').get(details);
 router.route('/requestHistory').get(authMiddleware, requestHistory);
+router.route('/shiftingEdit/:id').get(shiftingEdit);
+router.route('/editShifting/:id').patch(editShifting);
+
+
 
 module.exports = router;
