@@ -90,9 +90,14 @@ function UserShifting() {
                       View Details
                     </button>
                   </Link>
-                  <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
-                    Edit
-                  </button>
+                  <Link
+                    key={request._id}
+                    to={`/RoomShifting/editShifting/${request._id}`}
+                    >
+                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
+                      Edit
+                    </button>
+                  </Link>
                   <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700">
                     Delete
                   </button>
