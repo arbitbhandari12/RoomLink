@@ -43,7 +43,7 @@ const TenantDetails = () => {
     }
   }, [id]);
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-8">
+    <div className=" mx-auto border rounded-xl p-8 mt-10">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6">
         Tenant Details
       </h2>
@@ -108,10 +108,10 @@ const TenantDetails = () => {
         <div className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-300">
           <FaBox className="text-indigo-500" size={24} />
           <div>
-            <p className="text-sm text-gray-500 font-semibold">Categories</p>
-            <p className="text-lg text-gray-700">
-              {shift.categories}
+            <p className="text-sm text-gray-500 font-semibold">
+              Moving Categories
             </p>
+            <p className="text-lg text-gray-700">{shift.categories}</p>
           </div>
         </div>
       </div>
