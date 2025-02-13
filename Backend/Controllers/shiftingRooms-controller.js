@@ -85,13 +85,45 @@ const requestHistory = async (req, res) => {
     const id = user._id;
     const request = await shiftList.find({ userId: id });
     res.status(200).json({ request });
-    console.log(request)
+    console.log(request);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Failed to fetch request history.' });
   }
 };
 
+const shiftingEdit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const request = await shiftList.findById(id);
+    res.json(request);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const editShifting = async (req, res) => {
+  try {
+    const updatedData = {
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email,
+      pickup: req.body.pickup,
+      dropoff: req.body.dropoff,
+      shiftingdate: req.body.shiftingdate,
+      categories: req.body.categories,
+      helper: req.body.helper,
+      status: 'Pending'
+    };
+    const id = req.params.id;
+    const response = await shiftList.findByIdAndUpdate(id, updatedData, {
+      new: true
+    });
+    res.json(response)
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   shiftRoom,
@@ -99,5 +131,7 @@ module.exports = {
   shiftReject,
   shiftingRequest,
   details,
-  requestHistory
+  requestHistory,
+  shiftingEdit,
+  editShifting
 };
