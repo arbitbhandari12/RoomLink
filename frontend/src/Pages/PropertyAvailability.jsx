@@ -7,7 +7,11 @@ function PropertyAvailability() {
   const [approve, setApprove] = useState([]);
   const [locationInput, setLocationInput] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
-  const [loading, setLoading] = useState(true); 
+  const [typeInput, setTypeInput] = useState('');
+  const [typeFilter, settypeFilter] = useState('');
+  const [budgetInput, setBudgetInput] = useState('');
+  const [budgetFilter, setBudgetFilter] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const approvedProperty = async () => {
     try {
@@ -26,7 +30,7 @@ function PropertyAvailability() {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -36,6 +40,8 @@ function PropertyAvailability() {
 
   const handleSearch = () => {
     setLocationFilter(locationInput);
+    settypeFilter(typeInput);
+    setBudgetFilter(budgetInput);
   };
 
   const fuse = new Fuse(approve, {
@@ -43,9 +49,15 @@ function PropertyAvailability() {
     threshold: 0.5
   });
 
-  const filteredProperties = locationFilter
-    ? fuse.search(locationFilter).map((result) => result.item)
-    : approve;
+  const filteredProperties = approve.filter(
+    (property) =>
+      (!locationFilter ||
+        property.location
+          .toLowerCase()
+          .includes(locationFilter.toLowerCase())) &&
+      (!typeFilter || property.type === typeFilter) &&
+      (!budgetFilter || property.price <= Number(budgetFilter))
+  );
 
   return (
     <>
@@ -74,11 +86,19 @@ function PropertyAvailability() {
               </label>
               <select
                 name="type"
+                value={typeInput}
+                onChange={(e) => setTypeInput(e.target.value)}
                 className="mt-1 block w-full h-11 p-2 border border-gray-400 rounded-md shadow-sm"
               >
                 <option value="">Select type</option>
-                <option value="Private">Private</option>
-                <option value="Shared">Shared</option>
+                <option value="Apartment">Apartment</option>
+                <option value="House">House</option>
+                <option value="1 BHK">1 BHK</option>
+                <option value="2 BHK">2 BHK</option>
+                <option value="3 BHK">3 BHK</option>
+                <option value="4 BHK">4 BHK</option>
+                <option value="Flat">Flat</option>
+                <option value="Bunglow">Bunglow</option>
               </select>
             </div>
 
@@ -89,6 +109,8 @@ function PropertyAvailability() {
               <input
                 type="number"
                 name="budget"
+                value={budgetInput}
+                onChange={(e)=>setBudgetInput(e.target.value)}
                 placeholder="Enter maximum budget"
                 className="mt-1 block w-full h-11 p-2 border border-gray-300 rounded-md"
               />
@@ -110,7 +132,9 @@ function PropertyAvailability() {
         }`}
       >
         {loading ? (
-          <p className="text-center col-span-full text-gray-500">Loading properties...</p>
+          <p className="text-center col-span-full text-gray-500">
+            Loading properties...
+          </p>
         ) : filteredProperties.length > 0 ? (
           filteredProperties.map((property) => (
             <Link key={property._id} to={`/property/${property._id}`}>
@@ -146,7 +170,9 @@ function PropertyAvailability() {
             </Link>
           ))
         ) : (
-          <p className="text-center col-span-full text-gray-500">No properties available.</p>
+          <p className="text-center col-span-full text-gray-500">
+            No properties available.
+          </p>
         )}
       </div>
     </>
