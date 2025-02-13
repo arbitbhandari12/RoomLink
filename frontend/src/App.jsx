@@ -24,6 +24,7 @@ import AdminShifting from './Pages/RoomShiftingDetailsPage';
 import AdminHome from './Pages/AdminHome';
 import AboutUs from './Pages/AboutUs';
 import UserShifting from './Pages/UserShifting';
+import EditShifting from './Pages/EditShifting';
 
 function App() {
   const location = useLocation();
@@ -57,6 +58,7 @@ function App() {
           <Route index element={<RoomShifting />} />
           <Route path="yourRequest" element={<UserShifting />}></Route>
           <Route path="Shifting/:id" element={<AdminShifting />} />
+          <Route path="editShifting/:id" element={<EditShifting />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
