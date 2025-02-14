@@ -37,6 +37,16 @@ function PropertyLayout() {
                 My Property
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/addproperty/booking"
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
+                Your Booking
+              </NavLink>
+            </li>
           </ul>
         </nav>
       </aside>
