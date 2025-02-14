@@ -25,6 +25,7 @@ import AdminHome from './Pages/AdminHome';
 import AboutUs from './Pages/AboutUs';
 import UserShifting from './Pages/UserShifting';
 import EditShifting from './Pages/EditShifting';
+import OwnerBooking from './Pages/ownerBooking'
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
         <Route path="/addproperty" element={<PropertyLayout />}>
           <Route index element={<AddProperty />} />
           <Route path="UserProperty" element={<UserProperty />}></Route>
+          <Route path="booking" element={< OwnerBooking />}></Route>
           <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
         <Route path="/aboutus" element={<AboutUs />} />
