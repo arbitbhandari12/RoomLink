@@ -17,6 +17,7 @@ const { Comment, getComment } = require('../Controllers/comments-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const {
   booking,
+  bookingList,
   roomStatuss
 } = require('../Controllers/BookingProperty-controller');
 
@@ -33,6 +34,7 @@ router.route('/similar/:id').get(authMiddleware, similarProperty);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
+router.route('/bookingList').get(authMiddleware, bookingList);
 router.post('/booking/:id', booking);
 router.patch('/roomStatus/:id', roomStatuss);
 router.post('/comment/:id', authMiddleware, Comment);
