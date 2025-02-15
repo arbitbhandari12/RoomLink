@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
-import Fuse from 'fuse.js';
 
 function PropertyAvailability() {
   const [approve, setApprove] = useState([]);
@@ -12,6 +11,8 @@ function PropertyAvailability() {
   const [budgetInput, setBudgetInput] = useState('');
   const [budgetFilter, setBudgetFilter] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage] = useState(4);
 
   const approvedProperty = async () => {
     try {
@@ -44,11 +45,6 @@ function PropertyAvailability() {
     setBudgetFilter(budgetInput);
   };
 
-  const fuse = new Fuse(approve, {
-    keys: ['location'],
-    threshold: 0.5
-  });
-
   const filteredProperties = approve.filter(
     (property) =>
       (!locationFilter ||
@@ -58,6 +54,11 @@ function PropertyAvailability() {
       (!typeFilter || property.type === typeFilter) &&
       (!budgetFilter || property.price <= Number(budgetFilter))
   );
+
+  const lastPostIndex = currentPage * postPerPage;
+  const firstPostIndex = lastPostIndex - postPerPage;
+  const currentPost = filteredProperties.slice(firstPostIndex, lastPostIndex);
+  const totalPages = Math.ceil(filteredProperties.length / postPerPage);
 
   return (
     <>
@@ -110,7 +111,7 @@ function PropertyAvailability() {
                 type="number"
                 name="budget"
                 value={budgetInput}
-                onChange={(e)=>setBudgetInput(e.target.value)}
+                onChange={(e) => setBudgetInput(e.target.value)}
                 placeholder="Enter maximum budget"
                 className="mt-1 block w-full h-11 p-2 border border-gray-300 rounded-md"
               />
@@ -135,8 +136,8 @@ function PropertyAvailability() {
           <p className="text-center col-span-full text-gray-500">
             Loading properties...
           </p>
-        ) : filteredProperties.length > 0 ? (
-          filteredProperties.map((property) => (
+        ) : currentPost.length > 0 ? (
+          currentPost.map((property) => (
             <Link key={property._id} to={`/property/${property._id}`}>
               <div className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-96">
                 <div className="relative">
@@ -175,6 +176,37 @@ function PropertyAvailability() {
           </p>
         )}
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2 mb-8">
+          <button
+            onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-md ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() =>
+              setCurrentPage(Math.min(currentPage + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </>
   );
 }
