@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 import { useEffect, useState } from 'react';
 
@@ -19,13 +20,11 @@ const OwnerBooking = () => {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      if (response.ok) {
+        const data = await response.json();
+        setBookings(data.ownerBooking);
+        setRooms(data.details);
       }
-
-      const data = await response.json();
-      setBookings(data.ownerBooking || []);
-      setRooms(data.details || []);
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
@@ -52,23 +51,24 @@ const OwnerBooking = () => {
               <h3 className="text-2xl font-semibold text-gray-800">
                 {room.title} - {room.location}
               </h3>
-              <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
-                View Details
-              </button>
+              <Link key={room._id} to={`/properties/${room._id}`}>
+                <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+                  View Details
+                </button>
+              </Link>
             </div>
             <p className="text-gray-600 text-lg">
               Price: Rs{room.price} | Status: {room.roomStatus}
             </p>
 
-            {bookings.filter((booking) => booking.room === room._id).length >
-              0 && (
-              <div className="mt-6">
-                <h4 className="text-xl font-semibold text-gray-800">
+            {bookings.filter((booking) => booking.room).length > 0 && (
+              <div className="mt-6 space-y-2 max-h-56 overflow-y-auto">
+                <h4 className="text-xl font-semibold text-gray-800 ">
                   Bookings for this Room:
                 </h4>
                 <ul className="mt-4 space-y-4">
                   {bookings
-                    .filter((booking) => booking.room === room._id)
+                    .filter((booking) => booking.room)
                     .map((booking) => (
                       <li
                         key={booking._id}
