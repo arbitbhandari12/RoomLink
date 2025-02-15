@@ -14,7 +14,7 @@ function ShiftLayout() {
           ${isOpen ? 'fixed left-0 top-0 w-3/4 h-full z-50 p-6' : 'hidden sm:block'}
         `}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center">
           <span className="font-bold text-2xl flex">
             Hello {user?.username || 'Guest'}
           </span>
@@ -31,7 +31,10 @@ function ShiftLayout() {
             <li>
               <NavLink
                 to="/RoomShifting"
-                className="text-center"
+                end
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
                 onClick={() => setIsOpen(false)}
               >
                 Shifting Request
@@ -40,7 +43,9 @@ function ShiftLayout() {
             <li>
               <NavLink
                 to="/RoomShifting/yourRequest"
-                className="text-center"
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
                 onClick={() => setIsOpen(false)}
               >
                 Your Requests
