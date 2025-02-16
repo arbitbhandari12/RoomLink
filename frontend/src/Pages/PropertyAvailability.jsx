@@ -129,11 +129,11 @@ function PropertyAvailability() {
 
       <div
         className={`grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5 ${
-          loading ? 'min-h-[400px]' : ''
+          loading ? 'min-h-[470px]' : ''
         }`}
       >
         {loading ? (
-          <p className="text-center col-span-full text-gray-500">
+          <p className="text-center col-span-full text-gray-500 items-center justify-center flex">
             Loading properties...
           </p>
         ) : currentPost.length > 0 ? (
