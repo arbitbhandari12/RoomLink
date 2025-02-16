@@ -93,6 +93,8 @@ function AddProperty() {
     }
   }, [user]);
 
+  const { authorization } = useAuth();
+
   const formik = useFormik({
     initialValues: initialValues,
     // validationSchema: validationSchema,
@@ -113,6 +115,9 @@ function AddProperty() {
           'http://localhost:4001/api/properties/addproperty',
           {
             method: 'POST',
+            headers: {
+              Authorization: authorization
+            },
             body: formData
           }
         );
@@ -480,8 +485,8 @@ function AddProperty() {
             className="flex w-full p-3 rounded-md mt-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoComplete="off"
             name="name"
+            onChange={formik.handleChange}
             value={formik.values.name}
-            readOnly
           />
         </div>
 
@@ -494,8 +499,8 @@ function AddProperty() {
             className="flex w-full p-3 rounded-md mt-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoComplete="off"
             name="phone"
+            onChange={formik.handleChange}
             value={formik.values.phone}
-            readOnly
           />
         </div>
 
@@ -506,8 +511,8 @@ function AddProperty() {
             className="flex w-full p-3 rounded-md mt-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoComplete="off"
             name="email"
+            onChange={formik.handleChange}
             value={formik.values.email}
-            readOnly
           />
         </div>
 
