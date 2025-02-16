@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Store/auth';
+import Swal from 'sweetalert2';
+
 
 function AdminUser() {
   const { authorization } = useAuth();
@@ -25,6 +27,17 @@ function AdminUser() {
 
   const deleteUser = async (id) => {
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You want to delete this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (!result.isConfirmed) return;
       const response = await fetch(
         `http://localhost:4001/api/admin/users/delete/${id}`,
         {
