@@ -21,7 +21,9 @@ const {
   roomStatuss
 } = require('../Controllers/BookingProperty-controller');
 
-router.post('/addproperty', upload.array('photos', 10), addProperty);
+router
+  .route('/addproperty')
+  .post(upload.array('photos', 10), authMiddleware, addProperty);
 router.route('/homelatest').get(homeproperty);
 router.route('/available').get(userSideProperty);
 router.route('/property/:id').get(propertyPage);
