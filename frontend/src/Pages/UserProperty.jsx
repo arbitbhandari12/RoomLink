@@ -54,6 +54,9 @@ function UserProperty() {
           }
         }
       );
+      if(response.ok){
+        myProperty()
+      }
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -125,7 +128,7 @@ function UserProperty() {
                 </td>
                 <td className="text-center py-3 px-4 border-b border-gray-300">
                   <Link
-                    key={properties._id}
+                    // key={properties._id}
                     to={`/yourproperty/${properties._id}`}
                   >
                     <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
