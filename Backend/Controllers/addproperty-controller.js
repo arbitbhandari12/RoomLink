@@ -2,6 +2,16 @@ const List = require('../models/propertyList-model');
 
 const addProperty = async (req, res) => {
   try {
+    const user = req.user;
+    const admin = user.isAdmin;
+
+    let status = '';
+
+    if (admin == true) {
+      status = 'Approved';
+    } else {
+      status = 'Pending';
+    }
     // Create an array of file paths for the uploaded photos
     const photoPaths = req.files.map((file) => file.path);
 
@@ -27,7 +37,8 @@ const addProperty = async (req, res) => {
       transport: req.body.transport,
       name: req.body.name,
       phone: req.body.phone,
-      email: req.body.email
+      email: req.body.email,
+      status: status
     });
 
     // Send success response
