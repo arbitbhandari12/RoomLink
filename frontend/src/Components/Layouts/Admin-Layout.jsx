@@ -20,41 +20,54 @@ function AdminLayout() {
 
   return (
     <div className="flex">
-    <aside className="w-1/8 p-4 min-h-screen border-r border-gray-300">
-      <nav>
-        <ul className="space-y-4">
-          <li>
-            <NavLink to="/admin/home" className="">
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/admin/users" className="">
-              User
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/admin/listofproperty" className="">
-              List of Property
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/admin/requests" className="">
-              Shifting Request
-            </NavLink>
-          </li>
-          {/* <li>
-            <NavLink to="/admin/complaintproperty" className="nav-link">
-              Complaint Property
-            </NavLink>
-          </li> */}
-        </ul>
-      </nav>
-    </aside>
-    <main className="flex-1 p-3 border-l border-gray-300">
-      <Outlet />
-    </main>
-  </div>
+      <aside className="w-1/8 p-4 min-h-screen border-r border-gray-300">
+        <nav>
+          <ul className="space-y-4">
+            <li>
+              <NavLink
+                to="/admin/home"
+                className={({isActive}) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
+                Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/users"  className={({isActive}) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }>
+                User
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/listofproperty"  className={({isActive}) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }>
+                List of Property
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/admin/requests"  className={({isActive}) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }>
+                Shifting Request
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/logout"  className={({isActive}) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }>
+                Logout
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <main className="flex-1 p-3 border-l border-gray-300">
+        <Outlet />
+      </main>
+    </div>
   );
 }
 
