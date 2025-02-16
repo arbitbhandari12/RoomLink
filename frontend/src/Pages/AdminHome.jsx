@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const AdminHome = () => {
   return (
@@ -36,12 +37,18 @@ const AdminHome = () => {
         </div>
 
         <div className="mb-5 flex gap-3">
-          <button className="bg-green-500 text-white px-6 py-2 rounded-lg">
+          <NavLink
+            to="/admin/addProperty"
+            className="bg-green-500 text-white px-6 py-2 rounded-lg"
+          >
             + Add Rooms
-          </button>
-          <button className="bg-green-500 text-white px-6 py-2 rounded-lg">
+          </NavLink>
+          <NavLink
+            to="/admin/yourRooms"
+            className="bg-green-500 text-white px-6 py-2 rounded-lg"
+          >
             Your Rooms
-          </button>
+          </NavLink>
         </div>
         <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg">
           <thead className="bg-gradient-to-r from-indigo-600 to-red-700 text-white">
