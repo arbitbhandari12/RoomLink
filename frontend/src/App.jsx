@@ -25,7 +25,9 @@ import AdminHome from './Pages/AdminHome';
 import AboutUs from './Pages/AboutUs';
 import UserShifting from './Pages/UserShifting';
 import EditShifting from './Pages/EditShifting';
-import OwnerBooking from './Pages/ownerBooking'
+import OwnerBooking from './Pages/ownerBooking';
+import AdminProperty from './Pages/adminProperty';
+import AdminEdit from './Pages/adminEditProperty';
 
 function App() {
   const location = useLocation();
@@ -35,7 +37,8 @@ function App() {
 
   return (
     <>
-      <Header />
+      {!isAdminRoute && <Header />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -52,7 +55,7 @@ function App() {
         <Route path="/addproperty" element={<PropertyLayout />}>
           <Route index element={<AddProperty />} />
           <Route path="UserProperty" element={<UserProperty />}></Route>
-          <Route path="booking" element={< OwnerBooking />}></Route>
+          <Route path="booking" element={<OwnerBooking />}></Route>
           <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
         <Route path="/aboutus" element={<AboutUs />} />
@@ -64,6 +67,9 @@ function App() {
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
+          <Route path="addProperty" element={<AddProperty />} />
+          <Route path="yourRooms" element={<AdminProperty />} />
+          <Route path="edit/:id" element={<AdminEdit />} />
           <Route path="users" element={<AdminUser />} />
           <Route path="listofproperty" element={<AdminListProperty />} />
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
