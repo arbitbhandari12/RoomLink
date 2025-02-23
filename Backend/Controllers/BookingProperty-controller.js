@@ -49,7 +49,7 @@ const roomStatuss = async (req, res) => {
   try {
     const room = await propertyList.findByIdAndUpdate(
       req.params.id,
-      { status: 'Rented' },
+      { roomStatus: 'Rented' },
       { new: true }
     );
 
