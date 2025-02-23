@@ -44,7 +44,7 @@ function DetailsPropertyAdmin() {
   }, [id]);
 
   if (!property) {
-    return <p>Loading property details...</p>;
+    return <p className='text-2xl col-span-full text-grey-500 min-h-[700px] justify-center items-center flex'>Loading property details...</p>;
   }
 
   return (

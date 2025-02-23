@@ -1,5 +1,4 @@
 const comment = require('../models/comment-model');
-const authMiddleware = require('../middlewares/auth-middleware')
 
 const Comment = async (req, res) => {
   const room = req.params.id;
@@ -20,7 +19,6 @@ const getComment = async (req, res) => {
   const room = req.params.id;
   try {
     const comments = await comment.find({room});
-    console.log(comments);
     res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });

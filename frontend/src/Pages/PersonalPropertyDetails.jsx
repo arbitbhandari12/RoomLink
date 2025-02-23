@@ -44,7 +44,7 @@ function PersonalPropertyDetails() {
   }, [id]);
 
   if (!property) {
-    return <p>Loading property details...</p>;
+    return <p className='text-2xl col-span-full text-grey-500 min-h-[700px] justify-center items-center flex'>Loading property details...</p>;
   }
 
   return (
@@ -73,7 +73,7 @@ function PersonalPropertyDetails() {
             {/* Property Details Section */}
             <div className="border p-2 border-gray-500 mt-4">
               <h1 className="font-bold text-2xl">
-                Property Details{' '}
+                Property Details
                 <span className="text-gray-500 font-normal">
                   (#{property._id.substring(18, 24)})
                 </span>

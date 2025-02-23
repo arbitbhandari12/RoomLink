@@ -27,7 +27,7 @@ function PropertyAvailability() {
       );
       const data = await response.json();
       console.log(data);
-      setApprove(data.approved);
+      setApprove(data.properties);
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,6 +43,7 @@ function PropertyAvailability() {
     setLocationFilter(locationInput);
     settypeFilter(typeInput);
     setBudgetFilter(budgetInput);
+    setCurrentPage(1);
   };
 
   const filteredProperties = approve.filter(
@@ -53,6 +54,7 @@ function PropertyAvailability() {
           .includes(locationFilter.toLowerCase())) &&
       (!typeFilter || property.type === typeFilter) &&
       (!budgetFilter || property.price <= Number(budgetFilter))
+      
   );
 
   const lastPostIndex = currentPage * postPerPage;
@@ -144,15 +146,17 @@ function PropertyAvailability() {
                   <img
                     src={`http://localhost:4001/${property.photos[0]}`}
                     alt={property.title}
-                    className="w-full h-48 rounded-t-lg"
+                    className="w-full h-48 rounded-t-lg object-cover"
                     loading="lazy"
                   />
+                  <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                    {property.roomStatus}
+                  </div>
                 </div>
                 <div className="p-4">
                   <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
                     {property.title}
                   </h3>
-                  <h1>{property.roomStatus}</h1>
                   <div className="flex justify-between mt-2">
                     <p className="text-gray-400 text-xl">Rs {property.price}</p>
                     <p className="text-gray-600">Room Type: {property.type}</p>

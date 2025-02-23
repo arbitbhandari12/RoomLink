@@ -11,16 +11,16 @@ const homeproperty = async (req, res) => {
   }
 };
 
-//all property available page that are approved
 const userSideProperty = async (req, res) => {
   try {
-    const approved = await PropertyList.find({ status: 'Approved' });
-    res.status(201).json({ approved });
+    const properties = await PropertyList.find({
+      $or: [{ status: 'Approved' }, { roomStatus: 'Rented' }]
+    });
+    res.status(200).json({ properties });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
-
 // property detail page
 const propertyPage = async (req, res) => {
   try {
