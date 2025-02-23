@@ -47,10 +47,10 @@ const Header = () => {
           {isLoggedIN ? (
             <>
               <NavLink
-                to="/Logout"
-                className="px-4 py-2 rounded bg-yellow-900 text-white flex items-center transition duration-200 hover:bg-blue-700"
+                to=""
+                className="w-12 h-12 rounded-full bg-gray-200 text-white flex items-center justify-center transition duration-200 hover:bg-blue-700"
               >
-                <span>👤</span> Logout
+                <span>👤</span>
               </NavLink>
               {/* {admin && <NavLink to="/admin" className="sm:block hidden">Admin</NavLink>} */}
             </>
