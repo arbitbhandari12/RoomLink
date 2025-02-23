@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import BookingButton from '../Components/Booking';
 
-
 function PropertyDetails() {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
@@ -132,7 +131,7 @@ function PropertyDetails() {
         );
         const data = await response.json();
         console.log('Fetched similar rooms:', data);
-        setSimilarRooms(data);
+        setSimilarRooms(data || []);
       } catch (error) {
         console.error('Error fetching similar rooms:', error);
       }
@@ -144,7 +143,11 @@ function PropertyDetails() {
   }, [id]);
 
   if (!property) {
-    return <p>Loading property details...</p>;
+    return (
+      <p className="text-2xl col-span-full text-grey-500 min-h-[700px] justify-center items-center flex">
+        Loading property details...
+      </p>
+    );
   }
 
   return (
@@ -173,7 +176,7 @@ function PropertyDetails() {
             {/* Property Details Section */}
             <div className="border p-2 border-gray-500 mt-4">
               <h1 className="font-bold text-2xl">
-                Property Details{' '}
+                Property Details
                 <span className="text-gray-500 font-normal">
                   (#{property._id.substring(18, 24)})
                 </span>
@@ -307,12 +310,36 @@ function PropertyDetails() {
               </div>
             </div>
 
-            <div className="flex gap-6 mt-6 mb-40">
+            <div className="flex gap-6 mt-6 mb-32">
               <div>
                 <BookingButton id={id} />
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div>
+        <h1 className="flex text-2xl justify-center">Similar Rooms</h1>
+        <div className="grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5">
+          {similar.map((same, index) => (
+            <div className="" key={index}>
+              <div className="relative">
+                <img
+                  src={`http://localhost:4001/${same.photos[0]}`}
+                  alt={property.title}
+                  className="w-full h-48 rounded-t-lg"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <span>{same.title}</span>
+              </div>
+              <div>
+                <span>{same.status}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>
