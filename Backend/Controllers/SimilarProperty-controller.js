@@ -3,30 +3,51 @@ const propertyList = require('../models/propertyList-model');
 const similarProperty = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log('Fetching similar rooms for property ID:', id);
-
     const selectedRoom = await propertyList.findById(id);
-    console.log('Selected room:', selectedRoom);
 
     if (!selectedRoom) {
       console.log('No room found with ID:', id);
       return res.status(404).json({ message: 'Property not found' });
     }
 
-    const similarRooms = await propertyList.find({
-      location: selectedRoom.location,
-      price: selectedRoom.price,
-      _id: { $ne: id }
-    }).limit(4);
+    const priceRange = selectedRoom.price * 0.2;
+    const minPrice = selectedRoom.price - priceRange;
+    const maxPrice = selectedRoom.price + priceRange;
 
-    if (similarRooms.length === 0) {
-      console.log('No similar rooms found for property:', selectedRoom.title);
-      return res.status(404).json({ message: 'No similar properties found' });
+    let similarRooms = await propertyList
+      .find({
+        location: selectedRoom.location,
+        price: { $gte: minPrice, $lte: maxPrice },
+        type: selectedRoom.type,
+        status: 'Approved',
+        _id: { $ne: id }
+      })
+      .limit(4);
+    console.log(similarRooms);
+
+    if (similarRooms.length < 4) {
+      similarRooms = await propertyList
+        .find({
+          status: 'Approved',
+          $or: [
+            { location: selectedRoom.location },
+            { price: { $gte: minPrice, $lte: maxPrice } },
+            { type: selectedRoom.type },
+          ],
+          _id: { $ne: id }
+        })
+        .limit(4);
+      console.log(similarRooms);
     }
 
+    if (similarRooms.length < 4) {
+      similarRooms = await propertyList
+        .find({ status: 'Approved', _id: { $ne: id } })
+        .limit(4);
+    }
     res.json(similarRooms);
+    console.log(similarRooms);
   } catch (error) {
-    console.error('Error fetching similar rooms:', error.message);
     res
       .status(500)
       .json({ message: 'Internal server error', error: error.message });
