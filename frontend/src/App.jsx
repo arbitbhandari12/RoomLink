@@ -28,6 +28,9 @@ import EditShifting from './Pages/EditShifting';
 import OwnerBooking from './Pages/ownerBooking';
 import AdminProperty from './Pages/adminProperty';
 import AdminEdit from './Pages/adminEditProperty';
+import UserLayout from './Components/Layouts/User-Layout';
+import YourProfile from './Pages/YourProfile';
+import ChangePassword from './Pages/ChangePassword';
 
 function App() {
   const location = useLocation();
@@ -64,6 +67,10 @@ function App() {
           <Route path="yourRequest" element={<UserShifting />}></Route>
           <Route path="Shifting/:id" element={<AdminShifting />} />
           <Route path="editShifting/:id" element={<EditShifting />} />
+        </Route>
+        <Route path="/user" element={<UserLayout />}>
+          <Route path="yourProfile" element={<YourProfile />} />
+          <Route path="changePassword" element={<ChangePassword />} />  
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
