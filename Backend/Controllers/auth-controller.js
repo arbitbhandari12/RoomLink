@@ -90,7 +90,41 @@ const forgot = async (req, res) => {
     if (!oldUser) {
       return res.status(404).json({ error: "User doesn't exists" });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = {
+      username: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone
+    };
+    await User.findByIdAndUpdate(id, updatedData, { new: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id);
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Old password is incorrect' });
+    }
+    const saltRounds = 10;
+    user.password = await bcrypt.hash(newPassword, saltRounds);
+    await user.save();
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 module.exports = {
@@ -98,5 +132,7 @@ module.exports = {
   register,
   login,
   user,
-  forgot
+  forgot,
+  updateProfile,
+  changePassword
 };
