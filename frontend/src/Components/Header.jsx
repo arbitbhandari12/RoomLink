@@ -47,8 +47,8 @@ const Header = () => {
           {isLoggedIN ? (
             <>
               <NavLink
-                to=""
-                className="w-12 h-12 rounded-full bg-gray-200 text-white flex items-center justify-center transition duration-200 hover:bg-blue-700"
+                to="/user"
+                className="w-9 h-9 right-10 absolute rounded-full bg-gray-200 text-white flex items-center justify-center transition duration-200 hover:bg-blue-700"
               >
                 <span>👤</span>
               </NavLink>
