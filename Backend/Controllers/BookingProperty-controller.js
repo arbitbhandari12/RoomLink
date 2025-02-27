@@ -126,7 +126,7 @@ const bookingList = async (req, res) => {
 
     // Find all bookings for the user
     const ownerBooking = await Booking.find({ owner: email });
-    console.log(ownerBooking)
+    console.log(ownerBooking);
 
     // Extract all room IDs
     const rooms = ownerBooking.map((booking) => booking.room);
