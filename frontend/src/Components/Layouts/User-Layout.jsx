@@ -35,12 +35,12 @@ const UserLayout = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink className="flex items-center justify-center">
+              <NavLink to="YourBooking" className="flex items-center justify-center">
                 Your Booking
               </NavLink>
             </li>
             <li>
-              <NavLink className="flex items-center justify-center">
+              <NavLink to= "/logout" className="flex items-center justify-center">
                 Logout
               </NavLink>
             </li>

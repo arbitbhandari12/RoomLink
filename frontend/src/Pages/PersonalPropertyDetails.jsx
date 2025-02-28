@@ -49,7 +49,7 @@ function PersonalPropertyDetails() {
 
   return (
     <>
-      <div className="px-8 md:px-16 lg:px-36">
+      <div className="">
         {/* Image Section */}
         <div className="mt-3">
           <ImageSlider

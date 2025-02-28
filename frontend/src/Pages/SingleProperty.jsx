@@ -152,7 +152,7 @@ function PropertyDetails() {
 
   return (
     <>
-      <div className="px-8 md:px-16 lg:px-36">
+      <div className="px-3 md:px-16 lg:px-24">
         {/* Image Section */}
         <div className="mt-3">
           <ImageSlider

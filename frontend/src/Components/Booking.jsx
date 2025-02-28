@@ -4,13 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../Store/auth';
 
 const BookingForm = ({ id }) => {
+  const { authorization } = useAuth();
   const initialValues = {
     name: '',
     email: '',
     phone: '',
-    date: null,
+    date: null
   };
 
   const formik = useFormik({
@@ -23,26 +25,24 @@ const BookingForm = ({ id }) => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+                Authorization: authorization
             },
-            body: JSON.stringify(values),
+            body: JSON.stringify(values)
           }
         );
 
         const data = await response.json();
-
+        console.log(data);
         if (response.ok) {
-          toast.success('Booking Successful!', {
-          });
+          toast.success('Booking Successful!', {});
         } else {
-          toast.error(data.msg || 'Booking failed', {
-          });
+          toast.error(data.msg || 'Booking failed', {});
         }
       } catch (error) {
         console.log(error);
-        toast.error('Server error. Please try again later.', {
-        });
+        toast.error('Server error. Please try again later.', {});
       }
-    },
+    }
   });
 
   return (

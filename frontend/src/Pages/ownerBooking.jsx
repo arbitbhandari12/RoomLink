@@ -51,7 +51,7 @@ const OwnerBooking = () => {
               <h3 className="text-2xl font-semibold text-gray-800">
                 {room.title} - {room.location}
               </h3>
-              <Link key={room._id} to={`/properties/${room._id}`}>
+              <Link key={room._id} to={`/addproperty/properties/${room._id}`}>
                 <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
                   View Details
                 </button>
