@@ -31,6 +31,7 @@ import AdminEdit from './Pages/adminEditProperty';
 import UserLayout from './Components/Layouts/User-Layout';
 import YourProfile from './Pages/YourProfile';
 import ChangePassword from './Pages/ChangePassword';
+import YourBooking from './Pages/YourBooking';
 
 function App() {
   const location = useLocation();
@@ -49,15 +50,15 @@ function App() {
           element={<PropertyAvailability />}
         />
         <Route path="/property/:id" element={<PropertyDetails />} />
-        <Route path="/properties/:id" element={<DetailsPropertyAdmin />} />
-        <Route path="/yourproperty/:id" element={<PersonalPropertyDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addproperty" element={<PropertyLayout />}>
           <Route index element={<AddProperty />} />
+          <Route path="yourproperty/:id" element={<PersonalPropertyDetails />} />
           <Route path="UserProperty" element={<UserProperty />}></Route>
+          <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
           <Route path="booking" element={<OwnerBooking />}></Route>
           <Route path="editProperty/:id" element={<EditProperty />}></Route>
         </Route>
@@ -70,7 +71,9 @@ function App() {
         </Route>
         <Route path="/user" element={<UserLayout />}>
           <Route path="yourProfile" element={<YourProfile />} />
-          <Route path="changePassword" element={<ChangePassword />} />  
+          <Route path="changePassword" element={<ChangePassword />} />
+          <Route path="YourBooking" element={<YourBooking />} />
+
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="home" element={<AdminHome />} />
