@@ -91,7 +91,9 @@ const booking = async (req, res) => {
   const room = req.params.id;
   const owner = await propertyList.findById(room);
   const response = owner.email;
-  console.log('This is room', response);
+  const user = req.user;
+  console.log(user);
+
   const { name, email, phone, date } = req.body;
 
   try {
@@ -111,7 +113,8 @@ const booking = async (req, res) => {
       phone,
       date,
       owner: response,
-      room
+      room,
+      userId: user._id
     });
 
     res.status(201).json({ msg: 'Booked Successfully', booking: newBooking });
@@ -122,15 +125,14 @@ const booking = async (req, res) => {
 const bookingList = async (req, res) => {
   try {
     const user = req.user;
-    const email = user.email;
+    console.log("Current user ID: ", req.user._id);
+
 
     // Find all bookings for the user
-    const ownerBooking = await Booking.find({ owner: email });
-    console.log(ownerBooking);
+    const ownerBooking = await Booking.find({ userId: user._id });
 
     // Extract all room IDs
     const rooms = ownerBooking.map((booking) => booking.room);
-    // console.log('Rooms:', rooms);
 
     // Find property details for all room IDs
     const details = await propertyList.find({ _id: { $in: rooms } });
@@ -138,7 +140,7 @@ const bookingList = async (req, res) => {
 
     res
       .status(200)
-      .json({ msg: 'This is booking list', ownerBooking, details });
+      .json({ownerBooking, details });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Server error. Please try again later.' });

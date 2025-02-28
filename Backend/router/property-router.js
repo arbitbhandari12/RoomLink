@@ -37,7 +37,7 @@ router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
 router.route('/bookingList').get(authMiddleware, bookingList);
-router.post('/booking/:id', booking);
+router.route('/booking/:id').post(authMiddleware, booking);
 router.patch('/roomStatus/:id', roomStatuss);
 router.post('/comment/:id', authMiddleware, Comment);
 router.route('/getComment/:id').get(getComment);

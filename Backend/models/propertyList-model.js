@@ -66,22 +66,28 @@ const propertyList = new mongoose.Schema({
     required: true
   },
   school: {
-    type: String
+    type: String,
+    required: true
   },
   healthcare: {
-    type: String
+    type: String,
+    required: true
   },
   park: {
-    type: String
+    type: String,
+    required: true
   },
   transport: {
-    type: String
+    type: String,
+    required: true
   },
   temple: {
-    type: String
+    type: String,
+    required: true
   },
   bank: {
-    type: String
+    type: String,
+    required: true
   },
   roomStatus: {
     type: String,
@@ -92,6 +98,10 @@ const propertyList = new mongoose.Schema({
     type: String,
     enum: ['Approved', 'Pending', 'Rejected'],
     default: 'Pending'
+  },
+  userId: {
+    type: String,
+    required: true
   }
 });
 

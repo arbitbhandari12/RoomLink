@@ -23,7 +23,6 @@ const similarProperty = async (req, res) => {
         _id: { $ne: id }
       })
       .limit(4);
-    console.log(similarRooms);
 
     if (similarRooms.length < 4) {
       similarRooms = await propertyList
@@ -32,12 +31,11 @@ const similarProperty = async (req, res) => {
           $or: [
             { location: selectedRoom.location },
             { price: { $gte: minPrice, $lte: maxPrice } },
-            { type: selectedRoom.type },
+            { type: selectedRoom.type }
           ],
           _id: { $ne: id }
         })
         .limit(4);
-      console.log(similarRooms);
     }
 
     if (similarRooms.length < 4) {
@@ -46,7 +44,6 @@ const similarProperty = async (req, res) => {
         .limit(4);
     }
     res.json(similarRooms);
-    console.log(similarRooms);
   } catch (error) {
     res
       .status(500)

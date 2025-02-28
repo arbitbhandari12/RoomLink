@@ -1,6 +1,7 @@
 const User = require('../models/user-model');
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
-// const approve = require('../models/propertyapprove-model');
+const booking = require('../models/Booking-model');
+const Booking = require('../models/Booking-model');
 
 const home = async (req, res) => {
   try {
@@ -134,5 +135,5 @@ module.exports = {
   user,
   forgot,
   updateProfile,
-  changePassword
+  changePassword,
 };

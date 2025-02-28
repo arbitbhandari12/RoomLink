@@ -35,7 +35,7 @@ const propertyPage = async (req, res) => {
 const personalProperty = async (req, res) => {
   try {
     const userData = req.user;
-    const myProperty = await PropertyList.find({ email: userData.email }).sort({
+    const myProperty = await PropertyList.find({ userId: userData._id }).sort({
       _id: -1
     });
     res.json(myProperty);
