@@ -49,7 +49,7 @@ function DetailsPropertyAdmin() {
 
   return (
     <>
-      <div className="px-3 md:px-16 lg:px-24">
+      <div className="">
         {/* Image Section */}
         <div className="mt-3">
           <ImageSlider

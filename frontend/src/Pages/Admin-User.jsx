@@ -36,8 +36,9 @@ function AdminUser() {
         cancelButtonColor: '#3085d6',
         confirmButtonText: 'Yes, delete it!'
       });
-
+      
       if (!result.isConfirmed) return;
+
       const response = await fetch(
         `http://localhost:4001/api/admin/users/delete/${id}`,
         {

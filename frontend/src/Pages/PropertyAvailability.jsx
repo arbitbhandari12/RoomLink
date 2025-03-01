@@ -53,7 +53,7 @@ function PropertyAvailability() {
           .toLowerCase()
           .includes(locationFilter.toLowerCase())) &&
       (!typeFilter || property.type === typeFilter) &&
-      (!budgetFilter || property.price <= Number(budgetFilter))
+      (!budgetFilter || Math.abs(property.price - Number(budgetFilter)) <= 1500)
       
   );
 
