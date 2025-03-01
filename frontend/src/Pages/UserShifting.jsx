@@ -18,8 +18,23 @@ function UserShifting() {
         }
       );
       const data = await response.json();
+      setShift(data.request);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteShifting = async (id) => {
+    try {
+      shifting();
+      const response = await fetch(
+        `http://localhost:4001/api/shifting/deleteShifting/${id}`,
+        {
+          method: 'DELETE'
+        }
+      );
       if (response.ok) {
-        setShift(data.request);
+        shifting();
       }
     } catch (error) {
       console.log(error);
@@ -29,6 +44,7 @@ function UserShifting() {
   useEffect(() => {
     shifting();
   }, []);
+
   return (
     <>
       <div>
@@ -53,23 +69,24 @@ function UserShifting() {
             </tr>
           </thead>
           <tbody>
-            {shift.map((request, index) => (
-              <tr
-                key={index}
-                className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
-              >
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {request.pickup}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {request.dropoff}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {new Date(request.shiftingdate).toLocaleString()}
-                </td>
-                <td className="text-center py-3 px-4 border-b">
-                  <span
-                    className={`py-3 px-4 border-b border-gray-300 rounded-full 
+            {shift.length > 0 ? (
+              shift.map((request, index) => (
+                <tr
+                  key={index}
+                  className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+                >
+                  <td className="py-3 px-4 border-b border-gray-300 text-center">
+                    {request.pickup}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center">
+                    {request.dropoff}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center">
+                    {new Date(request.shiftingdate).toLocaleString()}
+                  </td>
+                  <td className="text-center py-3 px-4 border-b">
+                    <span
+                      className={`py-3 px-4 border-b border-gray-300 rounded-full 
                     ${
                       request.status === 'Pending'
                         ? 'bg-yellow-200'
@@ -77,38 +94,49 @@ function UserShifting() {
                           ? 'bg-red-200'
                           : 'bg-green-200'
                     }`}
-                  >
-                    {request.status}
-                  </span>
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  <Link
-                    key={shift._id}
-                    to={`/Roomshifting/Shifting/${request._id}`}
-                  >
-                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
-                      View Details
-                    </button>
-                  </Link>
-                  <Link
-                    key={request._id}
-                    to={`/RoomShifting/editShifting/${request._id}`}
                     >
-                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
-                      Edit
+                      {request.status}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center">
+                    <Link
+                      key={shift._id}
+                      to={`/Roomshifting/Shifting/${request._id}`}
+                    >
+                      <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
+                        View Details
+                      </button>
+                    </Link>
+                    <Link
+                      key={request._id}
+                      to={`/RoomShifting/editShifting/${request._id}`}
+                    >
+                      <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 mr-4">
+                        Edit
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => deleteShifting(request._id)}
+                      className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700"
+                    >
+                      Delete
                     </button>
-                  </Link>
-                  <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700">
-                    Delete
-                  </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="py-4 text-center text-gray-500">
+                  No shifting requests available
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
         <div className="sm:hidden space-y-4">
-          {shift.map((request, index) => (
+          {shift.length > 0 ? (
+          shift.map((request, index) => (
             <div
               key={index}
               className="bg-white border border-gray-300 rounded-lg shadow-lg p-4"
@@ -126,6 +154,20 @@ function UserShifting() {
                   <span className="font-semibold">Shifting Date:</span>
                   {new Date(request.shiftingdate).toLocaleString()}
                 </div>
+                <div>
+                  <span
+                    className={`py-1 px-4 border-b border-gray-300 mb-2 mt-2
+                    ${
+                      request.status === 'Pending'
+                        ? 'bg-yellow-200'
+                        : request.status === 'Rejected'
+                          ? 'bg-red-200'
+                          : 'bg-green-200'
+                    }`}
+                  >
+                    {request.status}
+                  </span>
+                </div>
                 <div className="flex justify-center gap-2 mt-4">
                   <Link
                     key={shift._id}
@@ -135,16 +177,26 @@ function UserShifting() {
                       View Details
                     </button>
                   </Link>
-                  <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
-                    Edit
-                  </button>
-                  <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 text-sm">
+                  <Link
+                    key={request._id}
+                    to={`/RoomShifting/editShifting/${request._id}`}
+                  >
+                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
+                      Edit
+                    </button>
+                  </Link>
+                  <button
+                    onClick={() => deleteShifting(request._id)}
+                    className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 text-sm"
+                  >
                     Delete
                   </button>
                 </div>
               </div>
             </div>
-          ))}
+          ))):(
+            <span className='flex justify-center'>No shifting requests</span>
+          )}
         </div>
       </div>
     </>
