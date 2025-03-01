@@ -1,4 +1,5 @@
 const List = require('../models/propertyList-model');
+const User = require('../models/user-model');
 
 const addProperty = async (req, res) => {
   try {
@@ -12,6 +13,13 @@ const addProperty = async (req, res) => {
     } else {
       status = 'Pending';
     }
+
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (!existingUser) {
+      return res.json('No user registered with this email. Please register first.');
+    }
+
     // Create an array of file paths for the uploaded photos
     const photoPaths = req.files.map((file) => file.path);
 
@@ -41,8 +49,6 @@ const addProperty = async (req, res) => {
       status: status,
       userId: user._id
     });
-
-    // Send success response
     res.status(201).json({ message: 'Property added successfully!' });
   } catch (error) {
     console.error(error);
