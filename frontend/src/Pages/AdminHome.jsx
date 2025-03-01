@@ -1,10 +1,62 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../Store/auth';
 
 const AdminHome = () => {
+  const { authorization } = useAuth();
+  const [user, setUser] = useState();
+  const [property, setProperty] = useState();
+
+  const totalUser = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/admin/userCount',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const propertyCount = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/admin/propertyCount',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setProperty(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    totalUser();
+  }, []);
+
+  useEffect(() => {
+    propertyCount();
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
-      {/* Dashboard Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex space-x-4">
           <h1 className="text-2xl font-semibold">RoomLink Dashboard</h1>
@@ -12,11 +64,11 @@ const AdminHome = () => {
         <div className="flex space-x-6">
           <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
             <span className="font-semibold">Total Users</span>
-            <span className="text-xl">100</span>
+            <span className="text-xl">{user}</span>
           </div>
           <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
             <span className="font-semibold">Total Rooms</span>
-            <span className="text-xl">100</span>
+            <span className="text-xl">{property}</span>
           </div>
           <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
             <span className="font-semibold">Remaining Listing Rooms</span>
