@@ -54,8 +54,8 @@ function UserProperty() {
           }
         }
       );
-      if(response.ok){
-        myProperty()
+      if (response.ok) {
+        myProperty();
       }
       const data = await response.json();
       console.log(data);
@@ -84,84 +84,82 @@ function UserProperty() {
 
   return (
     <>
-      <div>
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-lg mb-20">
-          <thead className="bg-gradient-to-r from-indigo-600 to-red-700 text-white">
-            <tr>
-              <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
-                Room Id
-              </th>
-              <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
-                Room Title
-              </th>
-              <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
-                Status
-              </th>
-              <th className="py-3 px-4 border-b border-gray-300 text-center font-semibold">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {property.map((properties, index) => (
-              <tr
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {property.length > 0 ? (
+            property.map((properties, index) => (
+              <div
                 key={index}
-                className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+                className="bg-white shadow-lg rounded-lg overflow-hidden border"
               >
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  (#{properties._id.substring(18, 24)})
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center">
-                  {properties.title && properties.title.length > 20
-                    ? properties.title.substring(0, 20) + '...'
-                    : properties.title}
-                </td>
-                <td className="text-center py-3 px-4 border-b">
-                <span
-                    className={`py-3 px-4 border-b border-gray-300 rounded-full 
-                    ${properties.status === 'Pending' ? 'bg-yellow-300 text-black' :
-                      properties.status === 'Rejected' ? 'bg-red-400 text-white' :
-                      'bg-green-200 text-black'}`}
+                                  <Link to={`/addproperty/yourproperty/${properties._id}`}>
+
+                 <div className="relative">
+                  <img
+                    src={`http://localhost:4001/${properties.photos[0]}`}
+                    alt={properties.title}
+                    className="w-full h-48 rounded-t-lg object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-xl mb-2">
+                    Room Id: #{properties._id.substring(18, 24)}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {properties.title && properties.title.length > 20
+                      ? properties.title.substring(0, 20) + '...'
+                      : properties.title}
+                  </p>
+                  <div
+                    className={`py-2 px-4 rounded-full mb-4 text-center 
+                      ${
+                        properties.status === 'Pending'
+                          ? 'bg-yellow-300 text-black'
+                          : properties.status === 'Rejected'
+                          ? 'bg-red-400 text-white'
+                          : 'bg-green-200 text-black'
+                      }`}
                   >
                     {properties.status}
-                  </span>
-                </td>
-                <td className="text-center py-3 px-4 border-b border-gray-300">
-                  <Link
-                    // key={properties._id}
-                    to={`/addproperty/yourproperty/${properties._id}`}
-                  >
-                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
-                      View Details
-                    </button>
-                  </Link>
+                  </div>
+                </div>
+                <div className="flex flex-wrap justify-center gap-2 p-4">
                   <Link
                     key={properties._id}
                     to={`/addproperty/editProperty/${properties._id}`}
                   >
-                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2">
+                    <button className="text-white bg-green-700 hover:bg-slate-600 font-semibold border rounded px-4 py-2">
                       Edit
                     </button>
                   </Link>
                   <button
-                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2 mr-2"
+                    className="text-white bg-red-700 hover:bg-slate-600 font-semibold border rounded px-4 py-2"
                     onClick={() => deleteProperty(properties._id)}
                   >
                     Delete
                   </button>
-                  {properties.status !== 'Pending' && properties.status !== 'Rejected' && (
-                    <button
-                      className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
-                      onClick={() => rentProperty(properties._id)}
-                    >
-                      Rented
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  {properties.status !== 'Pending' &&
+                    properties.status !== 'Rejected' && (
+                      <button
+                        className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-4 py-2"
+                        onClick={() => rentProperty(properties._id)}
+                      >
+                        Rented
+                      </button>
+                    )}
+                </div>
+                </Link>
+
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500">
+              No properties listed yet.
+            </div>
+          )}
+          
+        </div>
       </div>
     </>
   );
