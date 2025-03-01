@@ -85,10 +85,18 @@ const requestHistory = async (req, res) => {
     const id = user._id;
     const request = await shiftList.find({ userId: id });
     res.status(200).json({ request });
-    console.log(request);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Failed to fetch request history.' });
+  }
+};
+
+const deleteShifting = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await shiftList.deleteOne({ _id: id });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
 
@@ -119,7 +127,7 @@ const editShifting = async (req, res) => {
     const response = await shiftList.findByIdAndUpdate(id, updatedData, {
       new: true
     });
-    res.json(response)
+    res.json(response);
   } catch (error) {
     console.log(error);
   }
@@ -132,6 +140,7 @@ module.exports = {
   shiftingRequest,
   details,
   requestHistory,
+  deleteShifting,
   shiftingEdit,
   editShifting
 };
