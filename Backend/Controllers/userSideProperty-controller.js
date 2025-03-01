@@ -13,9 +13,7 @@ const homeproperty = async (req, res) => {
 
 const userSideProperty = async (req, res) => {
   try {
-    const properties = await PropertyList.find({
-      $or: [{ status: 'Approved' }, { roomStatus: 'Rented' }]
-    });
+    const properties = await PropertyList.find({ status: 'Approved' });
     res.status(200).json({ properties });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
