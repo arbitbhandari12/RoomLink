@@ -7,6 +7,7 @@ const {
   shiftingRequest,
   details,
   requestHistory,
+  deleteShifting,
   shiftingEdit,
   editShifting
 } = require('../Controllers/shiftingRooms-controller');
@@ -19,8 +20,7 @@ router.route('/shiftReject/:id').post(shiftReject);
 router.route('/shiftDetails/:id').get(details);
 router.route('/requestHistory').get(authMiddleware, requestHistory);
 router.route('/shiftingEdit/:id').get(shiftingEdit);
+router.route('/deleteShifting/:id').delete(deleteShifting);
 router.route('/editShifting/:id').patch(editShifting);
-
-
 
 module.exports = router;
