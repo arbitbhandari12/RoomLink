@@ -1,6 +1,7 @@
 const User = require('../models/user-model');
 const List = require('../models/propertyList-model');
 const shiftRequest = require('../models/ShiftingRequest-model');
+const PropertyList = require('../models/propertyList-model');
 
 const allUsers = async (req, res) => {
   try {
@@ -118,6 +119,24 @@ const rejectingShifting = async (req, res) => {
   }
 };
 
+const userCount = async (req, res) => {
+  try {
+    const numberOfUser = await User.countDocuments();
+    res.json(numberOfUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const propertyCount = async (req, res) => {
+  try {
+    const numberofProperty = await PropertyList.countDocuments();
+    res.json(numberofProperty);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
 module.exports = {
   allUsers,
   deleteUsers,
@@ -126,5 +145,7 @@ module.exports = {
   approveProperty,
   rejectedProperty,
   approveshifting,
-  rejectingShifting
+  rejectingShifting,
+  userCount,
+  propertyCount
 };
