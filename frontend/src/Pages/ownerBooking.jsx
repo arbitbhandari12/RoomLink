@@ -10,7 +10,7 @@ const OwnerBooking = () => {
   const fetchBookings = async () => {
     try {
       const response = await fetch(
-        'http://localhost:4001/api/properties/bookingList',
+        'http://localhost:4001/api/properties/landloardBooking',
         {
           method: 'GET',
           headers: {
@@ -31,15 +31,13 @@ const OwnerBooking = () => {
   };
 
   useEffect(() => {
-    if (authorization) {
-      fetchBookings();
-    }
-  }, [authorization]);
+    fetchBookings();
+  }, []);
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       <h2 className="text-3xl font-bold text-center text-indigo-600 mb-8">
-        Your Booking List
+        Upcoming Visits
       </h2>
       {rooms.length > 0 ? (
         rooms.map((room) => (
@@ -57,18 +55,15 @@ const OwnerBooking = () => {
                 </button>
               </Link>
             </div>
-            <p className="text-gray-600 text-lg">
-              Price: Rs{room.price} | Status: {room.roomStatus}
-            </p>
+            <p className="text-gray-600 text-lg">Price: Rs{room.price}</p>
 
-            {bookings.filter((booking) => booking.room).length > 0 && (
               <div className="mt-6 space-y-2 max-h-56 overflow-y-auto">
-                <h4 className="text-xl font-semibold text-gray-800 ">
-                  Bookings for this Room:
+              <h4 className="text-xl font-semibold text-gray-800 ">
+                  Visit for this Room:
                 </h4>
                 <ul className="mt-4 space-y-4">
                   {bookings
-                    .filter((booking) => booking.room)
+                    .filter((booking) => booking.room === room._id)
                     .map((booking) => (
                       <li
                         key={booking._id}
@@ -77,24 +72,23 @@ const OwnerBooking = () => {
                         <div className="font-medium text-gray-700">
                           {booking.name}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          booked this room on{' '}
+                        <div className="text-sm text-gray-500 mt-1">
+                          Visit date for this room on{' '}
                           <span className="text-indigo-600">
                             {new Date(booking.date).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 mt-2">
                           Email: {booking.email} | Phone: {booking.phone}
                         </p>
                       </li>
                     ))}
                 </ul>
               </div>
-            )}
           </div>
         ))
       ) : (
-        <p className="text-center text-gray-500">No rooms found.</p>
+        <p className="text-center text-gray-500">No upcoming visits.</p>
       )}
     </div>
   );

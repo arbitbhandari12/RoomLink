@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import ImageSlider from '../Components/Image-Slider';
 import { useAuth } from '../Store/auth';
@@ -22,6 +22,12 @@ import {
 import BookingButton from '../Components/Booking';
 
 function PropertyDetails() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [comment, setComment] = useState();
@@ -319,25 +325,37 @@ function PropertyDetails() {
         </div>
       </div>
 
-      <div>
+      <div className="">
         <h1 className="flex text-2xl justify-center">Similar Rooms</h1>
         <div className="grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5">
-          {similar.map((same, index) => (
-            <div className="" key={index}>
-              <div className="relative">
-                <img
-                  src={`http://localhost:4001/${same.photos[0]}`}
-                  alt={property.title}
-                  className="w-full h-48 rounded-t-lg"
-                  loading="lazy"
-                />
-              </div>
-              <div>
-                <span>{same.title}</span>
-              </div>
-              <div>
-                <span>{same.status}</span>
-              </div>
+          {similar.map((property, index) => (
+            <div
+              className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-80"
+              key={index}
+            >
+              <Link to={`/property/${property._id}`}>
+                <div className="relative">
+                  <img
+                    src={`http://localhost:4001/${property.photos[0]}`}
+                    alt={property.title}
+                    className="w-full h-48 rounded-t-lg"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
+                    {property.title}
+                  </h3>
+                  <div className="flex justify-between mt-2">
+                    <p className="text-gray-400 text-xl">Rs {property.price}</p>
+                    <p className="text-gray-600">Room Type: {property.type}</p>
+                  </div>
+                  <p className="text-gray-600 flex items-center mt-2">
+                    <MapPin size={13} color="blue" className="mr-0.5" />
+                    {property.location}
+                  </p>
+                </div>
+              </Link>
             </div>
           ))}
         </div>
@@ -347,12 +365,3 @@ function PropertyDetails() {
 }
 
 export default PropertyDetails;
-
-{
-  /* <div className="mt-6 flex">
-                <span className="border px-2 py-1 rounded-md bg-gray-100 flex gap-1 items-center">
-                  <MapPin size={20} color="blue" />
-                  Location: {property.location}
-                </span>
-              </div> */
-}

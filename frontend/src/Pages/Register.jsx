@@ -177,7 +177,7 @@ const Signup = () => {
               Password
             </label>
             <input
-              type={showPassword ? 'text' : 'password'} // Toggle between text and password
+              type={showPassword ? 'text' : 'password'}
               name="password"
               autoComplete="off"
               id="password"
@@ -191,7 +191,7 @@ const Signup = () => {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute inset-y-0 top-8 right-3 flex items-center text-gray-500"
             >
-              {showPassword ? 'Hide' : 'Show'} {/* Toggle button label */}
+              {showPassword ? 'Hide' : 'Show'} 
             </button>
             {formik.errors.password && formik.touched.password && (
               <div className="text-red-500 text-sm mt-1">

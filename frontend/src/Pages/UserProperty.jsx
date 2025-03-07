@@ -75,8 +75,9 @@ function UserProperty() {
           }
         }
       );
-      const data = await response.json();
-      console.log(data);
+      if (response.ok) {
+        myProperty();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -92,38 +93,38 @@ function UserProperty() {
                 key={index}
                 className="bg-white shadow-lg rounded-lg overflow-hidden border"
               >
-                                  <Link to={`/addproperty/yourproperty/${properties._id}`}>
-
-                 <div className="relative">
-                  <img
-                    src={`http://localhost:4001/${properties.photos[0]}`}
-                    alt={properties.title}
-                    className="w-full h-48 rounded-t-lg object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-xl mb-2">
-                    Room Id: #{properties._id.substring(18, 24)}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {properties.title && properties.title.length > 20
-                      ? properties.title.substring(0, 20) + '...'
-                      : properties.title}
-                  </p>
-                  <div
-                    className={`py-2 px-4 rounded-full mb-4 text-center 
+                <Link to={`/addproperty/yourproperty/${properties._id}`}>
+                  <div className="relative">
+                    <img
+                      src={`http://localhost:4001/${properties.photos[0]}`}
+                      alt={properties.title}
+                      className="w-full h-48 rounded-t-lg object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-xl mb-2">
+                      Room Id: #{properties._id.substring(18, 24)}
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      {properties.title && properties.title.length > 20
+                        ? properties.title.substring(0, 20) + '...'
+                        : properties.title}
+                    </p>
+                    <div
+                      className={`py-2 px-4 rounded-full mb-4 text-center 
                       ${
                         properties.status === 'Pending'
                           ? 'bg-yellow-300 text-black'
                           : properties.status === 'Rejected'
-                          ? 'bg-red-400 text-white'
-                          : 'bg-green-200 text-black'
+                            ? 'bg-red-400 text-white'
+                            : 'bg-green-200 text-black'
                       }`}
-                  >
-                    {properties.status}
+                    >
+                      {properties.status}
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <div className="flex flex-wrap justify-center gap-2 p-4">
                   <Link
                     key={properties._id}
@@ -142,15 +143,20 @@ function UserProperty() {
                   {properties.status !== 'Pending' &&
                     properties.status !== 'Rejected' && (
                       <button
-                        className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-4 py-2"
+                        className={`text-white font-semibold border rounded px-4 py-2 ${
+                          properties.roomStatus === 'Rented'
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-blue-400 hover:bg-slate-600'
+                        }`}
                         onClick={() => rentProperty(properties._id)}
+                        disabled={properties.roomStatus === 'Rented'}
                       >
-                        Rented
+                        {properties.roomStatus === 'Rented'
+                          ? 'Already Rented'
+                          : 'Rent'}
                       </button>
                     )}
                 </div>
-                </Link>
-
               </div>
             ))
           ) : (
@@ -158,7 +164,6 @@ function UserProperty() {
               No properties listed yet.
             </div>
           )}
-          
         </div>
       </div>
     </>

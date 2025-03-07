@@ -44,7 +44,7 @@ function PropertyLayout() {
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
                 }
               >
-                Your Booking
+                Visitor Appointments
               </NavLink>
             </li>
           </ul>
