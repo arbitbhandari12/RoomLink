@@ -70,6 +70,8 @@ function App() {
           <Route path="editShifting/:id" element={<EditShifting />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
+        <Route index element={<YourProfile />} />
+        <Route path="yourproperty/:id" element={<PersonalPropertyDetails />} />
           <Route path="yourProfile" element={<YourProfile />} />
           <Route path="changePassword" element={<ChangePassword />} />
           <Route path="YourBooking" element={<YourBooking />} />
