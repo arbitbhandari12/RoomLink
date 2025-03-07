@@ -18,7 +18,8 @@ const authMiddleware = require('../middlewares/auth-middleware');
 const {
   booking,
   bookingList,
-  roomStatuss
+  roomStatuss,
+  landloardBooking
 } = require('../Controllers/BookingProperty-controller');
 
 router
@@ -37,6 +38,7 @@ router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
 router.route('/bookingList').get(authMiddleware, bookingList);
+router.route('/landloardBooking').get(authMiddleware, landloardBooking);
 router.route('/booking/:id').post(authMiddleware, booking);
 router.patch('/roomStatus/:id', roomStatuss);
 router.post('/comment/:id', authMiddleware, Comment);
