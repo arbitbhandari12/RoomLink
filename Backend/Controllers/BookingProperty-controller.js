@@ -90,7 +90,7 @@ const roomStatuss = async (req, res) => {
 const booking = async (req, res) => {
   const room = req.params.id;
   const owner = await propertyList.findById(room);
-  const response = owner.email;
+  const response = owner.userId;
   const user = req.user;
   console.log(user);
 
@@ -125,27 +125,34 @@ const booking = async (req, res) => {
 const bookingList = async (req, res) => {
   try {
     const user = req.user;
-    console.log("Current user ID: ", req.user._id);
-
-
-    // Find all bookings for the user
     const ownerBooking = await Booking.find({ userId: user._id });
-
-    // Extract all room IDs
     const rooms = ownerBooking.map((booking) => booking.room);
-
-    // Find property details for all room IDs
     const details = await propertyList.find({ _id: { $in: rooms } });
-    console.log('Property Details:', details);
-
-    res
-      .status(200)
-      .json({ownerBooking, details });
+    res.status(200).json({ ownerBooking, details });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Server error. Please try again later.' });
   }
 };
 
+const landloardBooking = async (req, res) => {
+  try {
+    const user = req.user;
+    console.log('Current user ID: ', req.user._id);
+
+    const ownerBooking = await Booking.find({ owner: user._id });
+    const rooms = ownerBooking.map((booking) => booking.room);
+
+    console.log(rooms);
+
+    const details = await propertyList.find({ _id: { $in: rooms } });
+    console.log(details);
+
+    res.status(200).json({ ownerBooking, details });
+  } catch (error) {
+    res.status(500).json({ msg: 'Server error. Please try again later.' });
+  }
+};
+
 // Export both functions
-module.exports = { booking, roomStatuss, bookingList };
+module.exports = { booking, roomStatuss, bookingList, landloardBooking };

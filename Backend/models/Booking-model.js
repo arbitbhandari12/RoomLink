@@ -28,7 +28,7 @@ const bookinglist = new mongoose.Schema({
   userId: {
     type: String,
     required: true
-  }
+  },
 });
 
 const Booking = mongoose.model('BookingList', bookinglist);

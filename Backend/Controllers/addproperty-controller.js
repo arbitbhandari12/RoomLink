@@ -17,7 +17,9 @@ const addProperty = async (req, res) => {
     const existingUser = await User.findOne({ email: req.body.email });
 
     if (!existingUser) {
-      return res.json('No user registered with this email. Please register first.');
+      return res.json(
+        'No user registered with this email. Please register first.'
+      );
     }
 
     // Create an array of file paths for the uploaded photos
