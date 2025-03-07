@@ -2,6 +2,8 @@ const User = require('../models/user-model');
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 const booking = require('../models/Booking-model');
 const Booking = require('../models/Booking-model');
+const nodemailer = require('nodemailer');
+
 
 const home = async (req, res) => {
   try {
@@ -128,6 +130,63 @@ const changePassword = async (req, res) => {
   }
 };
 
+const cancelBooking = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    await Booking.deleteOne({ _id: id });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+    console.log(error);
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body; 
+
+    // Validate if email is provided
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    user.resetOtp = otp;
+    user.resetOtpExpires = Date.now() + 300000; // OTP expires in 5 minutes
+
+    // Save the updated user instance
+    await user.save();
+
+    // Create a transporter object with hardcoded email credentials
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'arbitbhandari17@gmail.com',  // Hardcoded email
+        pass: 'qbkp vpvk cwuz glcj',        // Hardcoded password
+      }
+    });
+
+    // Send OTP email
+    await transporter.sendMail({
+      to: user.email,
+      subject: 'Password Reset OTP',
+      html: `<p>Your OTP for password reset is: <b>${otp}</b></p><p>This OTP will expire in 5 minutes.</p>`
+    });
+
+    res.json({ message: 'OTP sent to email' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error sending OTP' });
+  }
+};
+
 module.exports = {
   home,
   register,
@@ -136,4 +195,6 @@ module.exports = {
   forgot,
   updateProfile,
   changePassword,
+  cancelBooking,
+  forgotPassword
 };
