@@ -21,7 +21,9 @@ const userSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
-  }
+  },
+  resetOtp: { type: String },
+  resetOtpExpires: { type: Date }
 });
 
 userSchema.methods.generateToken = async function () {
@@ -35,8 +37,8 @@ userSchema.methods.generateToken = async function () {
       process.env.JWT_SECRET_KEY
     );
   } catch (error) {
-    console.error('Error generating token:', error); 
-    throw new Error('Token generation failed.'); 
+    console.error('Error generating token:', error);
+    throw new Error('Token generation failed.');
   }
 };
 

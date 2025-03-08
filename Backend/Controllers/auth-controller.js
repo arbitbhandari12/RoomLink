@@ -4,7 +4,6 @@ const booking = require('../models/Booking-model');
 const Booking = require('../models/Booking-model');
 const nodemailer = require('nodemailer');
 
-
 const home = async (req, res) => {
   try {
     res.send('This is home page using router');
@@ -86,18 +85,6 @@ const user = async (req, res) => {
   }
 };
 
-const forgot = async (req, res) => {
-  const email = req.body;
-  try {
-    const oldUser = await User.findOne({ email });
-    if (!oldUser) {
-      return res.status(404).json({ error: "User doesn't exists" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
-  }
-};
-
 const updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
@@ -143,7 +130,7 @@ const cancelBooking = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   try {
-    const { email } = req.body; 
+    const { email } = req.body;
 
     // Validate if email is provided
     if (!email) {
@@ -168,8 +155,8 @@ const forgotPassword = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'arbitbhandari17@gmail.com',  // Hardcoded email
-        pass: 'qbkp vpvk cwuz glcj',        // Hardcoded password
+        user: 'arbitbhandari17@gmail.com',
+        pass: 'qbkp vpvk cwuz glcj'
       }
     });
 
@@ -187,14 +174,46 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const otpVerification = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    console.log(code);
+
+    const user = await User.findOne({ email });
+    if (!user || user.resetOtp !== code || Date.now() > user.resetOtpExpires) {
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
+    res.json({ message: 'OTP verified' });
+  } catch (error) {
+    res.status(500).json({ message: 'OTP verification failed' });
+  }
+};
+const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+    user.password = await bcrypt.hash(password, 10);
+    user.resetOtp = undefined;
+    user.resetOtpExpires = undefined;
+    await user.save();
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error resetting password' });
+  }
+};
+
 module.exports = {
   home,
   register,
   login,
   user,
-  forgot,
   updateProfile,
   changePassword,
   cancelBooking,
-  forgotPassword
+  forgotPassword,
+  otpVerification,
+  resetPassword
 };
