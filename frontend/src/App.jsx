@@ -32,6 +32,8 @@ import UserLayout from './Components/Layouts/User-Layout';
 import YourProfile from './Pages/YourProfile';
 import ChangePassword from './Pages/ChangePassword';
 import YourBooking from './Pages/YourBooking';
+import OtpVerification from './Pages/OtpVerification';
+import ResetPassword from './Pages/NewPassword';
 
 function App() {
   const location = useLocation();
@@ -52,6 +54,8 @@ function App() {
         <Route path="/property/:id" element={<PropertyDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<OtpVerification />} />
+        <Route path="/ResetPassword" element={<ResetPassword />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/addproperty" element={<PropertyLayout />}>

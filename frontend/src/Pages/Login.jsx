@@ -50,7 +50,7 @@ const Login = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-coer bg-center relative"
+      className="flex items-center justify-center min-h-screen  bg-center relative"
       style={{ backgroundImage: "url('room.jpg')" }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
