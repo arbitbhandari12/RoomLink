@@ -33,7 +33,7 @@ router.route('/yourProperties/:id').get(yourProperties);
 router
   .route('/update/:id')
   .patch(authMiddleware, upload.array('photos', 10), updateProperty);
-router.route('/similar/:id').get(authMiddleware, similarProperty);
+router.route('/similar/:id').get(similarProperty);
 router.route('/delete/:id').delete(authMiddleware, deleteProperty);
 router.route('/editProperty/:id').get(authMiddleware, editRoom);
 router.route('/booked-dates/:id').get(authMiddleware, booking);
