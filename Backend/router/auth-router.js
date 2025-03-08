@@ -8,7 +8,9 @@ const {
   updateProfile,
   changePassword,
   cancelBooking,
-  forgotPassword
+  forgotPassword,
+  otpVerification,
+  resetPassword
 } = require('../Controllers/auth-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 
@@ -20,7 +22,8 @@ router.route('/updateProfile/:id').patch(authMiddleware, updateProfile);
 router.route('/changePassword').patch(authMiddleware, changePassword);
 router.route('/cancelBooking/:id').delete(authMiddleware, cancelBooking);
 router.route('/forgotPassword').post(forgotPassword);
-
+router.route('/otpVerification').post(otpVerification);
+router.route('/resetPassword').post(resetPassword);
 
 
 module.exports = router;
