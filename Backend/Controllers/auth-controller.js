@@ -1,6 +1,5 @@
 const User = require('../models/user-model');
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
-const booking = require('../models/Booking-model');
 const Booking = require('../models/Booking-model');
 const nodemailer = require('nodemailer');
 

@@ -14,12 +14,16 @@ const addProperty = async (req, res) => {
       status = 'Pending';
     }
 
+    console.log('Request Body:', req.body);
+
     const existingUser = await User.findOne({ email: req.body.email });
 
     if (!existingUser) {
-      return res.json(
-        'No user registered with this email. Please register first.'
-      );
+      return res
+        .status(400)
+        .json({
+          error: 'No user registered with this email. Please register first.'
+        });
     }
 
     // Create an array of file paths for the uploaded photos
