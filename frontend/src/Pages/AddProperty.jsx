@@ -2,9 +2,10 @@ import { Formik, useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { useAuth } from '../Store/auth';
+import Swal from 'sweetalert2';
 
 function AddProperty() {
-  const fileInputRef = useRef();
+  const { user } = useAuth();
 
   // const validationSchema = yup.object({
   //   title: yup
@@ -21,8 +22,8 @@ function AddProperty() {
   // type: yup
   //   .string()
   //   .required('Property type is required')
-  //   .oneOf(
-  //     ['apartment', 'house', 'townhouse'],
+  //   .notOneOf(
+  //     ['Select Property Type'],
   //     'Please select a valid property type'
   //   ),
   // price: yup
@@ -59,45 +60,18 @@ function AddProperty() {
     park: '',
     transport: '',
     temple: '',
-    name: '',
-    phone: '',
-    email: ''
+    name: user.username || '',
+    phone: user.phone || '',
+    email: user.email || ''
   };
-
-  const { user } = useAuth();
-  if (!user) {
-  }
-
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState('');
-
-  useEffect(() => {
-    if (user) {
-      const { email, phone, username } = user; // Destructure user data
-
-      if (email) {
-        setEmail(email); // Set email when available
-        formik.setFieldValue('email', email); // Update formik's email field
-      }
-
-      if (phone) {
-        setPhone(phone);
-        formik.setFieldValue('phone', phone); // Update formik's phone field
-      }
-
-      if (username) {
-        setName(username);
-        formik.setFieldValue('name', username); // Update formik's name field
-      }
-    }
-  }, [user]);
 
   const { authorization } = useAuth();
 
   const formik = useFormik({
     initialValues: initialValues,
     // validationSchema: validationSchema,
+    enableReinitialize: true,
+
     onSubmit: async (values) => {
       const formData = new FormData();
       for (const key in values) {
@@ -122,25 +96,47 @@ function AddProperty() {
           }
         );
 
-        // if (response.ok) {
-        //   formik.resetForm({
-        //     values: {
-        //       ...initialValues,
-        //       name: name,
-        //       phone: phone,
-        //       email: email
-        //     }
-        //   });
-        //   if (fileInputRef.current) {
-        //     fileInputRef.current.value = '';
-        //   }
-        // }
-
         const data = await response.json();
-        console.log(data);
+
+        if (response.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Property added successfully!',
+            confirmButtonColor: '#3085d6'
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text:
+              data.error || 'Failed to add property. Please try again later.',
+            confirmButtonColor: '#d33'
+          });
+        }
       } catch (error) {
-        console.error('Error:', error);
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Something went wrong. Please try again later.',
+          confirmButtonColor: '#d33'
+        });
       }
+
+      // if (response.ok) {
+      //   formik.resetForm({
+      //     values: {
+      //       ...initialValues,
+      //       name: name,
+      //       phone: phone,
+      //       email: email
+      //     }
+      //   });
+      //   if (fileInputRef.current) {
+      //     fileInputRef.current.value = '';
+      //   }
+      // }
     }
   });
 

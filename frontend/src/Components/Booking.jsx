@@ -34,7 +34,10 @@ const BookingForm = ({ id }) => {
         const data = await response.json();
         console.log(data);
         if (response.ok) {
-          toast.success('Booking Successful!', {});
+          toast.success('Booked Successful!');
+          formik.resetForm({
+            values: initialValues
+          })
         } else {
           toast.error(data.msg || 'Booking failed', {});
         }
