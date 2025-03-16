@@ -130,8 +130,40 @@ const userCount = async (req, res) => {
 
 const propertyCount = async (req, res) => {
   try {
-    const numberofProperty = await PropertyList.countDocuments();
+    const numberofProperty = await PropertyList.countDocuments({
+      status: 'Approved'
+    });
     res.json(numberofProperty);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const ListingCount = async (req, res) => {
+  try {
+    const remainingListing = await PropertyList.countDocuments({
+      status: 'Pending'
+    });
+    res.json(remainingListing);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const allRooms = async (req, res) => {
+  try {
+    const rooms = await PropertyList.find({ status: 'Approved' });
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
+const deleteProperty = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const rooms = await PropertyList.deleteOne({ _id: id });
+    res.status(200).json(rooms);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -147,5 +179,8 @@ module.exports = {
   approveshifting,
   rejectingShifting,
   userCount,
-  propertyCount
+  propertyCount,
+  ListingCount,
+  allRooms,
+  deleteProperty
 };
