@@ -96,6 +96,10 @@ const booking = async (req, res) => {
 
   const { name, email, phone, date } = req.body;
 
+  if (!user) {
+    return res.status(401).json({ error: 'Please login first' });
+  }
+
   try {
     // Check if a booking already exists for this room and date
     const existingBooking = await Booking.findOne({ room: room, date: date });
@@ -103,6 +107,14 @@ const booking = async (req, res) => {
     if (existingBooking) {
       return res.status(400).json({
         msg: 'This date is already booked. Please select another date.'
+      });
+    }
+
+    const userBooking = await Booking.findOne({ room: room, userId: user._id });
+
+    if (userBooking) {
+      return res.status(400).json({
+        msg: 'You have already booked this room. You can only book it once.'
       });
     }
 

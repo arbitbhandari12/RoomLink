@@ -6,6 +6,10 @@ const addProperty = async (req, res) => {
     const user = req.user;
     const admin = user.isAdmin;
 
+    if (!user) {
+      return res.status(401).json({ error: 'Please login first' });
+    }
+
     let status = '';
 
     if (admin == true) {

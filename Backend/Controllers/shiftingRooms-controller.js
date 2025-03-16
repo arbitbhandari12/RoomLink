@@ -37,6 +37,9 @@ const shiftApprove = async (req, res) => {
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
+
+    return res.status(200).json({ message: 'Shifting request approved', shift });
+
   } catch (error) {
     console.log(error);
   }
@@ -55,6 +58,8 @@ const shiftReject = async (req, res) => {
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
+    return res.status(200).json({ message: 'Shifting request rejected', shift });
+
   } catch (error) {
     console.log(error);
   }

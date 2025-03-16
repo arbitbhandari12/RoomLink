@@ -2,7 +2,7 @@ const PropertyList = require('../models/propertyList-model');
 
 const homeproperty = async (req, res) => {
   try {
-    const latestItems = await PropertyList.find()
+    const latestItems = await PropertyList.find({ status: 'Approved' })
       .sort({ createdAt: -1 }) // Sort by createdAt in descending order
       .limit(5); // Limit to 5 results
     res.status(200).json(latestItems);

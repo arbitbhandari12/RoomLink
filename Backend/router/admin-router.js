@@ -8,7 +8,10 @@ const {
   approveProperty,
   rejectedProperty,
   userCount,
-  propertyCount
+  propertyCount,
+  ListingCount,
+  allRooms,
+  deleteProperty
 } = require('../Controllers/admin-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const adminMiddleware = require('../middlewares/admin-middleware');
@@ -26,17 +29,23 @@ router
   .route('/property/approve/:id')
   .post(authMiddleware, adminMiddleware, approveProperty);
 
-
-  router
+router
   .route('/property/rejected/:id')
   .post(authMiddleware, adminMiddleware, rejectedProperty);
 
-  router
-  .route('/userCount')
-  .get(authMiddleware, adminMiddleware, userCount);
+router.route('/userCount').get(authMiddleware, adminMiddleware, userCount);
 
-  router
+router
   .route('/propertyCount')
   .get(authMiddleware, adminMiddleware, propertyCount);
+
+router
+  .route('/listingCount')
+  .get(authMiddleware, adminMiddleware, ListingCount);
+
+router.route('/allRooms').get(authMiddleware, adminMiddleware, allRooms); deleteProperty
+
+router.route('/deleteProperty/:id').delete(authMiddleware, adminMiddleware, deleteProperty); 
+
 
 module.exports = router;

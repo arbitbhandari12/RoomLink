@@ -1,4 +1,5 @@
 const propertyList = require('../models/propertyList-model');
+const User = require('../models/user-model');
 
 const updateProperty = async (req, res) => {
   try {
@@ -12,6 +13,14 @@ const updateProperty = async (req, res) => {
       status = 'Approved';
     } else {
       status = 'Pending';
+    }
+
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (!existingUser) {
+      return res.status(400).json({
+        error: 'No user registered with this email. Please register first.'
+      });
     }
 
     const updatedData = {
@@ -59,7 +68,6 @@ const updateProperty = async (req, res) => {
       property: updatedProperty
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Failed to update property.' });
   }
 };
