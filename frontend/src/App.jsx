@@ -34,6 +34,7 @@ import ChangePassword from './Pages/ChangePassword';
 import YourBooking from './Pages/YourBooking';
 import OtpVerification from './Pages/OtpVerification';
 import ResetPassword from './Pages/NewPassword';
+import ScrollToTop from './Pages/ScrollToTop'; 
 
 function App() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
 
   return (
     <>
+    <ScrollToTop />
       {!isAdminRoute && <Header />}
 
       <Routes>
@@ -82,6 +84,7 @@ function App() {
 
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminHome />} />
           <Route path="home" element={<AdminHome />} />
           <Route path="addProperty" element={<AddProperty />} />
           <Route path="yourRooms" element={<AdminProperty />} />
