@@ -66,6 +66,17 @@ function UserProperty() {
 
   const rentProperty = async (id) => {
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You want to rent this property!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, rent it!'
+      });
+  
+      if (!result.isConfirmed) return;
       const response = await fetch(
         `http://localhost:4001/api/properties/roomStatus/${id}`,
         {

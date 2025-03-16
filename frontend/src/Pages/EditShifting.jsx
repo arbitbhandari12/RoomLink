@@ -34,14 +34,22 @@ const EditShifting = () => {
           body: JSON.stringify(values)
         }
       );
+      const result = await response.json();
       if (response.ok) {
-        console.log(values);
         Swal.fire({
           icon: 'success',
           title: 'Success!',
-          text: 'Request submitted successfully!'
+          text: 'Edit Request successfully!'
         }).then(() => {
-          navigate('/');
+          navigate('/RoomShifting/yourRequest');
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text:
+            result.error || 'Failed to update request. Please try again later.',
+          confirmButtonColor: '#d33'
         });
       }
     }

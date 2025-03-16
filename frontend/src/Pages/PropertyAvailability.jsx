@@ -12,7 +12,7 @@ function PropertyAvailability() {
   const [budgetFilter, setBudgetFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage] = useState(4);
+  const [postPerPage] = useState(16);
 
   const approvedProperty = async () => {
     try {

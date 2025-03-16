@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
+import Swal from 'sweetalert2';
 
 const AdminHome = () => {
   const { authorization } = useAuth();
   const [user, setUser] = useState();
   const [property, setProperty] = useState();
+  const [remaining, setRemaining] = useState();
+  const [rooms, setRooms] = useState();
+
+  const allRooms = async () => {
+    try {
+      const response = await fetch('http://localhost:4001/api/admin/allRooms', {
+        method: 'GET',
+        headers: {
+          Authorization: authorization
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setRooms(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const totalUser = async () => {
     try {
@@ -21,6 +41,26 @@ const AdminHome = () => {
       if (response.ok) {
         const data = await response.json();
         setUser(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ListingCount = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/admin/ListingCount',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setRemaining(data);
       }
     } catch (error) {
       console.log(error);
@@ -47,12 +87,59 @@ const AdminHome = () => {
     }
   };
 
-  useEffect(() => {
-    totalUser();
-  }, []);
+  const deleteRoom = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to delete this room?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      });
+      if (!result.isConfirmed) return;
+  
+      const response = await fetch(
+        `http://localhost:4001/api/admin/deleteProperty/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+  
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'The room has been deleted successfully.'
+        });
+        allRooms();
+
+      } 
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An unexpected error occurred. Please try again later.'
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An unexpected error occurred. Please try again later.'
+      });
+    }
+  };
+  
 
   useEffect(() => {
+    totalUser();
+    ListingCount();
     propertyCount();
+    allRooms();
   }, []);
 
   return (
@@ -72,22 +159,13 @@ const AdminHome = () => {
           </div>
           <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
             <span className="font-semibold">Remaining Listing Rooms</span>
-            <span className="text-xl">10</span>
+            <span className="text-xl">{remaining}</span>
           </div>
         </div>
       </div>
 
       {/* Properties Section */}
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Properties</h2>
-          <input
-            type="text"
-            placeholder="Search property by email..."
-            className="px-4 py-2 border rounded-lg"
-          />
-        </div>
-
         <div className="mb-5 flex gap-3">
           <NavLink
             to="/admin/addProperty"
@@ -123,51 +201,43 @@ const AdminHome = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Property rows */}
-            <tr className="border-b">
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                #2038
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                Kathmandu
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                10000
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                arbit@gmail.com
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                <button className="bg-green-500 text-white px-4 py-1 rounded-lg mr-2">
-                  View Details
-                </button>
-                <button className="bg-red-500 text-white px-4 py-1 rounded-lg">
-                  Delete
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b">
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                #203a
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                Kathmandu
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                10000
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                arbit@gmail.com
-              </td>
-              <td className="py-3 px-4 border-b border-gray-300 text-center ">
-                <button className="bg-green-500 text-white px-4 py-1 rounded-lg mr-2">
-                  View Details
-                </button>
-                <button className="bg-red-500 text-white px-4 py-1 rounded-lg">
-                  Delete
-                </button>
-              </td>
-            </tr>
+            {rooms && rooms.length > 0 ? (
+              rooms.map((room) => (
+                <tr key={room._id} className="border-b">
+                  <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                    (#{room._id.substring(18, 24)})
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                    {room.location}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                    {room.price}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                    {room.email}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center ">
+                    <Link to={`/admin/properties/${room._id}`}>
+                      <button className="bg-green-500 text-white px-4 py-1 rounded-lg mr-2">
+                        View Details
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => deleteRoom(room._id)}
+                      className="bg-red-500 text-white px-4 py-1 rounded-lg"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="py-3 px-4 text-center">
+                  No rooms available.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

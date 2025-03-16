@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import Swal from 'sweetalert2';
 
 function EditProperty() {
   const { id } = useParams();
@@ -91,22 +92,31 @@ function EditProperty() {
             body: formData
           }
         );
+        const result = await response.json();
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to update property');
+          throw new Error(result.error || 'Failed to update property');
         }
 
-        const data = await response.json();
-        console.log('Success:', data);
-        alert('Property updated successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Property updated successfully!',
+          confirmButtonColor: '#3085d6'
+        });
       } catch (error) {
-        console.error('Error:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message || 'Something went wrong. Please try again later.',
+          confirmButtonColor: '#d33'
+        });
       } finally {
         setLoading(false);
       }
     }
   });
+
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -511,6 +521,7 @@ function EditProperty() {
             className="flex w-full p-3 rounded-md mt-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoComplete="off"
             name="phone"
+            onChange={formik.handleChange}
             value={formik.values.phone}
           />
         </div>
@@ -522,6 +533,7 @@ function EditProperty() {
             className="flex w-full p-3 rounded-md mt-1 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoComplete="off"
             name="email"
+            onChange={formik.handleChange}
             value={formik.values.email}
           />
         </div>

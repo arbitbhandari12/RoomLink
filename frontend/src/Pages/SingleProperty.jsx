@@ -3,6 +3,8 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import ImageSlider from '../Components/Image-Slider';
 import { useAuth } from '../Store/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   MapPin,
@@ -22,12 +24,6 @@ import {
 import BookingButton from '../Components/Booking';
 
 function PropertyDetails() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [comment, setComment] = useState();
@@ -40,7 +36,18 @@ function PropertyDetails() {
 
   const formik = useFormik({
     initialValues: initialValues,
+    validate: (values) => {
+      const errors = {};
+      if (!values.comment) {
+        errors.comment = 'Comment is required';
+      }
+      return errors;
+    },
     onSubmit: async (values) => {
+      if (!authorization) {
+        toast.error('Please login first to comment.');
+        return;
+      }
       try {
         const response = await fetch(
           `http://localhost:4001/api/properties/comment/${id}`,
@@ -53,6 +60,11 @@ function PropertyDetails() {
             body: JSON.stringify(values)
           }
         );
+
+        if (response.status === 401) {
+          toast.warning('Please login first to comment.');
+          return;
+        }
 
         if (response.ok) {
           const updatedCommentsResponse = await fetch(
@@ -67,7 +79,7 @@ function PropertyDetails() {
 
           const updatedComments = await updatedCommentsResponse.json();
           setComment(updatedComments);
-
+          toast.success('Comment added successfully!');
           formik.resetForm();
         } else {
           console.error('Error submitting comment');
@@ -283,6 +295,11 @@ function PropertyDetails() {
                       className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Write your comment here"
                     />
+                    {formik.errors.comment && formik.touched.comment && (
+                      <div className="text-red-500 text-sm">
+                        {formik.errors.comment}
+                      </div>
+                    )}
                   </div>
 
                   <button
@@ -318,47 +335,60 @@ function PropertyDetails() {
 
             <div className="flex gap-6 mt-6 mb-32">
               <div>
-                <BookingButton id={id} />
+                <BookingButton
+                  id={id}
+                  disabled={property.roomStatus === 'Rented'}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="">
+      <div className="border mb-10 mt-5 border-gray-400 m-8">
         <h1 className="flex text-2xl justify-center">Similar Rooms</h1>
-        <div className="grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5">
-          {similar.map((property, index) => (
-            <div
-              className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-80"
-              key={index}
-            >
-              <Link to={`/property/${property._id}`}>
-                <div className="relative">
-                  <img
-                    src={`http://localhost:4001/${property.photos[0]}`}
-                    alt={property.title}
-                    className="w-full h-48 rounded-t-lg"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
-                    {property.title}
-                  </h3>
-                  <div className="flex justify-between mt-2">
-                    <p className="text-gray-400 text-xl">Rs {property.price}</p>
-                    <p className="text-gray-600">Room Type: {property.type}</p>
+        {similar.length === 0 ? (
+          <div className="flex justify-center mt-10 p-10 font-bold">
+            <p>No similar Rooms</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 mx-3 rounded-md sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:mx-auto max-w-screen-xl mb-5">
+            {similar.map((property, index) => (
+              <div
+                className="bg-white shadow-sm rounded-lg overflow-hidden border hover:border-blue-600 mt-6 h-80"
+                key={index}
+              >
+                <Link to={`/property/${property._id}`}>
+                  <div className="relative">
+                    <img
+                      src={`http://localhost:4001/${property.photos[0]}`}
+                      alt={property.title}
+                      className="w-full h-48 rounded-t-lg"
+                      loading="lazy"
+                    />
                   </div>
-                  <p className="text-gray-600 flex items-center mt-2">
-                    <MapPin size={13} color="blue" className="mr-0.5" />
-                    {property.location}
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
+                  <div className="p-4">
+                    <h3 className="text-base font-bold text-blue-800 mb-1 truncate">
+                      {property.title}
+                    </h3>
+                    <div className="flex justify-between mt-2">
+                      <p className="text-gray-400 text-xl">
+                        Rs {property.price}
+                      </p>
+                      <p className="text-gray-600">
+                        Room Type: {property.type}
+                      </p>
+                    </div>
+                    <p className="text-gray-600 flex items-center mt-2">
+                      <MapPin size={13} color="blue" className="mr-0.5" />
+                      {property.location}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

@@ -95,8 +95,7 @@ function AddProperty() {
             body: formData
           }
         );
-
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.ok) {
           Swal.fire({
@@ -105,13 +104,18 @@ function AddProperty() {
             text: 'Property added successfully!',
             confirmButtonColor: '#3085d6'
           });
+        } else if (response.status === 401) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Login Required!',
+            text: 'Please login first before listing the Property.',
+            confirmButtonColor: '#d33'
+          });
         } else {
           Swal.fire({
             icon: 'error',
-            title: 'Error!',
-            text:
-              data.error || 'Failed to add property. Please try again later.',
-            confirmButtonColor: '#d33'
+            title: 'Oops...',
+            text: data.error || 'Failed to submit request!'
           });
         }
       } catch (error) {
@@ -119,7 +123,8 @@ function AddProperty() {
         Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text: 'Something went wrong. Please try again later.',
+          text:
+            error.message || 'Something went wrong. Please try again later.',
           confirmButtonColor: '#d33'
         });
       }

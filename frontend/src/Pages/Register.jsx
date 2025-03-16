@@ -7,14 +7,14 @@ import { useAuth } from '../Store/auth';
 import { toast } from 'react-toastify';
 
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false); 
 
   const validationSchema = yup.object({
     username: yup
       .string()
       .matches(
-        /^[a-zA-Z][a-zA-Z0-9]*$/,
-        'Username must start with a letter and contain only letters and numbers'
+        /^[A-Za-z0-9\s]+$/,
+        'Username can only contain letters, numbers, and spaces'
       )
       .trim()
       .required('Username is required')
@@ -40,14 +40,8 @@ const Signup = () => {
     password: yup
       .string()
       .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
+      .min(6, 'Password must be at least 6 characters')
       .max(20, 'Password must be 20 characters or less')
-      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(/[0-9]/, 'Password must contain at least one number')
-      .matches(
-        /[!@#$%^&*]/,
-        'Password must contain at least one special character (e.g., !@#$%^&*)'
-      )
   });
 
   const initialValues = {
@@ -191,7 +185,7 @@ const Signup = () => {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute inset-y-0 top-8 right-3 flex items-center text-gray-500"
             >
-              {showPassword ? 'Hide' : 'Show'} 
+              {showPassword ? 'Hide' : 'Show'}
             </button>
             {formik.errors.password && formik.touched.password && (
               <div className="text-red-500 text-sm mt-1">

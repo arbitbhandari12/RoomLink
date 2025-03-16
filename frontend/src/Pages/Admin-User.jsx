@@ -71,7 +71,7 @@ function AdminUser() {
 
   useEffect(() => {
     allUsers();
-  }, []);
+  }, [user]);
 
   return (
     <>

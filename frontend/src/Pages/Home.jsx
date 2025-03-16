@@ -25,6 +25,7 @@ function Home() {
   useEffect(() => {
     latestProperty();
   }, []);
+
   return (
     <>
       <div className="relative">
@@ -39,7 +40,10 @@ function Home() {
           <p className="text-2xl mt-4">
             Discover comfortable and affordable rooms in your desired location.
           </p>
-          <NavLink to='/PropertyAvailability' className="bg-white text-black px-6 py-2 mt-6 rounded hover:bg-gray-200">
+          <NavLink
+            to="/PropertyAvailability"
+            className="bg-white text-black px-6 py-2 mt-6 rounded hover:bg-gray-200"
+          >
             Start Exploring
           </NavLink>
         </div>
@@ -49,33 +53,43 @@ function Home() {
         <h1 className="font-extralight">Our Rooms</h1>
       </div>
       <div className="flex justify-end mr-8 mt-8 md:mt-0">
-        <NavLink to='/PropertyAvailability' className="border bg-slate-500 text-white rounded-md p-1.5 hover:bg-black w-24 text-center">
+        <NavLink
+          to="/PropertyAvailability"
+          className="border bg-slate-500 text-white rounded-md p-1.5 hover:bg-black w-24 text-center"
+        >
           View All <span>&#8594;</span>
         </NavLink>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 gap-4 p-6">
-        {properties.map((property) => (
-          <Link key={property._id} to={`/property/${property._id}`}>
-            <div key={property._id}>
-              <div className="border rounded-lg">
-                <div className="">
-                  <img
-                    src={`http://localhost:4001/${property.photos[0]}`}
-                    alt={property.title}
-                    className="w-full h-48 rounded-t-lg"
-                  />
-                </div>
-                <div className="">
-                  <div className="border mt-4"></div>
-                  <div className="flex justify-end mt-1 mb-1 mr-2 text-blue-500">
-                    Rs: {property.price}/month
+      {properties.length === 0 ? (
+        <div className="text-center text-gray-500 text-lg mb-20">
+          <p>No properties found</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 gap-4 p-6">
+          {properties.map((property) => (
+            <Link key={property._id} to={`/property/${property._id}`}>
+              <div key={property._id}>
+                <div className="border rounded-lg">
+                  <div className="">
+                    <img
+                      src={`http://localhost:4001/${property.photos[0]}`}
+                      alt={property.title}
+                      className="w-full h-48 rounded-t-lg"
+                    />
+                  </div>
+                  <div className="">
+                    <div className="border mt-4"></div>
+                    <div className="flex justify-end mt-1 mb-1 mr-2 text-blue-500">
+                      Rs: {property.price}/month
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
       <div className="text-center font-bold uppercase mt-4 ">
         <h1>Discover More</h1>
         <h2>
@@ -91,9 +105,11 @@ function Home() {
             <h2 className="font-semibold mt-5">
               Find rooms that match your <br /> preferences and location.
             </h2>
+            <NavLink  to={'/PropertyAvailability'}>
             <button className="mt-6 mb-8 bg-slate-800 p-2 rounded-lg text-white font-thin w-36">
               Start Searching
             </button>
+            </NavLink>
           </div>
           <div className="text-center border p-4 rounded-lg bg-[rgba(240,253,244,1)]">
             <h1 className="font-bold">List Your Rooms</h1>
@@ -101,18 +117,22 @@ function Home() {
               Have a room to rent? List it on <br /> our platform and find
               tenants.
             </h2>
+            <NavLink to={"/addproperty"}>
             <button className="p-2 bg-slate-800 text-white rounded-lg mt-6 w-36 font-thin">
               List Now
             </button>
+            </NavLink>
           </div>
           <div className="text-center border p-4 rounded-lg bg-[rgb(250,245,255)]">
             <h1 className="font-bold">Learn More</h1>
             <h2 className="font-semibold mt-5">
               Discover how RoomFinder works <br /> and why people love it.
             </h2>
+            <NavLink to={"/aboutus"}>
             <button className="p-2 w-36 bg-slate-800 mt-6 text-white rounded-lg mb-8 font-thin">
               About Us
             </button>
+            </NavLink>
           </div>
         </div>
       </div>

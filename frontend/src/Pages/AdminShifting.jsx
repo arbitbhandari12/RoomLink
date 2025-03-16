@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Store/auth';
 import { Link, NavLink } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const AdminShifting = () => {
   const { authorization } = useAuth();
@@ -26,7 +27,6 @@ const AdminShifting = () => {
     }
   };
 
-
   const approveShifting = async (id) => {
     try {
       const response = await fetch(
@@ -38,16 +38,39 @@ const AdminShifting = () => {
           }
         }
       );
+
       if (response.ok) {
+        console.log('Request approved successfully');
+        Swal.fire({
+          icon: 'success',
+          title: 'Approved',
+          text: 'The shifting request has been approved.'
+        });
         requestShifting();
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error in approveShifting:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong. Please try again later.'
+      });
     }
   };
 
   const rejectShifting = async (id) => {
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to reject this shifting request?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, reject it!'
+      });
+      if (!result.isConfirmed) return;
+
       const response = await fetch(
         `http://localhost:4001/api/shifting/shiftReject/${id}`,
         {
@@ -58,17 +81,26 @@ const AdminShifting = () => {
         }
       );
       if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Rejected',
+          text: 'The shifting request has been rejected.'
+        });
         requestShifting();
       }
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong. Please try again later.'
+      });
     }
   };
 
   useEffect(() => {
     requestShifting();
   }, []);
-  
+
   return (
     <>
       <h1 className="font-bold text-center text-2xl sm:text-xl lg:text-3xl mb-6">
@@ -93,42 +125,50 @@ const AdminShifting = () => {
             </tr>
           </thead>
           <tbody>
-            {request.map((shift, index) => (
-              <tr
-                key={index}
-                className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
-              >
-                <td className="py-3 px-4 border-b border-gray-300 text-center truncate max-w-[120px] text-sm lg:text-base">
-                  {shift.pickup}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center truncate max-w-[100px] text-sm lg:text-base">
-                  {shift.dropoff}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-300 text-center text-sm lg:text-base">
-                  {new Date(shift.shiftingdate).toLocaleString()}
-                </td>
+            {request.length > 0 ? (
+              request.map((shift, index) => (
+                <tr
+                  key={index}
+                  className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+                >
+                  <td className="py-3 px-4 border-b border-gray-300 text-center truncate max-w-[120px] text-sm lg:text-base">
+                    {shift.pickup}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center truncate max-w-[100px] text-sm lg:text-base">
+                    {shift.dropoff}
+                  </td>
+                  <td className="py-3 px-4 border-b border-gray-300 text-center text-sm lg:text-base">
+                    {new Date(shift.shiftingdate).toLocaleString()}
+                  </td>
 
-                <td className="py-3 px-4 border-b border-gray-300 text-center flex flex-wrap justify-center gap-2">
-                  <Link key={shift._id} to={`/admin/Shifting/${shift._id}`}>
-                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded">
-                      View Details
+                  <td className="py-3 px-4 border-b border-gray-300 text-center flex flex-wrap justify-center gap-2">
+                    <Link key={shift._id} to={`/admin/Shifting/${shift._id}`}>
+                      <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded">
+                        View Details
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => approveShifting(shift._id)}
+                      className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded"
+                    >
+                      Approve
                     </button>
-                  </Link>
-                  <button
-                    onClick={() => approveShifting(shift._id)}
-                    className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 rounded"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => rejectShifting(shift._id)}
-                    className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 rounded"
-                  >
-                    Reject
-                  </button>
+                    <button
+                      onClick={() => rejectShifting(shift._id)}
+                      className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 rounded"
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="py-4 text-center text-gray-500">
+                  No request available.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

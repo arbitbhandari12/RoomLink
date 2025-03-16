@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
+import Swal from 'sweetalert2';
 
 function UserShifting() {
   const [shift, setShift] = useState([]);
@@ -17,8 +18,10 @@ function UserShifting() {
           }
         }
       );
+      if (response.ok) {
+        setShift(data.request);
+      }
       const data = await response.json();
-      setShift(data.request);
     } catch (error) {
       console.log(error);
     }
@@ -26,15 +29,32 @@ function UserShifting() {
 
   const deleteShifting = async (id) => {
     try {
-      shifting();
-      const response = await fetch(
-        `http://localhost:4001/api/shifting/deleteShifting/${id}`,
-        {
-          method: 'DELETE'
-        }
-      );
-      if (response.ok) {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (result.isConfirmed) {
         shifting();
+        const response = await fetch(
+          `http://localhost:4001/api/shifting/deleteShifting/${id}`,
+          {
+            method: 'DELETE'
+          }
+        );
+      }
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Request delete successfully!',
+          confirmButtonColor: '#3085d6'
+        });
       }
     } catch (error) {
       console.log(error);
@@ -136,27 +156,27 @@ function UserShifting() {
 
         <div className="sm:hidden space-y-4">
           {shift.length > 0 ? (
-          shift.map((request, index) => (
-            <div
-              key={index}
-              className="bg-white border border-gray-300 rounded-lg shadow-lg p-4"
-            >
-              <div className="space-y-2">
-                <div>
-                  <span className="font-semibold">Pick-Up Location:</span>
-                  {request.pickup}
-                </div>
-                <div>
-                  <span className="font-semibold">Drop-Off Location:</span>
-                  {request.dropoff}
-                </div>
-                <div>
-                  <span className="font-semibold">Shifting Date:</span>
-                  {new Date(request.shiftingdate).toLocaleString()}
-                </div>
-                <div>
-                  <span
-                    className={`py-1 px-4 border-b border-gray-300 mb-2 mt-2
+            shift.map((request, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-300 rounded-lg shadow-lg p-4"
+              >
+                <div className="space-y-2">
+                  <div>
+                    <span className="font-semibold">Pick-Up Location:</span>
+                    {request.pickup}
+                  </div>
+                  <div>
+                    <span className="font-semibold">Drop-Off Location:</span>
+                    {request.dropoff}
+                  </div>
+                  <div>
+                    <span className="font-semibold">Shifting Date:</span>
+                    {new Date(request.shiftingdate).toLocaleString()}
+                  </div>
+                  <div>
+                    <span
+                      className={`py-1 px-4 border-b border-gray-300 mb-2 mt-2
                     ${
                       request.status === 'Pending'
                         ? 'bg-yellow-200'
@@ -164,38 +184,39 @@ function UserShifting() {
                           ? 'bg-red-200'
                           : 'bg-green-200'
                     }`}
-                  >
-                    {request.status}
-                  </span>
-                </div>
-                <div className="flex justify-center gap-2 mt-4">
-                  <Link
-                    key={shift._id}
-                    to={`/Roomshifting/Shifting/${request._id}`}
-                  >
-                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
-                      View Details
+                    >
+                      {request.status}
+                    </span>
+                  </div>
+                  <div className="flex justify-center gap-2 mt-4">
+                    <Link
+                      key={shift._id}
+                      to={`/Roomshifting/Shifting/${request._id}`}
+                    >
+                      <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
+                        View Details
+                      </button>
+                    </Link>
+                    <Link
+                      key={request._id}
+                      to={`/RoomShifting/editShifting/${request._id}`}
+                    >
+                      <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
+                        Edit
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => deleteShifting(request._id)}
+                      className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 text-sm"
+                    >
+                      Delete
                     </button>
-                  </Link>
-                  <Link
-                    key={request._id}
-                    to={`/RoomShifting/editShifting/${request._id}`}
-                  >
-                    <button className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-green-700 text-sm">
-                      Edit
-                    </button>
-                  </Link>
-                  <button
-                    onClick={() => deleteShifting(request._id)}
-                    className="text-white hover:bg-slate-600 font-semibold border px-4 py-1 bg-red-700 text-sm"
-                  >
-                    Delete
-                  </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))):(
-            <span className='flex justify-center'>No shifting requests</span>
+            ))
+          ) : (
+            <span className="flex justify-center">No shifting requests</span>
           )}
         </div>
       </div>

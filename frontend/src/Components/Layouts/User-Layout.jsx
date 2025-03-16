@@ -5,7 +5,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 const UserLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className='flex'>
+    <div className="flex">
       <aside
         className={`sm:w-48 sm:p-4 min-h-screen border bg-white sm:block 
           ${isOpen ? 'fixed left-0 top-0 w-3/4 h-full z-50 p-6' : 'hidden sm:block'}
@@ -24,23 +24,39 @@ const UserLayout = () => {
             <li>
               <NavLink
                 to="yourProfile"
-                className=" flex items-center justify-center"
+                end
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
               >
                 Profile
               </NavLink>
             </li>
             <li>
-              <NavLink to="changePassword" className="flex items-center justify-center">
+              <NavLink
+                to="changePassword"
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
                 Change Password
               </NavLink>
             </li>
             <li>
-              <NavLink to="YourBooking" className="flex items-center justify-center">
+              <NavLink
+                to="YourBooking"
+                className={({ isActive }) =>
+                  `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
+                }
+              >
                 Your Booking
               </NavLink>
             </li>
             <li>
-              <NavLink to= "/logout" className="flex items-center justify-center">
+              <NavLink
+                to="/logout"
+                className="flex items-center justify-center"
+              >
                 Logout
               </NavLink>
             </li>

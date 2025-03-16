@@ -24,7 +24,7 @@ function PropertyLayout() {
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
                 }
               >
-                Add Property
+                Add Rooms
               </NavLink>
             </li>
             <li>
@@ -34,7 +34,7 @@ function PropertyLayout() {
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
                 }
               >
-                My Property
+                My Rooms
               </NavLink>
             </li>
             <li>
