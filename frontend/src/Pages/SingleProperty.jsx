@@ -344,9 +344,8 @@ function PropertyDetails() {
           </div>
         </div>
       </div>
-
+      <h1 className="flex text-2xl justify-center">Similar Rooms</h1>
       <div className="border mb-10 mt-5 border-gray-400 m-8">
-        <h1 className="flex text-2xl justify-center">Similar Rooms</h1>
         {similar.length === 0 ? (
           <div className="flex justify-center mt-10 p-10 font-bold">
             <p>No similar Rooms</p>

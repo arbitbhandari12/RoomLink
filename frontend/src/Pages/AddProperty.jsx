@@ -7,38 +7,139 @@ import Swal from 'sweetalert2';
 function AddProperty() {
   const { user } = useAuth();
 
-  // const validationSchema = yup.object({
-  //   title: yup
-  //   .string()
-  //   .matches(
-  //     /^[a-zA-Z][a-zA-Z0-9]*$/,
-  //     'Title must start with a letter and contain only letters and numbers'
-  //   )
-  //   .trim()
-  //   .required('Title is required')
-  //   .min(5, 'Title must be at least 5 characters')
-  //   .max(30, 'Title must be 30 characters or less'),
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .trim()
+      .required('Name is required')
+      .min(3, 'Title must be at least 5 characters')
+      .max(30, 'Title must be 30 characters or less'),
 
-  // type: yup
-  //   .string()
-  //   .required('Property type is required')
-  //   .notOneOf(
-  //     ['Select Property Type'],
-  //     'Please select a valid property type'
-  //   ),
-  // price: yup
-  //   .string()
-  //   .required('Price is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bedroom: yup
-  //   .string()
-  //   .required('Bedroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input'),
-  // bathroom: yup
-  //   .string()
-  //   .required('Bathroom is required')
-  //   .matches(/^[0-9]+$/, 'Invalid Input')
-  // });
+    email: yup
+      .string()
+      .trim()
+      .required('Email is required')
+      .email('Enter a valid email address')
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Email format is invalid'
+      )
+      .max(254, 'Email must be 254 characters or less'),
+
+    phone: yup
+      .string()
+      .required('Phone number is required')
+      .matches(/^[0-9]{10}$/, 'Phone number must be Valid'),
+
+    title: yup
+      .string()
+      .trim()
+      .required('Title is required')
+      .min(5, 'Title must be at least 5 characters')
+      .max(30, 'Title must be 30 characters or less'),
+
+    description: yup
+      .string()
+      .trim()
+      .required('Description is required')
+      .min(5, 'Title must be at least 5 characters'),
+
+    location: yup.string().trim().required('Location is required'),
+
+    type: yup
+      .string()
+      .required('Property type is required')
+      .notOneOf(
+        ['Select Property Type'],
+        'Please select a valid property type'
+      ),
+
+    photos: yup.mixed().required('Image is required'),
+
+    price: yup
+      .string()
+      .required('Price is required')
+      .matches(/^[0-9]+$/, 'Invalid Input'),
+
+    bedroom: yup
+      .string()
+      .required('Bedroom is required')
+      .matches(/^[0-9]+$/, 'Invalid Input'),
+
+    bathroom: yup
+      .string()
+      .required('Bathroom is required')
+      .matches(/^[0-9]+$/, 'Invalid Input'),
+
+    kitchen: yup
+      .string()
+      .required('Please select if the property has a kitchen')
+      .notOneOf(['Kitchen'], 'Please select if the property has a kitchen'),
+
+    parking: yup
+      .string()
+      .required('Please select if the property has a Parking')
+      .notOneOf(['parking'], 'Please select if the property has a Parking'),
+
+    balcony: yup
+      .string()
+      .required('Please select if the property has a Balcony')
+      .notOneOf(['parking'], 'Please select if the property has a Balcony'),
+
+    bank: yup
+      .string()
+      .required('Please select if the property has a nearby bank')
+      .notOneOf(['bank'], 'Please select if the property has a nearby bank'),
+
+    school: yup
+      .string()
+      .required('Please select if the property has a nearby school')
+      .notOneOf(
+        ['school'],
+        'Please select if the property has a nearby school'
+      ),
+
+    healthcare: yup
+      .string()
+      .required(
+        'Please select if the property has a nearby healthcare facility'
+      )
+      .notOneOf(
+        ['healthcare'],
+        'Please select if the property has a nearby healthcare facility'
+      ),
+
+    park: yup
+      .string()
+      .required('Please select if the property has a nearby park')
+      .notOneOf(['park'], 'Please select if the property has a nearby park'),
+
+    transport: yup
+      .string()
+      .required('Please select if the property has public transport nearby')
+      .notOneOf(
+        ['transport'],
+        'Please select if the property has public transport nearby'
+      ),
+
+    temple: yup
+      .string()
+      .required('Please select if the property has a nearby temple')
+      .notOneOf(
+        ['temple'],
+        'Please select if the property has a nearby temple'
+      ),
+
+    furnishing: yup
+      .string()
+      .required('Please select a furnishing option')
+      .notOneOf(['furnishing'], 'Please select a valid furnishing option'),
+
+    water: yup
+      .string()
+      .required('Please select a water facility option')
+      .notOneOf(['water'], 'Please select a valid water facility option')
+  });
 
   const initialValues = {
     title: '',
@@ -69,7 +170,7 @@ function AddProperty() {
 
   const formik = useFormik({
     initialValues: initialValues,
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     enableReinitialize: true,
 
     onSubmit: async (values) => {
@@ -115,7 +216,7 @@ function AddProperty() {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: data.error || 'Failed to submit request!'
+            text: result.error || 'Failed to submit request!'
           });
         }
       } catch (error) {
@@ -123,25 +224,17 @@ function AddProperty() {
         Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text:
-            error.message || 'Something went wrong. Please try again later.',
+          text: 'Something went wrong. Please try again later.',
           confirmButtonColor: '#d33'
         });
       }
 
-      // if (response.ok) {
-      //   formik.resetForm({
-      //     values: {
-      //       ...initialValues,
-      //       name: name,
-      //       phone: phone,
-      //       email: email
-      //     }
-      //   });
-      //   if (fileInputRef.current) {
-      //     fileInputRef.current.value = '';
-      //   }
-      // }
+      if (response.ok) {
+        formik.resetForm();
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
     }
   });
 
@@ -190,6 +283,11 @@ function AddProperty() {
             onBlur={formik.handleBlur}
             value={formik.values.description}
           />
+          {formik.errors.description && formik.touched.description && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.description}
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
@@ -232,6 +330,11 @@ function AddProperty() {
             onBlur={formik.handleBlur}
             value={formik.values.location}
           />
+          {formik.errors.location && formik.touched.location && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.location}
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
@@ -249,6 +352,11 @@ function AddProperty() {
                 <li key={index}>{file.name}</li>
               ))}
             </ul>
+          )}
+          {formik.errors.photos && formik.touched.photos && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.photos}
+            </div>
           )}
         </div>
 
@@ -325,6 +433,11 @@ function AddProperty() {
               </option>
               <option value="No">No</option>
             </select>
+            {formik.errors.kitchen && formik.touched.kitchen && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.kitchen}
+              </div>
+            )}
           </div>
           <div className="flex flex-col mt-4 sm:mt-0 sm:w-1/3">
             <label className="font-bold">Parking</label>
@@ -339,6 +452,11 @@ function AddProperty() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
+            {formik.errors.parking && formik.touched.parking && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.parking}
+              </div>
+            )}
           </div>
           <div className="flex flex-col mt-4 sm:mt-0 sm:w-1/3">
             <label className="font-bold">Balcony</label>
@@ -353,6 +471,11 @@ function AddProperty() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
+            {formik.errors.balcony && formik.touched.balcony && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.balcony}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col mt-4 sm:flex-row gap-4">
@@ -369,6 +492,11 @@ function AddProperty() {
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
+            {formik.errors.furnishing && formik.touched.furnishing && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.furnishing}
+              </div>
+            )}
           </div>
           <div className="flex flex-col sm:w-1/3">
             <label className="font-bold">Water Facility</label>
@@ -385,6 +513,11 @@ function AddProperty() {
               <option value="day">Day</option>
               <option value="evening">Evening</option>
             </select>
+            {formik.errors.water && formik.touched.water && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.water}
+              </div>
+            )}
           </div>
         </div>
 
@@ -404,6 +537,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="far">Far</option>
             </select>
+            {formik.errors.school && formik.touched.school && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.school}
+              </div>
+            )}
           </div>
           <div className="flex flex-col mt-4 sm:mt-0 sm:w-1/3">
             <label>Healthcare</label>
@@ -417,6 +555,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="far">Far</option>
             </select>
+            {formik.errors.healthcare && formik.touched.healthcare && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.healthcare}
+              </div>
+            )}
           </div>
           <div className="flex flex-col mt-4 sm:mt-0 sm:w-1/3">
             <label>Parks</label>
@@ -430,6 +573,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="far">Far</option>
             </select>
+            {formik.errors.park && formik.touched.park && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.park}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex mt-4 flex-col sm:flex-row sm:gap-4">
@@ -445,6 +593,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="far">Far</option>
             </select>
+            {formik.errors.bank && formik.touched.bank && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.bank}
+              </div>
+            )}
           </div>
           <div className="flex flex-col sm:w-1/3 mt-4 sm:mt-0">
             <label>Public Transport</label>
@@ -458,6 +611,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="far">Far</option>
             </select>
+            {formik.errors.transport && formik.touched.transport && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.transport}
+              </div>
+            )}
           </div>
           <div className="flex flex-col sm:w-1/3 mt-4 sm:mt-0">
             <label>Temple</label>
@@ -472,6 +630,11 @@ function AddProperty() {
               <option value="Nearby">Nearby</option>
               <option value="Far">Far</option>
             </select>
+            {formik.errors.temple && formik.touched.temple && (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.temple}
+              </div>
+            )}
           </div>
         </div>
 
@@ -489,6 +652,11 @@ function AddProperty() {
             onChange={formik.handleChange}
             value={formik.values.name}
           />
+          {formik.errors.name && formik.touched.name && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.name}
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
@@ -503,6 +671,11 @@ function AddProperty() {
             onChange={formik.handleChange}
             value={formik.values.phone}
           />
+          {formik.errors.phone && formik.touched.phone && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.phone}
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
@@ -515,6 +688,11 @@ function AddProperty() {
             onChange={formik.handleChange}
             value={formik.values.email}
           />
+          {formik.errors.email && formik.touched.email && (
+            <div className="text-red-500 text-sm mt-1">
+              {formik.errors.email}
+            </div>
+          )}
         </div>
 
         <button

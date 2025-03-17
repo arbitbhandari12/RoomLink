@@ -22,7 +22,7 @@ const YourBooking = () => {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         setBookings(data.ownerBooking);
         setProperties(data.details);
         console.log(data);
@@ -97,11 +97,17 @@ const YourBooking = () => {
                   <strong>Location:</strong> {property.location}
                 </p>
                 <p className="text-sm text-gray-500">
-                  <strong>Price:</strong> ₹{property.price}/month
+                  <strong>Price:</strong> Rs {property.price}/month
                 </p>
                 <p className="text-sm text-gray-500">
-                  <strong>Status:</strong> {property.roomStatus}
+                  <strong>Status: </strong>
+                  <span
+                    className={`${(property.roomStatus === 'Available' ? 'text-green-500' : 'text-red-500')}`}
+                  >
+                    {property.roomStatus}
+                  </span>
                 </p>
+
                 <div className="mt-2">
                   <img
                     src={`http://localhost:4001/${property.photos[0]}`}
@@ -126,6 +132,12 @@ const YourBooking = () => {
                     >
                       Cancel Booking
                     </button>
+                    <div className="text-sm text-gray-500 mt-1">
+                      Visit date for this room on{' '}
+                      <span className="text-indigo-600">
+                        {new Date(booking.date).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
                 ))}
             </li>

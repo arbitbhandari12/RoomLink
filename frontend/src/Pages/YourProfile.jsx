@@ -17,17 +17,6 @@ const YourProfile = () => {
       .min(5, 'Username must be at least 5 characters')
       .max(20, 'Username must be at most 20 characters'),
 
-    email: yup
-      .string()
-      .trim()
-      .required('Email is required')
-      .email('Enter a valid email address')
-      .matches(
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        'Email format is invalid'
-      )
-      .max(254, 'Email must be 254 characters or less'),
-
     phone: yup
       .string()
       .required('Phone number is required')
@@ -105,12 +94,8 @@ const YourProfile = () => {
                 className="w-full border border-gray-300 rounded-lg p-3 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={formik.handleChange}
                 value={formik.values.email}
+                readOnly
               />
-              {formik.errors.email && formik.touched.email && (
-                <div className="text-red-500 text-sm mt-1">
-                  {formik.errors.email}
-                </div>
-              )}
             </div>
             <div>
               <label className="block text-gray-700 font-medium">Phone</label>
