@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Store/auth';
 import Swal from 'sweetalert2';
 
-
 function AdminUser() {
   const { authorization } = useAuth();
 
@@ -36,7 +35,7 @@ function AdminUser() {
         cancelButtonColor: '#3085d6',
         confirmButtonText: 'Yes, delete it!'
       });
-      
+
       if (!result.isConfirmed) return;
 
       const response = await fetch(
@@ -53,9 +52,18 @@ function AdminUser() {
 
       if (response.ok) {
         allUsers();
+        await Swal.fire({
+          title: 'Deleted!',
+          text: 'The user has been deleted successfully.',
+          icon: 'success'
+        });
       }
     } catch (error) {
-      console.log('Error', error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Something went wrong while deleting the user.',
+        icon: 'error'
+      });
     }
   };
 

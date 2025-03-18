@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState('');
   const authorization = `Bearer ${token}`;
   const [isLoading, setIsLoading] = useState(true);
+  const [admin, setAdmin] = useState();
 
   const storeToken = (token) => {
     setToken(token);
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data.userData);
+        setAdmin(data.isAdmin);
         setIsLoading(false);
       } else {
         console.log('load');
@@ -60,7 +62,8 @@ export const AuthProvider = ({ children }) => {
         LogoutUser,
         user,
         authorization,
-        isLoading
+        isLoading,
+        admin
       }}
     >
       {children}

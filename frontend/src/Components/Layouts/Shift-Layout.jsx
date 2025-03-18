@@ -19,10 +19,10 @@ function ShiftLayout() {
             Hello {user?.username || 'Guest'}
           </span>
           <button
-            className="sm:hidden text-xl"
+            className="sm:hidden text-4xl text-red-500 font-bold "
             onClick={() => setIsOpen(false)}
           >
-            ✖
+            X
           </button>
         </div>
         <hr className="my-4 border border-gray-300"></hr>

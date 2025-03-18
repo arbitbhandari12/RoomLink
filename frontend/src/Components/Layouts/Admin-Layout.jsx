@@ -8,11 +8,6 @@ function AdminLayout() {
   // Ensure `user.userData` exists before trying to access `isAdmin`
   const admin = user;
 
-  // If still loading user data, show a loading state
-  if (isLoading) {
-    return <h1>Loading</h1>;
-  }
-
   // If user is not an admin, navigate to home
   if (!admin?.isAdmin) {
     return <Navigate to="/" />;
@@ -26,7 +21,7 @@ function AdminLayout() {
             <li>
               <NavLink
                 to="/admin/home"
-                className={({isActive}) =>
+                className={({ isActive }) =>
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
                 }
               >
@@ -34,30 +29,42 @@ function AdminLayout() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/admin/users"  className={({isActive}) =>
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
-                }>
+                }
+              >
                 User
               </NavLink>
             </li>
             <li>
-              <NavLink to="/admin/listofproperty"  className={({isActive}) =>
+              <NavLink
+                to="/admin/listofproperty"
+                className={({ isActive }) =>
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
-                }>
+                }
+              >
                 List of Property
               </NavLink>
             </li>
             <li>
-              <NavLink to="/admin/requests"  className={({isActive}) =>
+              <NavLink
+                to="/admin/requests"
+                className={({ isActive }) =>
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
-                }>
+                }
+              >
                 Shifting Request
               </NavLink>
             </li>
             <li>
-              <NavLink to="/logout"  className={({isActive}) =>
+              <NavLink
+                to="/admin/logout"
+                className={({ isActive }) =>
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
-                }>
+                }
+              >
                 Logout
               </NavLink>
             </li>

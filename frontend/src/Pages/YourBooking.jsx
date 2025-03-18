@@ -46,7 +46,7 @@ const YourBooking = () => {
         confirmButtonText: 'Yes, cancel it!'
       });
       if (!result.isConfirmed) return;
-
+      yourBookings();
       const response = await fetch(
         `http://localhost:4001/api/auth/cancelBooking/${id}`,
         {
@@ -102,7 +102,7 @@ const YourBooking = () => {
                 <p className="text-sm text-gray-500">
                   <strong>Status: </strong>
                   <span
-                    className={`${(property.roomStatus === 'Available' ? 'text-green-500' : 'text-red-500')}`}
+                    className={`${property.roomStatus === 'Available' ? 'text-green-500' : 'text-red-500'}`}
                   >
                     {property.roomStatus}
                   </span>
@@ -130,7 +130,9 @@ const YourBooking = () => {
                       onClick={() => cancelBooking(booking._id)}
                       className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                     >
-                      Cancel Booking
+                      {property.roomStatus === 'Rented'
+                        ? 'Delete Booking'
+                        : 'Cancel Booking'}
                     </button>
                     <div className="text-sm text-gray-500 mt-1">
                       Visit date for this room on{' '}

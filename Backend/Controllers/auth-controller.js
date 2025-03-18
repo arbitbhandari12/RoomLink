@@ -61,7 +61,8 @@ const login = async (req, res) => {
       res.status(200).json({
         msg: 'User Login successfully',
         token: await existingUser.generateToken(),
-        userId: existingUser._id.toString()
+        userId: existingUser._id.toString(),
+        isAdmin: existingUser.isAdmin.toString()
       });
     } else {
       res.status(401).json({ msg: 'Password not valid.' });
@@ -92,7 +93,9 @@ const updateProfile = async (req, res) => {
       email: req.body.email,
       phone: req.body.phone
     };
-    const updatedUser = await User.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
+      new: true
+    });
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found.' });
     }

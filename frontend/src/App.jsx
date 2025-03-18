@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './Components/Header';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
@@ -34,17 +34,25 @@ import ChangePassword from './Pages/ChangePassword';
 import YourBooking from './Pages/YourBooking';
 import OtpVerification from './Pages/OtpVerification';
 import ResetPassword from './Pages/NewPassword';
-import ScrollToTop from './Pages/ScrollToTop'; 
+import ScrollToTop from './Pages/ScrollToTop';
+import { useAuth } from './Store/auth';
 
 function App() {
   const location = useLocation();
+  const { user } = useAuth();
+
+  const isAdmin = user?.isAdmin;
+
+  if (isAdmin && !location.pathname.startsWith('/admin')) {
+    return <Navigate to="/admin" />;
+  }
 
   // Check if the current path starts with '/admin'
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <>
-    <ScrollToTop />
+      <ScrollToTop />
       {!isAdminRoute && <Header />}
 
       <Routes>
@@ -62,7 +70,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/addproperty" element={<PropertyLayout />}>
           <Route index element={<AddProperty />} />
-          <Route path="yourproperty/:id" element={<PersonalPropertyDetails />} />
+          <Route
+            path="yourproperty/:id"
+            element={<PersonalPropertyDetails />}
+          />
           <Route path="UserProperty" element={<UserProperty />}></Route>
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
           <Route path="booking" element={<OwnerBooking />}></Route>
@@ -76,15 +87,18 @@ function App() {
           <Route path="editShifting/:id" element={<EditShifting />} />
         </Route>
         <Route path="/user" element={<UserLayout />}>
-        <Route index element={<YourProfile />} />
-        <Route path="yourproperty/:id" element={<PersonalPropertyDetails />} />
+          <Route index element={<YourProfile />} />
+          <Route
+            path="yourproperty/:id"
+            element={<PersonalPropertyDetails />}
+          />
           <Route path="yourProfile" element={<YourProfile />} />
           <Route path="changePassword" element={<ChangePassword />} />
           <Route path="YourBooking" element={<YourBooking />} />
-
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminHome />} />
+        <Route path="logout" element={<Logout />} />
+          <Route index element={<AdminHome />} />
           <Route path="home" element={<AdminHome />} />
           <Route path="addProperty" element={<AddProperty />} />
           <Route path="yourRooms" element={<AdminProperty />} />

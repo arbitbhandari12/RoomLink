@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
+
   const initialValues = {
     email: '',
     password: ''
@@ -33,11 +33,16 @@ const Login = () => {
         }
 
         const data = await response.json();
+        console.log(data.isAdmin);
 
         if (data.token) {
           storeToken(data.token);
           formik.resetForm();
-          navigate('/');
+          if (data.isAdmin === 'true') {
+            navigate('/admin');
+          } else {
+            navigate('/');
+          }
           toast.success(data.msg || 'Login Sucessful');
         } else {
           console.log('No token received');
@@ -93,7 +98,10 @@ const Login = () => {
               className="mt-2 block w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             />
           </div>
-          <Link to="/forgotpassword" className="flex justify-end text-blue-600 mt-2 mb-5">
+          <Link
+            to="/forgotpassword"
+            className="flex justify-end text-blue-600 mt-2 mb-5"
+          >
             Forgot Password?
           </Link>
           <button
