@@ -1,13 +1,19 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OtpVerification = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email } = location.state || {};
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const { email, isVerified } = location.state || {};
+
+  useEffect(() => {
+    if (!isVerified) {
+      navigate('/');
+    }
+  }, []);
 
   const initialValues = {
     code: ''
@@ -30,20 +36,20 @@ const OtpVerification = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setError(errorData.message || 'OTP verification failed. Please try again.');
+          toast.error(
+            errorData.message || 'OTP verification failed. Please try again.'
+          );
         } else {
-          setSuccessMessage('OTP verified successfully!');
-          navigate('/ResetPassword', { state: {email, isVerified: true } });
+          toast.success('OTP verified successfully!');
+          navigate('/ResetPassword', { state: { email, isVerified: true } });
         }
       } catch (error) {
-        setError('Network error. Please try again.');
+        toast.error('Network error. Please try again.');
       }
     }
   });
 
   const resendCode = async () => {
-    setError('');
-    setSuccessMessage('');
     try {
       const response = await fetch(
         'http://localhost:4001/api/auth/forgotPassword',
@@ -56,12 +62,14 @@ const OtpVerification = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.message || 'Failed to resend OTP. Please try again.');
+        toast.error(
+          errorData.message || 'Failed to resend OTP. Please try again.'
+        );
       } else {
-        setSuccessMessage('OTP has been resent successfully.');
+        toast.success('OTP has been resent successfully.');
       }
     } catch (error) {
-      setError('Network error. Please try again.');
+      toast.error('Network error. Please try again.');
     }
   };
 
@@ -69,13 +77,12 @@ const OtpVerification = () => {
     <form onSubmit={formik.handleSubmit}>
       <div className="flex flex-col items-center justify-center min-h-[70vh] bg-gray-100 p-4">
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-xl font-semibold mb-4">Enter Confirmation Code</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Enter Confirmation Code
+          </h2>
           <p className="text-gray-600 mb-4">
             We have sent a code to your email. Please enter it below to proceed.
           </p>
-
-          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-          {successMessage && <p className="text-green-500 text-sm mb-3">{successMessage}</p>}
 
           <input
             type="text"

@@ -2,6 +2,33 @@ const User = require('../models/user-model');
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 const Booking = require('../models/Booking-model');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+// Email configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Send email function
+const sendEmail = async (to, subject, text) => {
+  try {
+    const info = await transporter.sendMail({
+      to: to,
+      subject: subject,
+      text: text
+    });
+    console.log(`Email sent: ${info.response}`);
+  } catch (error) {
+    console.error('Error sending email:', error.message);
+    if (error.response) {
+      console.error('Error response:', error.response);
+    }
+  }
+};
 
 const home = async (req, res) => {
   try {
@@ -39,6 +66,15 @@ const register = async (req, res) => {
       token: await newUser.generateToken(),
       userId: newUser._id.toString()
     });
+    const message = `Dear ${newUser.username},  
+Thank you for registering with us. Your account has been successfully created.  
+
+You can now log in to your account and enjoy our services.  
+
+Best regards,  
+RoomLink`;
+
+    await sendEmail(newUser.email, 'Welcome to Our Service', message);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -178,7 +214,7 @@ const forgotPassword = async (req, res) => {
     res.json({ message: 'OTP sent to email' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error sending OTP' });
+    res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 };
 

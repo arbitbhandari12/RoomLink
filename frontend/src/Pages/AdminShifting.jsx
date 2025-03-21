@@ -40,7 +40,6 @@ const AdminShifting = () => {
       );
 
       if (response.ok) {
-        console.log('Request approved successfully');
         Swal.fire({
           icon: 'success',
           title: 'Approved',

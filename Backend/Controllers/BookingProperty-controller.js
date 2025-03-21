@@ -2,31 +2,14 @@ const Booking = require('../models/Booking-model');
 const propertyList = require('../models/propertyList-model');
 const twilio = require('twilio');
 const nodemailer = require('nodemailer');
-
-const accountSid = 'ACcae7aeb6cf82f3df8b61bf9d0873062a';
-const authToken = 'f5dcf4c9d8c734cb22826216d006e6d7';
-const twilioClient = twilio(accountSid, authToken);
-
-// Send SMS function
-const sendSMS = async (phone, message) => {
-  try {
-    const response = await twilioClient.messages.create({
-      body: message,
-      from: '+18483151895',
-      to: phone
-    });
-    console.log(`SMS sent: ${response.sid}`);
-  } catch (error) {
-    console.error(`Error sending SMS:`, error.message);
-  }
-};
+require('dotenv').config();
 
 // Email configuration
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'arbitbhandari17@gmail.com',
-    pass: 'qbkp vpvk cwuz glcj'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -40,7 +23,10 @@ const sendEmail = async (to, subject, text) => {
     });
     console.log(`Email sent: ${info.response}`);
   } catch (error) {
-    console.error(`Error sending email:`, error);
+    console.error('Error sending email:', error.message);
+    if (error.response) {
+      console.error('Error response:', error.response);
+    }
   }
 };
 
@@ -64,19 +50,12 @@ const roomStatuss = async (req, res) => {
     }).populate('room');
 
     // Notify users with future bookings
-    const notificationPromises = bookings.map(async (booking) => {
+    bookings.map(async (booking) => {
       const message = `Dear ${
         booking.name
       }, the room you booked on ${booking.date.toDateString()} has been rented by another user.`;
-
-      // Send SMS
-      await sendSMS(booking.phone, message);
-
-      // Send Email
       await sendEmail(booking.email, 'Room Rented', message);
     });
-
-    await Promise.all(notificationPromises); // Wait for all notifications
 
     res
       .status(200)

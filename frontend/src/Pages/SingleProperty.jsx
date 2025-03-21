@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import ImageSlider from '../Components/Image-Slider';
 import { useAuth } from '../Store/auth';

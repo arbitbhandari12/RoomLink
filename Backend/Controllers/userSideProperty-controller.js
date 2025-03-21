@@ -3,7 +3,7 @@ const PropertyList = require('../models/propertyList-model');
 const homeproperty = async (req, res) => {
   try {
     const latestItems = await PropertyList.find({ status: 'Approved' })
-      .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+      .sort({ _id: -1 })
       .limit(5); // Limit to 5 results
     res.status(200).json(latestItems);
   } catch (error) {
@@ -13,7 +13,9 @@ const homeproperty = async (req, res) => {
 
 const userSideProperty = async (req, res) => {
   try {
-    const properties = await PropertyList.find({ status: 'Approved' });
+    const properties = await PropertyList.find({ status: 'Approved' }).sort({
+      _id: -1
+    });
     res.status(200).json({ properties });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -73,64 +75,6 @@ const editRoom = async (req, res) => {
   }
 };
 
-//Booking
-const createBooking = async (req) => {
-  try {
-    const { name, email, contact, bookingDate } = req.body;
-
-    if (!name || !email || !contact || !bookingDate) {
-      return { success: false, message: 'All fields are required' };
-    }
-
-    const formattedDate = new Date(bookingDate);
-    if (isNaN(formattedDate.getTime())) {
-      return { success: false, message: 'Invalid date format' };
-    }
-
-    const newBooking = new Booking({
-      name,
-      email,
-      contact,
-      bookingDate: formattedDate
-    });
-    await newBooking.save();
-
-    return { success: true, message: 'Booking successful', data: newBooking };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Error saving booking',
-      error: error.message
-    };
-  }
-};
-
-//feedback
-const submitFeedback = async (req) => {
-  try {
-    const userId = req.user.id;
-    const { comment } = req.body;
-
-    if (!userId || !comment) {
-      return { success: false, message: 'All fields are required' };
-    }
-
-    const newFeedback = new Feedback({ userId, comment });
-    await newFeedback.save();
-
-    return {
-      success: true,
-      message: 'Feedback submitted successfully',
-      data: newFeedback
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Error submitting feedback',
-      error: error.message
-    };
-  }
-};
 
 module.exports = {
   homeproperty,
@@ -140,6 +84,4 @@ module.exports = {
   yourProperties,
   deleteProperty,
   editRoom,
-  createBooking,
-  submitFeedback
 };

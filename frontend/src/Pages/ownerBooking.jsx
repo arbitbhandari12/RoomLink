@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 import { useEffect, useState } from 'react';
 
-const OwnerBooking = () => {
+const OwnerBooking = ({basePath}) => {
   const { authorization } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -49,7 +49,7 @@ const OwnerBooking = () => {
               <h3 className="text-2xl font-semibold text-gray-800">
                 {room.title} - {room.location}
               </h3>
-              <Link key={room._id} to={`/addproperty/properties/${room._id}`}>
+              <Link key={room._id} to={`${basePath}/properties/${room._id}`}>
                 <button className="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
                   View Details
                 </button>

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 
 function Logout() {
@@ -7,9 +6,10 @@ function Logout() {
 
   useEffect(() => {
     LogoutUser();
+    window.location.href = '/login';
   }, [LogoutUser]);
 
-  return <Navigate to="/Login" />;
+  return <div>Logging out...</div>;
 }
 
 export default Logout;

@@ -1,4 +1,27 @@
 const shiftList = require('../models/ShiftingRequest-model');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Send email function
+const sendEmail = async (to, subject, text) => {
+  try {
+    const info = await transporter.sendMail({
+      to: to,
+      subject: subject,
+      text: text
+    });
+    console.log(`Email sent: ${info.response}`);
+  } catch (error) {
+    console.error(`Error sending email:`, error);
+  }
+};
 
 const shiftRoom = async (req, res) => {
   try {
@@ -33,13 +56,29 @@ const shiftApprove = async (req, res) => {
       { status: 'Approved' },
       { new: true }
     );
+
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
 
-    return res
-      .status(200)
-      .json({ message: 'Shifting request approved', shift });
+    res.status(200).json({ message: 'Shifting request approved', shift });
+
+    const message = `Dear ${shift.name},
+We are pleased to inform you that your room shifting request has been approved. Below are the details of your shift:
+
+- **Shifting Date**: ${new Date(shift.shiftingdate).toLocaleString()}
+- **Pick-Up Location**: ${shift.pickUpLocation}
+- **Drop-Off Location**: ${shift.dropOffLocation}
+    
+Our team will be arriving at your pick-up location on the specified date to assist you with the shift. If you have any special requirements or questions, please feel free to reach out to us.
+
+Thank you for choosing our shifting service. We look forward to assisting you with your move.
+
+Best regards,
+RoomLink
+  `;
+
+    await sendEmail(shift.email, 'Room Shifting Request Approved', message);
   } catch (error) {
     console.log(error);
   }
@@ -58,6 +97,11 @@ const shiftReject = async (req, res) => {
     if (!shift) {
       return res.status(404).json({ message: 'Shifting request not found' });
     }
+    const message = `Dear ${shift.name},
+We regret to inform you that your room shifting request has been rejected. Please feel free to contact us for any further assistance.`;
+
+    await sendEmail(shift.email, 'Shifting request rejected', message);
+
     return res
       .status(200)
       .json({ message: 'Shifting request rejected', shift });
@@ -68,7 +112,9 @@ const shiftReject = async (req, res) => {
 
 const shiftingRequest = async (req, res) => {
   try {
-    const pending = await shiftList.find({ status: 'Pending' });
+    const pending = await shiftList
+      .find({ status: 'Pending' })
+      .sort({ _id: -1 });
     res.status(201).json({ pending });
   } catch (error) {
     console.log(error);
@@ -89,7 +135,7 @@ const requestHistory = async (req, res) => {
   try {
     const user = req.user;
     const id = user._id;
-    const request = await shiftList.find({ userId: id });
+    const request = await shiftList.find({ userId: id }).sort({ _id: -1 });
     res.status(200).json({ request });
   } catch (error) {
     console.log(error);

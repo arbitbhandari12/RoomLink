@@ -8,6 +8,10 @@ function AdminLayout() {
   // Ensure `user.userData` exists before trying to access `isAdmin`
   const admin = user;
 
+  if (isLoading) {
+    return null; 
+  }
+
   // If user is not an admin, navigate to home
   if (!admin?.isAdmin) {
     return <Navigate to="/" />;

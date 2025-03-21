@@ -2,10 +2,37 @@ const User = require('../models/user-model');
 const List = require('../models/propertyList-model');
 const shiftRequest = require('../models/ShiftingRequest-model');
 const PropertyList = require('../models/propertyList-model');
+const nodemailer = require('nodemailer');
+
+// Email configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Send email function
+const sendEmail = async (to, subject, text) => {
+  try {
+    const info = await transporter.sendMail({
+      to: to,
+      subject: subject,
+      text: text
+    });
+    console.log(`Email sent: ${info.response}`);
+  } catch (error) {
+    console.error('Error sending email:', error.message);
+    if (error.response) {
+      console.error('Error response:', error.response);
+    }
+  }
+};
 
 const allUsers = async (req, res) => {
   try {
-    const user = await User.find({}, { password: 0 });
+    const user = await User.find({}, { password: 0 }).sort({ _id: -1 });
     res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -26,7 +53,9 @@ const deleteUsers = async (req, res) => {
 //Getting all property
 const allproperty = async (req, res) => {
   try {
-    const listProperty = await List.find({ status: 'Pending' });
+    const listProperty = await List.find({ status: 'Pending' }).sort({
+      _id: -1
+    });
     res.status(201).json({ listProperty });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -58,6 +87,15 @@ const approveProperty = async (req, res) => {
       return res.status(404).json({ message: 'Property not found' });
     }
     res.json({ message: 'Property Approved successfully', property });
+    const message = `Dear ${property.name},  
+
+Your property listing has been approved and is now live on our platform.  
+Thank you for choosing our service.  
+    
+Best regards,  
+RoomLink`;
+
+    await sendEmail(property.email, 'Property Approved', message);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -78,6 +116,15 @@ const rejectedProperty = async (req, res) => {
       return res.status(404).json({ message: 'Property not found' });
     }
     res.json({ message: 'Property rejected successfully', property });
+    const message = `Dear ${property.name},  
+
+We regret to inform you that your property listing has been rejected.  
+If you believe this was a mistake or would like more details, please contact our support team.  
+
+Best regards,  
+RoomLink`;
+
+    await sendEmail(property.email, 'Property Rejected', message);
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }

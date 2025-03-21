@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -12,7 +13,6 @@ const ForgotPassword = () => {
     },
     onSubmit: async (values) => {
       try {
-        navigate('/verify-otp', { state: { email: values.email } });
         const response = await fetch(
           'http://localhost:4001/api/auth/forgotPassword',
           {
@@ -23,13 +23,15 @@ const ForgotPassword = () => {
         );
         if (!response.ok) {
           const errorData = await response.json();
-          setError(
-            errorData.message || 'Something went wrong. Please try again.'
+          toast.error(
+            errorData.error || 'Something went wrong. Please try again.'
           );
           return;
         }
+        toast.success('Otp send Sucessful');
+        navigate('/verify-otp', { state: { email: values.email, isVerified:true } });
       } catch (error) {
-        setError('Network error. Please try again.');
+        toast.error('Network error. Please try again.');
       }
     }
   });
@@ -54,6 +56,7 @@ const ForgotPassword = () => {
               className="border border-gray-300 p-3 rounded-lg w-full mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={formik.handleChange}
               value={formik.values.email}
+              required
             />
           </div>
           <div className="mt-6">

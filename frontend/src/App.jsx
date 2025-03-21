@@ -106,6 +106,7 @@ function App() {
           <Route path="users" element={<AdminUser />} />
           <Route path="listofproperty" element={<AdminListProperty />} />
           <Route path="properties/:id" element={<DetailsPropertyAdmin />} />
+          <Route path="booking" element={<OwnerBooking basePath="/admin" />} />
           <Route path="requests" element={<AdminShift />} />
           <Route path="Shifting/:id" element={<AdminShifting />} />
         </Route>
