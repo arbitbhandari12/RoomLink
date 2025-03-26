@@ -13,7 +13,7 @@ const {
 } = require('../controllers/userSideProperty-controller');
 const updateProperty = require('../Controllers/editProperty-controller');
 const similarProperty = require('../Controllers/SimilarProperty-controller');
-const { Comment, getComment } = require('../Controllers/comments-controller');
+const { Comment, getComment, deleteComment } = require('../Controllers/comments-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const {
   booking,
@@ -42,6 +42,7 @@ router.route('/landloardBooking').get(authMiddleware, landloardBooking);
 router.route('/booking/:id').post(authMiddleware, booking);
 router.patch('/roomStatus/:id', roomStatuss);
 router.post('/comment/:id', authMiddleware, Comment);
+router.delete('/deleteComment/:commentId', authMiddleware, deleteComment);
 router.route('/getComment/:id').get(getComment);
 
 module.exports = router;

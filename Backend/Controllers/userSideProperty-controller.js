@@ -1,4 +1,31 @@
 const PropertyList = require('../models/propertyList-model');
+const bookingList = require('../models/Booking-model');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Send email function
+const sendEmail = async (to, subject, text) => {
+  try {
+    const info = await transporter.sendMail({
+      to: to,
+      subject: subject,
+      text: text
+    });
+    console.log(`Email sent: ${info.response}`);
+  } catch (error) {
+    console.error('Error sending email:', error.message);
+    if (error.response) {
+      console.error('Error response:', error.response);
+    }
+  }
+};
 
 const homeproperty = async (req, res) => {
   try {
@@ -58,8 +85,18 @@ const yourProperties = async (req, res) => {
 const deleteProperty = async (req, res) => {
   try {
     const id = req.params.id;
+    const property = await PropertyList.findOne({ _id: id });
     await PropertyList.deleteOne({ _id: id });
     res.status(200).json({ msg: 'Delete Property successfully.' });
+    const bookings = await bookingList.find({ room: id });
+    for (const booking of bookings) {
+      const message = `Dear ${
+        booking.name
+      }, the room you booked on ${booking.date.toDateString()} has been deleted by Landloard contact on ${
+        property.phone
+      } to confirm your booking.`;
+      await sendEmail(booking.email, 'Room Deleted', message);
+    }
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }
@@ -75,7 +112,6 @@ const editRoom = async (req, res) => {
   }
 };
 
-
 module.exports = {
   homeproperty,
   userSideProperty,
@@ -83,5 +119,5 @@ module.exports = {
   personalProperty,
   yourProperties,
   deleteProperty,
-  editRoom,
+  editRoom
 };

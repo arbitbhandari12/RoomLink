@@ -26,9 +26,9 @@ import BookingButton from '../Components/Booking';
 function PropertyDetails() {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
-  const [comment, setComment] = useState();
+  const [comment, setComment] = useState([]);
   const [similar, setSimilarRooms] = useState([]);
-  const { authorization } = useAuth();
+  const { authorization, user } = useAuth();
 
   const initialValues = {
     comment: ''
@@ -113,6 +113,51 @@ function PropertyDetails() {
       fetchComments();
     }
   }, [id]);
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4001/api/properties/deleteComment/${commentId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: authorization,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.status === 401) {
+        toast.warning('Please login first to delete a comment.');
+        return;
+      }
+
+      if (response.status === 403) {
+        toast.error('You can only delete your own comments.');
+        return;
+      }
+
+      if (response.ok) {
+        const updatedCommentsResponse = await fetch(
+          `http://localhost:4001/api/properties/getComment/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: authorization
+            }
+          }
+        );
+        const updatedComments = await updatedCommentsResponse.json();
+        setComment(updatedComments);
+        toast.success('Comment deleted successfully!');
+      } else {
+        toast.error('Failed to delete comment.');
+      }
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast.error('Server error. Please try again later.');
+    }
+  };
 
   const fetchProperty = async () => {
     try {
@@ -267,18 +312,31 @@ function PropertyDetails() {
                 <div className="bg-gray-100 p-4 rounded-md">
                   <h3 className="text-lg font-medium mb-2">User Feedback</h3>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {comment &&
-                      comment.map((comments) => (
-                        <div
-                          key={comments._id}
-                          className="p-3 bg-white rounded-md shadow"
-                        >
+                    {comment.map((singleComment) => (
+                      <div
+                        key={singleComment._id}
+                        className="p-3 bg-white rounded-md shadow flex justify-between items-start"
+                      >
+                        <div>
                           <p className="text-sm font-semibold text-gray-700">
-                            {comments.name}
+                            {singleComment.name}
                           </p>
-                          <p className="text-gray-800">{comments.comment}</p>
+                          <p className="text-gray-800">
+                            {singleComment.comment}
+                          </p>
                         </div>
-                      ))}
+                        {user && user._id === singleComment.userId && (
+                          <button
+                            onClick={() =>
+                              handleDeleteComment(singleComment._id)
+                            }
+                            className="text-red-500 hover:text-red-700 text-sm"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
 

@@ -30,6 +30,7 @@ const sendEmail = async (to, subject, text) => {
   }
 };
 
+
 // Update room status to "Rented" and notify users
 const roomStatuss = async (req, res) => {
   try {

@@ -121,7 +121,7 @@ const AdminHome = () => {
       if (!result.isConfirmed) return;
 
       const response = await fetch(
-        `http://localhost:4001/api/admin/deleteProperty/${id}`,
+        `http://localhost:4001/api/properties/delete/${id}`,
         {
           method: 'DELETE',
           headers: {

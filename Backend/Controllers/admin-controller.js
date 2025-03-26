@@ -217,16 +217,6 @@ const allRooms = async (req, res) => {
   }
 };
 
-const deleteProperty = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const rooms = await PropertyList.deleteOne({ _id: id });
-    res.status(200).json(rooms);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error. Please try again later.' });
-  }
-};
-
 module.exports = {
   allUsers,
   deleteUsers,
@@ -240,6 +230,5 @@ module.exports = {
   ShiftingCount,
   propertyCount,
   ListingCount,
-  allRooms,
-  deleteProperty
+  allRooms
 };

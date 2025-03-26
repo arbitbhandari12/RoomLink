@@ -51,7 +51,7 @@ function App() {
   const isAdminRoute = location.pathname.startsWith('/admin');
   const noFooterRoutes = [
     '/login',
-    '/register',
+    '/Register',
     '/forgotpassword',
     '/verify-otp',
     '/ResetPassword'
@@ -119,7 +119,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isAdminRoute && !noFooterRoutes && !NotFound && <Footer />}
+      {!isAdminRoute && !noFooterRoutes.includes(location.pathname) && <Footer />}
     </>
   );
 }

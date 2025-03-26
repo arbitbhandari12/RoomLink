@@ -12,7 +12,6 @@ const {
   propertyCount,
   ListingCount,
   allRooms,
-  deleteProperty
 } = require('../Controllers/admin-controller');
 const authMiddleware = require('../middlewares/auth-middleware');
 const adminMiddleware = require('../middlewares/admin-middleware');
@@ -48,9 +47,8 @@ router
   .route('/shiftingCount')
   .get(authMiddleware, adminMiddleware, ShiftingCount);
 
-router.route('/allRooms').get(authMiddleware, adminMiddleware, allRooms); deleteProperty
+router.route('/allRooms').get(authMiddleware, adminMiddleware, allRooms);
 
-router.route('/deleteProperty/:id').delete(authMiddleware, adminMiddleware, deleteProperty); 
 
 
 module.exports = router;
