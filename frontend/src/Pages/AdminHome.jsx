@@ -8,6 +8,7 @@ const AdminHome = () => {
   const [user, setUser] = useState();
   const [property, setProperty] = useState();
   const [remaining, setRemaining] = useState();
+  const [remainingShift, setremainingShift] = useState();
   const [rooms, setRooms] = useState();
 
   const allRooms = async () => {
@@ -87,6 +88,26 @@ const AdminHome = () => {
     }
   };
 
+  const ShiftingCount = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:4001/api/admin/shiftingCount',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authorization
+          }
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setremainingShift(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const deleteRoom = async (id) => {
     try {
       const result = await Swal.fire({
@@ -98,7 +119,7 @@ const AdminHome = () => {
         cancelButtonText: 'No, keep it'
       });
       if (!result.isConfirmed) return;
-  
+
       const response = await fetch(
         `http://localhost:4001/api/admin/deleteProperty/${id}`,
         {
@@ -108,7 +129,7 @@ const AdminHome = () => {
           }
         }
       );
-  
+
       if (response.ok) {
         Swal.fire({
           icon: 'success',
@@ -116,9 +137,7 @@ const AdminHome = () => {
           text: 'The room has been deleted successfully.'
         });
         allRooms();
-
-      } 
-      else{
+      } else {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -133,13 +152,13 @@ const AdminHome = () => {
       });
     }
   };
-  
 
   useEffect(() => {
     totalUser();
     ListingCount();
     propertyCount();
     allRooms();
+    ShiftingCount();
   }, []);
 
   return (
@@ -160,6 +179,10 @@ const AdminHome = () => {
           <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
             <span className="font-semibold">Remaining Listing Rooms</span>
             <span className="text-xl">{remaining}</span>
+          </div>
+          <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-lg">
+            <span className="font-semibold">Remaining Shifting Request</span>
+            <span className="text-xl">{remainingShift}</span>
           </div>
         </div>
       </div>

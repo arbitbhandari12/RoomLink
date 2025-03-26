@@ -8,6 +8,7 @@ const {
   approveProperty,
   rejectedProperty,
   userCount,
+  ShiftingCount,
   propertyCount,
   ListingCount,
   allRooms,
@@ -42,6 +43,10 @@ router
 router
   .route('/listingCount')
   .get(authMiddleware, adminMiddleware, ListingCount);
+
+  router
+  .route('/shiftingCount')
+  .get(authMiddleware, adminMiddleware, ShiftingCount);
 
 router.route('/allRooms').get(authMiddleware, adminMiddleware, allRooms); deleteProperty
 

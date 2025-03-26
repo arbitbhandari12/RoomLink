@@ -197,6 +197,17 @@ const ListingCount = async (req, res) => {
   }
 };
 
+const ShiftingCount = async (req, res) => {
+  try {
+    const remainingShifting = await shiftRequest.countDocuments({
+      status: 'Pending'
+    });
+    res.json(remainingShifting);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error. Please try again later.' });
+  }
+};
+
 const allRooms = async (req, res) => {
   try {
     const rooms = await PropertyList.find({ status: 'Approved' });
@@ -226,6 +237,7 @@ module.exports = {
   approveshifting,
   rejectingShifting,
   userCount,
+  ShiftingCount,
   propertyCount,
   ListingCount,
   allRooms,

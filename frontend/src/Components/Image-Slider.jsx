@@ -9,13 +9,14 @@ function ImageSlider({ images }) {
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((currentImageIndex - 1) % images.length);
+    setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length);
   };
+  
 
   return (
     <div className="relative">
       <img
-        src={images[currentImageIndex]}
+        src={images[currentImageIndex]}z
         className="w-full h-full max-h-[35em] object-cover rounded-lg"
       />
       {images.length > 1 && (

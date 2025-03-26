@@ -34,6 +34,7 @@ import ChangePassword from './Pages/ChangePassword';
 import YourBooking from './Pages/YourBooking';
 import OtpVerification from './Pages/OtpVerification';
 import ResetPassword from './Pages/NewPassword';
+import NotFound from './Pages/NoPage';
 import ScrollToTop from './Pages/ScrollToTop';
 import { useAuth } from './Store/auth';
 
@@ -47,8 +48,14 @@ function App() {
     return <Navigate to="/admin" />;
   }
 
-  // Check if the current path starts with '/admin'
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const noFooterRoutes = [
+    '/login',
+    '/register',
+    '/forgotpassword',
+    '/verify-otp',
+    '/ResetPassword'
+  ];
 
   return (
     <>
@@ -97,7 +104,7 @@ function App() {
           <Route path="YourBooking" element={<YourBooking />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
-        <Route path="logout" element={<Logout />} />
+          <Route path="logout" element={<Logout />} />
           <Route index element={<AdminHome />} />
           <Route path="home" element={<AdminHome />} />
           <Route path="addProperty" element={<AddProperty />} />
@@ -110,8 +117,9 @@ function App() {
           <Route path="requests" element={<AdminShift />} />
           <Route path="Shifting/:id" element={<AdminShifting />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && !noFooterRoutes && !NotFound && <Footer />}
     </>
   );
 }
