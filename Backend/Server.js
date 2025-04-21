@@ -38,3 +38,5 @@ connectDB()
   });
 
 // GZGpctYGDvnhWy9I
+
+module.exports = app;

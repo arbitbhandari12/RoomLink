@@ -194,5 +194,6 @@ module.exports = {
   requestHistory,
   deleteShifting,
   shiftingEdit,
-  editShifting
+  editShifting,
+  sendEmail
 };

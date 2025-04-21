@@ -69,18 +69,18 @@ const roomStatuss = async (req, res) => {
 // Book a room
 const booking = async (req, res) => {
   const room = req.params.id;
-  const owner = await propertyList.findById(room);
-  const response = owner.userId;
   const user = req.user;
-  console.log(user);
-
-  const { name, email, phone, date } = req.body;
 
   if (!user) {
     return res.status(401).json({ error: 'Please login first' });
   }
 
   try {
+    const owner = await propertyList.findById(room);
+    const response = owner.userId;
+
+    const { name, email, phone, date } = req.body;
+
     // Check if a booking already exists for this room and date
     const existingBooking = await Booking.findOne({ room: room, date: date });
 
@@ -114,6 +114,7 @@ const booking = async (req, res) => {
     res.status(500).json({ msg: 'Server error. Please try again later.' });
   }
 };
+
 const bookingList = async (req, res) => {
   try {
     const user = req.user;

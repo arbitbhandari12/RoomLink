@@ -176,7 +176,7 @@ function PropertyAvailability() {
           ))
         ) : (
           <p className="text-center col-span-full text-gray-500">
-            No properties available.
+            No rooms available.
           </p>
         )}
       </div>

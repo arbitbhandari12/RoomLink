@@ -5,7 +5,6 @@ import { useAuth } from '../../Store/auth';
 function AdminLayout() {
   const { user, isLoading } = useAuth();
 
-  // Ensure `user.userData` exists before trying to access `isAdmin`
   const admin = user;
 
   if (isLoading) {
@@ -49,7 +48,7 @@ function AdminLayout() {
                   `text-center block p-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'text-black'}`
                 }
               >
-                List of Property
+                List of Rooms
               </NavLink>
             </li>
             <li>

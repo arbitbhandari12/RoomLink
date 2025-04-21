@@ -119,5 +119,6 @@ module.exports = {
   personalProperty,
   yourProperties,
   deleteProperty,
-  editRoom
+  editRoom,
+  sendEmail
 };

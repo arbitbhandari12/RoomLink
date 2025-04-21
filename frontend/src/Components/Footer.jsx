@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 import { FiTwitter } from 'react-icons/fi';
+import { FaTiktok } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -14,22 +15,22 @@ export default function Footer() {
             </p>
             <div className="flex items-center justify-center gap-7 mt-4">
               <a
-                href="#"
+                href="https://www.facebook.com/sastoroomfinderagent?mibextid=ZbWKwL"
                 className="text-primary hover:text-primary-dark transition-colors"
               >
                 <Facebook size={24} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/sasto_room_finder_official?igsh=MWVwaGZ1cXJmcnh5Zw=="
                 className="text-primary hover:text-primary-dark transition-colors"
               >
                 <Instagram size={24} />
               </a>
               <a
-                href="#"
+                href="https://www.tiktok.com/@sastoroomfinder?_t=ZS-8uz101CncBk&_r=1"
                 className="text-primary hover:text-primary-dark transition-colors"
               >
-                <FiTwitter size={24} />
+                <FaTiktok size={24} />
               </a>
             </div>
           </div>
@@ -52,7 +53,7 @@ export default function Footer() {
               >
                 List Your Rooms
               </a>
-              <a href="/about" className="text-gray-400 hover:text-gray-600 transition-colors">
+              <a href="/aboutus" className="text-gray-400 hover:text-gray-600 transition-colors">
                 About Us
               </a>
             </nav>
@@ -66,11 +67,11 @@ export default function Footer() {
                 className="flex items-center hover:text-gray-600 transition-colors"
               >
                 <Mail size={18} className="mr-2 text-primary" />
-                sastoproperty7@gmail.com
+                sastoroomfinder@gmail.com
               </a>
               <p className="flex items-center text-gray-400 hover:text-gray-600 transition-colors">
                 <Phone size={18} className="mr-2 text-primary" />
-                +977 9863935190
+                +977 9818067008
               </p>
               <p className="flex items-center text-gray-400 hover:text-gray-600 transition-colors">
                 <MapPin size={18} className="mr-2 text-primary" />

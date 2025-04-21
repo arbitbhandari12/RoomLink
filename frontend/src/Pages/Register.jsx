@@ -7,7 +7,7 @@ import { useAuth } from '../Store/auth';
 import { toast } from 'react-toastify';
 
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const validationSchema = yup.object({
     username: yup
@@ -68,14 +68,15 @@ const Signup = () => {
             body: JSON.stringify(values)
           }
         );
+        const data = await response.json();
         if (response.ok) {
           formik.resetForm();
+          toast.success(data.msg || 'Register Sucess');
           navigate('/');
+          storeToken(data.token);
+        } else {
+          toast.error(data.msg || 'Register Error');
         }
-
-        const data = await response.json();
-        toast.success(data.msg || 'Register Sucess');
-        storeToken(data.token);
       } catch (error) {
         console.error('register error:', error.message);
       }

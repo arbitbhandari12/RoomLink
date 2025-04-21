@@ -201,14 +201,14 @@ function AddProperty() {
           Swal.fire({
             icon: 'success',
             title: 'Success!',
-            text: 'Property added successfully!',
+            text: 'Room added successfully!',
             confirmButtonColor: '#3085d6'
           });
         } else if (response.status === 401) {
           Swal.fire({
             icon: 'warning',
             title: 'Login Required!',
-            text: 'Please login first before listing the Property.',
+            text: 'Please login first before listing the Room.',
             confirmButtonColor: '#d33'
           });
         } else {
@@ -241,17 +241,17 @@ function AddProperty() {
     <div className="container border border-gray-300 hover:border-blue-600 rounded-md shadow-lg mt-5 w-full mx-auto p-8 bg-white">
       <div>
         <h1 className="flex justify-start text-4xl font-bold text-gray-800">
-          List Your Property
+          List Your Room
         </h1>
         <h2 className="flex justify-start text-lg text-gray-500 mt-2 mb-6">
-          Fill out the form below to list your property for rent.
+          Fill out the form below to list your room for rent.
         </h2>
       </div>
 
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
         <div className="mb-6">
           <label className="flex mt-2 text-lg font-semibold">
-            Title of the Property
+            Title of the Room
           </label>
           <input
             type="text"
@@ -290,9 +290,7 @@ function AddProperty() {
         </div>
 
         <div className="mb-6">
-          <label className="flex mt-2 text-lg font-semibold">
-            Property Type
-          </label>
+          <label className="flex mt-2 text-lg font-semibold">Room Type</label>
           <select
             className="flex border w-full mt-1 p-3 rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             name="type"
@@ -302,13 +300,11 @@ function AddProperty() {
           >
             <option className="flex">Select Property Type</option>
             <option value="Apartment">Apartment</option>
-            <option value="House">House</option>
             <option value="1 BHK">1 BHK</option>
             <option value="2 BHK">2 BHK</option>
             <option value="3 BHK">3 BHK</option>
             <option value="4 BHK">4 BHK</option>
             <option value="Flat">Flat</option>
-            <option value="Bunglow">Bunglow</option>
           </select>
           {formik.errors.type && formik.touched.type && (
             <div className="text-red-500 text-sm mt-1">
@@ -698,7 +694,7 @@ function AddProperty() {
           type="submit"
           className="w-full bg-blue-500 text-white p-3 rounded-md mt-4 hover:bg-blue-600 transition"
         >
-          List Property
+          List Room
         </button>
       </form>
     </div>

@@ -21,7 +21,6 @@ const sendEmail = async (to, subject, text) => {
       subject: subject,
       text: text
     });
-    console.log(`Email sent: ${info.response}`);
   } catch (error) {
     console.error('Error sending email:', error.message);
     if (error.response) {
@@ -101,7 +100,7 @@ const login = async (req, res) => {
         isAdmin: existingUser.isAdmin.toString()
       });
     } else {
-      res.status(401).json({ msg: 'Password not valid.' });
+      res.status(401).json({ msg: 'Username or Password is not valid.' });
     }
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
@@ -125,7 +124,7 @@ const updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = {
-      username: req.body.name,
+      username: req.body.username,
       email: req.body.email,
       phone: req.body.phone
     };
@@ -232,6 +231,7 @@ const otpVerification = async (req, res) => {
     res.status(500).json({ message: 'OTP verification failed' });
   }
 };
+
 const resetPassword = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -259,5 +259,6 @@ module.exports = {
   cancelBooking,
   forgotPassword,
   otpVerification,
-  resetPassword
+  resetPassword,
+  sendEmail
 };

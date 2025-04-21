@@ -19,9 +19,9 @@ function UserShifting() {
         }
       );
       if (response.ok) {
+        const data = await response.json();
         setShift(data.request);
       }
-      const data = await response.json();
     } catch (error) {
       console.log(error);
     }

@@ -4,11 +4,12 @@ const User = require('../models/user-model');
 const addProperty = async (req, res) => {
   try {
     const user = req.user;
-    const admin = user.isAdmin;
 
     if (!user) {
       return res.status(401).json({ error: 'Please login first' });
     }
+
+    const admin = user.isAdmin;
 
     let status = '';
 
@@ -23,11 +24,9 @@ const addProperty = async (req, res) => {
     const existingUser = await User.findOne({ email: req.body.email });
 
     if (!existingUser) {
-      return res
-        .status(400)
-        .json({
-          error: 'No user registered with this email. Please register first.'
-        });
+      return res.status(400).json({
+        error: 'No user registered with this email. Please register first.'
+      });
     }
 
     // Create an array of file paths for the uploaded photos

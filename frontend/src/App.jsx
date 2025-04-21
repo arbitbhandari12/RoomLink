@@ -50,7 +50,7 @@ function App() {
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   const noFooterRoutes = [
-    '/login',
+    '/Login',
     '/Register',
     '/forgotpassword',
     '/verify-otp',
