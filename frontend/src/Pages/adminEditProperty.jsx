@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Store/auth';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import Swal from 'sweetalert2';
 
 function AdminEdit() {
   const { id } = useParams();
@@ -99,9 +100,19 @@ function AdminEdit() {
 
         const data = await response.json();
         console.log('Success:', data);
-        alert('Property updated successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Property Updated!',
+          text: 'Your property has been successfully updated.'
+        });
       } catch (error) {
         console.error('Error:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text:
+            error.message || 'An error occurred while updating the property.'
+        });
       } finally {
         setLoading(false);
       }

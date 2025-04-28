@@ -22,8 +22,6 @@ const OtpVerification = () => {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: async (values) => {
-      setError('');
-      setSuccessMessage('');
       try {
         const response = await fetch(
           'http://localhost:4001/api/auth/otpVerification',

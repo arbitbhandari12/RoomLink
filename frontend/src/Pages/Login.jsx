@@ -48,7 +48,7 @@ const Login = () => {
           console.log('No token received');
         }
       } catch (error) {
-        console.log('register error:', error.message);
+        toast.error("Server Error Please Try Again Later");
       }
     }
   });

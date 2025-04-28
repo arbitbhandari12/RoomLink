@@ -19,7 +19,7 @@ const Signup = () => {
       .trim()
       .required('Username is required')
       .min(5, 'Username must be at least 5 characters')
-      .max(10, 'Username must be 10 characters or less'),
+      .max(30, 'Username must be 10 characters or less'),
 
     email: yup
       .string()
@@ -78,7 +78,7 @@ const Signup = () => {
           toast.error(data.msg || 'Register Error');
         }
       } catch (error) {
-        console.error('register error:', error.message);
+        toast.error('Server Error Please Try Again Later', error.message);
       }
     }
   });

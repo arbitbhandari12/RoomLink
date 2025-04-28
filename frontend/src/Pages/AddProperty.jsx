@@ -2,9 +2,11 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useAuth } from '../Store/auth';
 import Swal from 'sweetalert2';
+import { useRef } from 'react';
 
 function AddProperty() {
   const { user } = useAuth();
+  const fileInputRef = useRef(null);
 
   const validationSchema = yup.object({
     name: yup
@@ -195,7 +197,12 @@ function AddProperty() {
             body: formData
           }
         );
-        const result = await response.json();
+        if (response.ok) {
+          formik.resetForm();
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        }
 
         if (response.ok) {
           Swal.fire({
@@ -223,16 +230,9 @@ function AddProperty() {
         Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text: 'Something went wrong. Please try again later.',
+          text: 'Something went wrong. Please try again laterrrrrrr.',
           confirmButtonColor: '#d33'
         });
-      }
-
-      if (response.ok) {
-        formik.resetForm();
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
       }
     }
   });
@@ -338,6 +338,7 @@ function AddProperty() {
             type="file"
             accept="image/*"
             multiple
+            ref={fileInputRef}
             onChange={(e) => formik.setFieldValue('photos', e.target.files)}
             className="border w-full p-3 rounded-md mt-1 border-gray-300 focus:ring-2 focus:ring-blue-500"
           />

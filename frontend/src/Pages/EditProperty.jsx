@@ -16,10 +16,6 @@ function EditProperty() {
   const validationSchema = yup.object({
     title: yup
       .string()
-      .matches(
-        /^[a-zA-Z][a-zA-Z0-9\s]*$/,
-        'Title must start with a letter and contain only letters, numbers and spaces'
-      )
       .trim()
       .required('Title is required')
       .min(5, 'Title must be at least 5 characters')

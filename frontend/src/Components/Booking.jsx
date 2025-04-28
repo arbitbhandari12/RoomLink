@@ -5,6 +5,14 @@ import { useFormik } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../Store/auth';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  phone: Yup.string().required('Phone number is required').matches(
+    /^[0-9]{10}$/,
+    'Phone number must be 10 digits'
+  ),
+});
 
 const BookingForm = ({ id, disabled }) => {
   const { authorization } = useAuth();
@@ -17,6 +25,7 @@ const BookingForm = ({ id, disabled }) => {
 
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: validationSchema, 
     onSubmit: async (values) => {
       try {
         const response = await fetch(
@@ -81,6 +90,9 @@ const BookingForm = ({ id, disabled }) => {
           className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
+         {formik.errors.phone && formik.touched.phone && (
+          <div className="text-red-500 text-sm">{formik.errors.phone}</div>
+        )}
         <div>
           <DatePicker
             selected={formik.values.date}

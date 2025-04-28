@@ -147,6 +147,7 @@ const deleteShifting = async (req, res) => {
   try {
     const id = req.params.id;
     await shiftList.deleteOne({ _id: id });
+    res.status(200).json({ msg: 'Delete shift request successfully.' });
   } catch (error) {
     res.status(500).json({ error: 'Server error. Please try again later.' });
   }

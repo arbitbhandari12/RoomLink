@@ -230,5 +230,6 @@ module.exports = {
   ShiftingCount,
   propertyCount,
   ListingCount,
-  allRooms
+  allRooms,
+  sendEmail
 };

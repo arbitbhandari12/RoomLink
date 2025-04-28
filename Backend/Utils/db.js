@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const URI = 'mongodb://localhost:27017/Roomlink';
+const dotenv = require('dotenv');
+dotenv.config();
+
+const URI = process.env.MONGO_DB;
 
 const connectDB = async () => {
   try {
