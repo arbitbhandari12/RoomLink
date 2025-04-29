@@ -79,6 +79,10 @@ const booking = async (req, res) => {
     const owner = await propertyList.findById(room);
     const response = owner.userId;
 
+    if (response.toString() === user._id.toString()) {
+      return res.status(400).json({ msg: "You cannot book your own listed property." });
+    }
+
     const { name, email, phone, date } = req.body;
 
     // Check if a booking already exists for this room and date

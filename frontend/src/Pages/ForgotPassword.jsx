@@ -24,12 +24,14 @@ const ForgotPassword = () => {
         if (!response.ok) {
           const errorData = await response.json();
           toast.error(
-            errorData.error || 'Something went wrong. Please try again.'
+            errorData.message || 'Something went wrong. Please try again.'
           );
           return;
         }
         toast.success('Otp send Sucessful');
-        navigate('/verify-otp', { state: { email: values.email, isVerified:true } });
+        navigate('/verify-otp', {
+          state: { email: values.email, isVerified: true }
+        });
       } catch (error) {
         toast.error('Network error. Please try again.');
       }

@@ -95,13 +95,11 @@ function PropertyAvailability() {
               >
                 <option value="">Select type</option>
                 <option value="Apartment">Apartment</option>
-                <option value="House">House</option>
                 <option value="1 BHK">1 BHK</option>
                 <option value="2 BHK">2 BHK</option>
                 <option value="3 BHK">3 BHK</option>
                 <option value="4 BHK">4 BHK</option>
                 <option value="Flat">Flat</option>
-                <option value="Bunglow">Bunglow</option>
               </select>
             </div>
 

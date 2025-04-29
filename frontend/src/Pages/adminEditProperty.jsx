@@ -23,7 +23,7 @@ function AdminEdit() {
       .trim()
       .required('Title is required')
       .min(5, 'Title must be at least 5 characters')
-      .max(30, 'Title must be 30 characters or less'),
+      .max(60, 'Title must be 30 characters or less'),
     type: yup.string().required('Property type is required'),
     price: yup
       .number()

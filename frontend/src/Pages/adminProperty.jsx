@@ -153,10 +153,17 @@ function AdminProperty() {
                   {properties.status !== 'Pending' &&
                     properties.status !== 'Rejected' && (
                       <button
-                        className="text-white bg-blue-400 hover:bg-slate-600 font-semibold border rounded px-3 py-1 md:px-6 md:py-2"
+                        className={`text-white font-semibold border rounded px-4 py-2 ${
+                          properties.roomStatus === 'Rented'
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-blue-400 hover:bg-slate-600'
+                        }`}
                         onClick={() => rentProperty(properties._id)}
+                        disabled={properties.roomStatus === 'Rented'}
                       >
-                        Rented
+                        {properties.roomStatus === 'Rented'
+                          ? 'Already Rented'
+                          : 'Rent'}
                       </button>
                     )}
                 </td>

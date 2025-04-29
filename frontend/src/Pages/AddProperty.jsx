@@ -37,7 +37,7 @@ function AddProperty() {
       .trim()
       .required('Title is required')
       .min(5, 'Title must be at least 5 characters')
-      .max(30, 'Title must be 30 characters or less'),
+      .max(60, 'Title must be 30 characters or less'),
 
     description: yup
       .string()
@@ -186,6 +186,7 @@ function AddProperty() {
         }
       }
       console.log(values);
+
       try {
         const response = await fetch(
           'http://localhost:4001/api/properties/addproperty',
@@ -203,7 +204,7 @@ function AddProperty() {
             fileInputRef.current.value = '';
           }
         }
-
+        const result = await response.json();
         if (response.ok) {
           Swal.fire({
             icon: 'success',
@@ -230,7 +231,7 @@ function AddProperty() {
         Swal.fire({
           icon: 'error',
           title: 'Error!',
-          text: 'Something went wrong. Please try again laterrrrrrr.',
+          text: 'Something went wrong. Please try again later.',
           confirmButtonColor: '#d33'
         });
       }
