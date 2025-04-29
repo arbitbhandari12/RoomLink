@@ -26,9 +26,11 @@ Steps to Run The Application
    Mongoose is configured to automatically connect to your MongoDB Atlas cluster using the URI in your .env file. If everything is correct, the app will connect as soon as it runs.
 
 7) cd backend
+   
    npx nodemon server.js
 
 8) cd frontend
+    
    npm run dev
 
 
