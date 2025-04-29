@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./utils/db.js');
+const connectDB = require('./Utils/db.js');
 const router = require('./router/auth-router.js');
 const PropertyRouter = require('./router/property-router.js');
 const shifting = require("./router/Shifting-router.js")
@@ -38,5 +38,6 @@ connectDB()
   });
 
 // GZGpctYGDvnhWy9I
+//s3fgSUUmeG3S1bn7
 
 module.exports = app;
