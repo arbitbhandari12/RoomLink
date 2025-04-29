@@ -1,31 +1,33 @@
 Steps to Run The Application
 
-Make sure Node Js is installed 
+1) Make sure Node Js is installed 
 
-1) 🔍 Clone the Repository
-1) git clone https://github.com/arbitbhandari12/RoomLink.git
-cd RoomLink
+2) 🔍 Clone the Repository
+     git clone https://github.com/arbitbhandari12/RoomLink.git
 
 
-2)Install Frontend Dependencies
+3) cd RoomLink
+
+
+4)Install Frontend Dependencies
 
  cd frontend
-npm install
+ npm install
 
 
-3) Install Backend Dependencies
+5) Install Backend Dependencies
 
  cd backend 
-npm install
+ npm install
 
 
-5) Db connection.
+6) Db connection.
    Mongoose is configured to automatically connect to your MongoDB Atlas cluster using the URI in your .env file. If everything is correct, the app will connect as soon as it runs.
 
-6) 5) cd backend
+7) cd backend
    npx nodemon server.js
 
-5) cd frontend
+8) cd frontend
    npm run dev
 
 
