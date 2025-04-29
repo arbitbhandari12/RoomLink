@@ -13,14 +13,16 @@ npm install
 
 
 3) Install Backend Dependencies
+
+ cd backend 
 npm install
 
 
-4) Make sure MongoDB Compass are installed locally.
+5) Make sure MongoDB Compass are installed locally.
    Start the MongoDB server.
    Open MongoDB Compass to create the database and collections.
 
-5) 5) cd backend
+6) 5) cd backend
    npx nodemon server.js
 
 5) cd frontend
