@@ -1,5 +1,6 @@
 Steps to Run The Application
 
+Make sure Node Js is installed 
 
 1) 🔍 Clone the Repository
 1) git clone https://github.com/arbitbhandari12/RoomLink.git
