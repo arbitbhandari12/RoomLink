@@ -34,3 +34,4 @@ Steps to Run The Application
 Frontend: http://localhost:5173
 Backend:  http://localhost:4001
 
+"Note: Images have not been pushed, so they may not appear after cloning the repository. Please try running it from the 'My Second Teacher' version that we submitted."
