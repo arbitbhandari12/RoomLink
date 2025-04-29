@@ -23,7 +23,7 @@ Steps to Run The Application
 
 
 6) Db connection.
-   Mongoose is configured to automatically connect to your MongoDB Atlas cluster using the URI in your .env file. If everything is correct, the app will connect as soon as it runs.
+   Mongoose is configured to automatically connect to MongoDB Atlas cluster using the URI in your .env file. If everything is correct, the app will connect as soon as it runs.
 
 7) cd backend
    
