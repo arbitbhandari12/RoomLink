@@ -14,7 +14,6 @@ Steps to Run The Application
  cd frontend
  npm install
 
-
 5) Install Backend Dependencies
 
  cd backend 
