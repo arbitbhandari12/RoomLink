@@ -12,11 +12,13 @@ Steps to Run The Application
 4)Install Frontend Dependencies
 
  cd frontend
+ 
  npm install
 
 5) Install Backend Dependencies
 
  cd backend 
+ 
  npm install
 
 
